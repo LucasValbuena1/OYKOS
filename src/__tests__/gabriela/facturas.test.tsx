@@ -72,8 +72,8 @@ describe("HU02 · Registrar factura", () => {
     await user.type(screen.getByLabelText(/Consumo/), "19");
     await user.type(screen.getByLabelText(/^Valor/), "84000");
     await user.click(screen.getByRole("button", { name: "Guardar factura" }));
-    const created = invoicesStore.get().find((i) => i.period === "2026-10" && i.serviceId === "s1");
-    expect(created).toMatchObject({ status: "pendiente", amount: 84000, householdId: "h1" });
+    const created = invoicesStore.get().at(-1);
+    expect(created).toMatchObject({ period: "2026-10", serviceId: "s1", status: "pendiente", amount: 84000, householdId: "h1" });
     expect(mockRouter().push).toHaveBeenCalledWith("/es/facturas");
   });
 

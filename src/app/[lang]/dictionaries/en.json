@@ -888,8 +888,7 @@
     "discard": "Discard",
     "discardTitle": "Discard the scan?",
     "discardMessage": "The detected data will be lost and no invoice will be created.",
-    "saved": "Invoice saved from the receipt.",
-    "savedWithLink": "Invoice saved. You can now pay it from the app."
+    "saved": "Invoice saved. We're looking up its payment link."
   },
   "processing": {
     "title": "Processing status",
@@ -907,8 +906,9 @@
     },
     "errors": {
       "noReference": "The receipt has no payment reference.",
-      "unsupportedProvider": "We don't have a connection to this company's portal yet.",
-      "aiUnavailable": "The AI service did not respond."
+      "unsupportedProvider": "This company isn't in the payment portal directory yet.",
+      "aiUnavailable": "The AI service did not respond.",
+      "linkUnavailable": "The payment link couldn't be looked up. Check your connection and retry."
     },
     "retryStep": "Retry step",
     "linkFound": "Payment link obtained.",
@@ -921,18 +921,28 @@
     "title": "Payment",
     "reference": "Reference",
     "cutoff": "Cutoff date",
-    "viaApi": "Official API",
-    "viaPortal": "Web portal",
     "pay": "Pay",
     "markPaidAfter": "I already paid",
     "unavailable": "No payment link is available for this invoice. You can pay it through the company's channels and mark it as paid.",
     "leaveTitle": "You're leaving Oykos",
-    "leaveMessage": "Payment happens on the company's official portal. Use the reference to find your invoice.",
+    "leaveMessage": "Payment happens on the company's official portal: Oykos never receives or stores your payment details.",
     "goToPortal": "Go to payment portal",
     "newTab": "opens in a new tab",
     "markPaidTitle": "Did you complete the payment?",
     "markPaidMessage": "Mark the invoice as paid and, if you like, attach the receipt.",
-    "proof": "Payment receipt (optional)"
+    "proof": "Payment receipt (optional)",
+    "viaScraping": "Obtained from the official portal",
+    "viaFallback": "Backup link to the official portal",
+    "copyReference": "Copy reference",
+    "referenceCopied": "Reference copied.",
+    "copyFailed": "The reference couldn't be copied.",
+    "searching": "Looking up the payment link on the company's portal…",
+    "useReference": "On the company's portal, enter this reference to find your invoice.",
+    "viaAi": "Found with AI on the official portal",
+    "pagesVisited": {
+      "one": "Claude checked {count} page of the official site",
+      "other": "Claude checked {count} pages of the official site"
+    }
   },
   "assistant": {
     "title": "AI Assistant",

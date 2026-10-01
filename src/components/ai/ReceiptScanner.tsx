@@ -303,7 +303,7 @@ export function ReceiptScanner() {
                 onDiscard={() => setConfirmDiscard(true)}
                 onConfirm={(v) => {
                   const inv = scanner.confirm(v);
-                  notify(inv.paymentLink ? dict.scanner.savedWithLink : dict.scanner.saved);
+                  notify(dict.scanner.saved);
                   router.push(href(`/facturas/${inv.id}`));
                 }}
               />

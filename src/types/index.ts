@@ -95,7 +95,16 @@ export interface ScanProcessing {
 
 export interface PaymentLink {
   url: string;
-  method: "api" | "scraping";
+  /** scraping: leído de la página pública de la empresa · fallback: enlace de respaldo. */
+  method: "scraping" | "fallback";
+  /** Página de la empresa de donde se obtuvo el enlace (solo scraping). */
+  sourcePage?: string;
+  /** ia: lo eligió Claude · patron: patrón conocido de la empresa. */
+  engine?: "ia" | "patron";
+  /** Páginas que se revisaron hasta encontrarlo. */
+  pagesVisited?: number;
+  /** Se leyó con un navegador sin interfaz (página armada con JavaScript). */
+  rendered?: boolean;
   obtainedAt: string;
 }
 

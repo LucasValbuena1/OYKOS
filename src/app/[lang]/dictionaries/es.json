@@ -888,8 +888,7 @@
     "discard": "Descartar",
     "discardTitle": "¿Descartar el escaneo?",
     "discardMessage": "Se perderán los datos detectados y no se creará la factura.",
-    "saved": "Factura guardada desde el recibo.",
-    "savedWithLink": "Factura guardada. Ya puedes pagarla desde la app."
+    "saved": "Factura guardada. Estamos buscando su link de pago."
   },
   "processing": {
     "title": "Estado del procesamiento",
@@ -907,8 +906,9 @@
     },
     "errors": {
       "noReference": "El recibo no tiene referencia de pago.",
-      "unsupportedProvider": "Aún no tenemos conexión con el portal de esta empresa.",
-      "aiUnavailable": "El servicio de IA no respondió."
+      "unsupportedProvider": "Esta empresa aún no está en el directorio de portales de pago.",
+      "aiUnavailable": "El servicio de IA no respondió.",
+      "linkUnavailable": "No se pudo consultar el link de pago. Revisa tu conexión y reintenta."
     },
     "retryStep": "Reintentar paso",
     "linkFound": "Link de pago obtenido.",
@@ -921,18 +921,28 @@
     "title": "Pago",
     "reference": "Referencia",
     "cutoff": "Fecha de corte",
-    "viaApi": "API oficial",
-    "viaPortal": "Portal web",
     "pay": "Pagar",
     "markPaidAfter": "Ya pagué",
     "unavailable": "No hay link de pago disponible para esta factura. Puedes pagarla por los canales de la empresa y marcarla como pagada.",
     "leaveTitle": "Vas a salir de Oykos",
-    "leaveMessage": "El pago se hace en el portal oficial de la empresa. Usa la referencia para encontrar tu factura.",
+    "leaveMessage": "El pago se hace en el portal oficial de la empresa: Oykos no recibe ni guarda tus datos de pago.",
     "goToPortal": "Ir al portal de pago",
     "newTab": "se abre en una pestaña nueva",
     "markPaidTitle": "¿Completaste el pago?",
     "markPaidMessage": "Marca la factura como pagada y, si quieres, adjunta el comprobante.",
-    "proof": "Comprobante de pago (opcional)"
+    "proof": "Comprobante de pago (opcional)",
+    "viaScraping": "Obtenido del portal oficial",
+    "viaFallback": "Enlace de respaldo al portal oficial",
+    "copyReference": "Copiar referencia",
+    "referenceCopied": "Referencia copiada.",
+    "copyFailed": "No se pudo copiar la referencia.",
+    "searching": "Buscando el link de pago en el portal de la empresa…",
+    "useReference": "En el portal de la empresa ingresa esta referencia para encontrar tu factura.",
+    "viaAi": "Encontrado con IA en el portal oficial",
+    "pagesVisited": {
+      "one": "Claude revisó {count} página del sitio oficial",
+      "other": "Claude revisó {count} páginas del sitio oficial"
+    }
   },
   "assistant": {
     "title": "Asistente IA",

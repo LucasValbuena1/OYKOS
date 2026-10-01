@@ -7,7 +7,7 @@ import type { Attachment, Invoice, ReceiptExtraction, ScanProcessing, Service } 
 import { useInvoices, useServices } from "./useDomain";
 import { readFileAsDataUrl } from "@/lib/utils";
 import { validateReceiptFile, type ReceiptFileError } from "@/lib/domain/receipts";
-import { resolvePaymentLink } from "@/lib/domain/paymentLinks";
+import { lookupPaymentLink } from "@/lib/paymentLinkClient";
 
 export type ScanPhase = "idle" | "scanning" | "extracting" | "review" | "failed";
 export type ScanError = "unreadable" | "aiUnavailable" | "aiNotConfigured" | "unauthorized" | "network" | "type" | "size";
@@ -33,13 +33,6 @@ export async function requestExtraction(attachment: Attachment, services: Pick<S
     throw new Error(res.status === 401 ? "unauthorized" : (body.error ?? "aiUnavailable"));
   }
   return (await res.json()) as ScanResult;
-}
-
-export function paymentLinkStep(provider: string, reference: string | undefined, now = new Date()) {
-  const result = resolvePaymentLink(provider, reference, now);
-  return result.ok
-    ? { link: result.link, step: { status: "success" as const, finishedAt: now.toISOString() } }
-    : { link: undefined, step: { status: "error" as const, error: result.error, finishedAt: now.toISOString() } };
 }
 
 export function useReceiptScanner() {
@@ -100,18 +93,20 @@ export function useReceiptScanner() {
     setFileError(null);
   }, []);
 
-  /** HU13/HU14: crea la factura confirmada e intenta obtener el link de pago. */
+  /**
+   * HU13/HU14: crea la factura confirmada de inmediato (paso del link "en
+   * curso") y luego busca el link de pago en segundo plano (HU16).
+   */
   const confirm = useCallback(
     (values: Pick<Invoice, "serviceId" | "period" | "consumption" | "amount" | "dueDate"> & { reference?: string; cutoffDate?: string }): Invoice => {
       const svc = services.getById(values.serviceId);
       const now = new Date();
-      const { link, step } = paymentLinkStep(svc?.provider ?? "", values.reference, now);
       const processing: ScanProcessing = {
         scan: { status: "success", finishedAt: now.toISOString() },
         extraction: { status: "success", finishedAt: now.toISOString() },
-        paymentLink: step,
+        paymentLink: { status: "running" },
       };
-      return invoices.add({
+      const created = invoices.add({
         ...values,
         reference: values.reference?.trim() || undefined,
         cutoffDate: values.cutoffDate || undefined,
@@ -119,10 +114,13 @@ export function useReceiptScanner() {
         status: "pendiente",
         source: "ia",
         attachment: attachment ?? undefined,
-        paymentLink: link,
         processing,
         createdAt: now.toISOString(),
       });
+      void lookupPaymentLink(svc?.provider ?? "", values.reference).then(({ link, step }) => {
+        invoices.update(created.id, { paymentLink: link, processing: { ...processing, paymentLink: step } });
+      });
+      return created;
     },
     [services, invoices, attachment],
   );

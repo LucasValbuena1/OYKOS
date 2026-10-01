@@ -3,10 +3,11 @@
 //   HU14 link de pago (API oficial o portal web), HU15 pagar desde la app,
 //   HU16 estado del procesamiento con reintento del paso fallido.
 import { useState } from "react";
-import { AlertTriangle, CheckCircle2, CircleDashed, ExternalLink, FileDown, Loader2, RefreshCw, CreditCard } from "lucide-react";
+import { AlertTriangle, CheckCircle2, CircleDashed, Copy, ExternalLink, FileDown, Loader2, RefreshCw, CreditCard } from "lucide-react";
 import { useI18n } from "@/i18n/I18nProvider";
 import { useInvoices, useServices } from "@/hooks/useDomain";
-import { paymentLinkStep, requestExtraction } from "@/hooks/useReceiptScanner";
+import { requestExtraction } from "@/hooks/useReceiptScanner";
+import { lookupPaymentLink } from "@/lib/paymentLinkClient";
 import { useToast } from "@/components/ui/Toast";
 import { Card } from "@/components/ui/Surface";
 import { Button } from "@/components/ui/Button";
@@ -18,11 +19,11 @@ import { toISODate } from "@/lib/utils";
 
 function StepRow({ label, step, onRetry, retrying }: { label: string; step: ProcessingStep; onRetry?: () => void; retrying?: boolean }) {
   const { dict } = useI18n();
-  const Icon = step.status === "success" ? CheckCircle2 : step.status === "error" ? AlertTriangle : CircleDashed;
+  const Icon = step.status === "success" ? CheckCircle2 : step.status === "error" ? AlertTriangle : step.status === "running" ? Loader2 : CircleDashed;
   return (
     <li className="flex flex-wrap items-start justify-between gap-3 rounded-xl bg-surface-low p-4" data-step-status={step.status}>
       <div className="flex items-start gap-3">
-        <Icon aria-hidden="true" className={step.status === "success" ? "mt-0.5 size-5 text-secondary" : step.status === "error" ? "mt-0.5 size-5 text-error" : "mt-0.5 size-5 text-outline"} />
+        <Icon aria-hidden="true" className={step.status === "success" ? "mt-0.5 size-5 text-secondary" : step.status === "error" ? "mt-0.5 size-5 text-error" : step.status === "running" ? "mt-0.5 size-5 animate-spin text-primary" : "mt-0.5 size-5 text-outline"} />
         <div>
           <p className="font-bold">{label}</p>
           <p className="text-sm text-on-surface-variant">{(dict.processing.status as Record<string, string>)[step.status]}</p>
@@ -39,7 +40,7 @@ function StepRow({ label, step, onRetry, retrying }: { label: string; step: Proc
 }
 
 export function InvoicePaymentPanel({ invoice }: { invoice: Invoice }) {
-  const { dict, date } = useI18n();
+  const { dict, date, plural } = useI18n();
   const invoices = useInvoices();
   const services = useServices();
   const { notify } = useToast();
@@ -50,12 +51,21 @@ export function InvoicePaymentPanel({ invoice }: { invoice: Invoice }) {
   const svc = services.getById(invoice.serviceId);
   const proc = invoice.processing;
 
-  const retryLink = () => {
+  const retryLink = async () => {
     setRetrying("link");
-    const { link, step } = paymentLinkStep(svc?.provider ?? "", invoice.reference);
+    const { link, step } = await lookupPaymentLink(svc?.provider ?? "", invoice.reference);
     invoices.update(invoice.id, { paymentLink: link, processing: proc ? { ...proc, paymentLink: step } : undefined });
     setRetrying(null);
     notify(link ? dict.processing.linkFound : dict.processing.linkStillMissing, link ? "success" : "error");
+  };
+
+  const copyReference = async () => {
+    try {
+      await navigator.clipboard.writeText(invoice.reference ?? "");
+      notify(dict.payment.referenceCopied);
+    } catch {
+      notify(dict.payment.copyFailed, "error");
+    }
   };
 
   const retryExtraction = async () => {
@@ -88,8 +98,11 @@ export function InvoicePaymentPanel({ invoice }: { invoice: Invoice }) {
           <CreditCard aria-hidden="true" className="size-5 text-primary" /> {dict.payment.title}
         </h2>
         {invoice.reference && (
-          <p>
+          <p className="flex flex-wrap items-center gap-2">
             {dict.payment.reference}: <strong className="font-mono">{invoice.reference}</strong>
+            <Button size="sm" variant="ghost" icon={<Copy aria-hidden="true" className="size-4" />} onClick={copyReference}>
+              {dict.payment.copyReference}
+            </Button>
           </p>
         )}
         {invoice.cutoffDate && (
@@ -100,8 +113,13 @@ export function InvoicePaymentPanel({ invoice }: { invoice: Invoice }) {
         {invoice.paymentLink ? (
           <>
             <p className="flex flex-wrap items-center gap-2 text-sm text-on-surface-variant">
-              <Badge tone="info">{invoice.paymentLink.method === "api" ? dict.payment.viaApi : dict.payment.viaPortal}</Badge>
+              <Badge tone="info">
+                {invoice.paymentLink.method === "fallback" ? dict.payment.viaFallback : invoice.paymentLink.engine === "ia" ? dict.payment.viaAi : dict.payment.viaScraping}
+              </Badge>
               {svc?.provider}
+              {invoice.paymentLink.engine === "ia" && invoice.paymentLink.pagesVisited && (
+                <span className="text-xs">· {plural(dict.payment.pagesVisited, invoice.paymentLink.pagesVisited)}</span>
+              )}
             </p>
             {invoice.status === "pendiente" ? (
               <div className="flex flex-wrap gap-3">
@@ -116,11 +134,16 @@ export function InvoicePaymentPanel({ invoice }: { invoice: Invoice }) {
               <Badge tone="success">{dict.invoiceStatus.pagada}</Badge>
             )}
           </>
+        ) : proc?.paymentLink.status === "running" ? (
+          <p role="status" className="flex items-center gap-2 text-on-surface-variant">
+            <Loader2 aria-hidden="true" className="size-4 animate-spin" /> {dict.payment.searching}
+          </p>
         ) : (
           <p className="text-on-surface-variant" data-testid="no-payment-link">
             {dict.payment.unavailable}
           </p>
         )}
+        {invoice.paymentLink && invoice.reference && <p className="text-sm text-on-surface-variant">{dict.payment.useReference}</p>}
       </Card>
 
       {proc && (

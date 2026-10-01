@@ -13,7 +13,7 @@ import { Button } from "@/components/ui/Button";
 import { EmptyState, InfoNote } from "@/components/ui/Feedback";
 import { emptyInvoice, validateInvoice, type InvoiceInput } from "@/lib/domain/invoices";
 import { SERVICE_UNITS } from "@/lib/domain/services";
-import { resolvePaymentLink } from "@/lib/domain/paymentLinks";
+import { lookupPaymentLink } from "@/lib/paymentLinkClient";
 import type { Invoice } from "@/types";
 
 function Form({ initial, editing }: { initial: InvoiceInput; editing?: Invoice }) {
@@ -41,15 +41,18 @@ function Form({ initial, editing }: { initial: InvoiceInput; editing?: Invoice }
         notify(dict.invoices.updated);
         router.push(href(`/facturas/${editing.id}`));
       } else {
-        // HU14 (Alejandro): al registrar la factura se intenta obtener el link de pago
-        const link = svc ? resolvePaymentLink(svc.provider, values.reference) : null;
-        invoices.add({
+        const created = invoices.add({
           ...data,
           reference: values.reference?.trim() || undefined,
-          paymentLink: link?.ok ? link.link : undefined,
           status: "pendiente",
           createdAt: new Date().toISOString(),
         });
+        // HU14 (Alejandro): con referencia, se busca el link de pago en segundo plano
+        if (svc && values.reference?.trim()) {
+          void lookupPaymentLink(svc.provider, values.reference).then(({ link }) => {
+            if (link) invoices.update(created.id, { paymentLink: link });
+          });
+        }
         notify(dict.invoices.created);
         router.push(href("/facturas"));
       }

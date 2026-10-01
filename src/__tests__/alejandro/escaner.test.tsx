@@ -7,7 +7,7 @@ import { InvoicePaymentPanel } from "@/components/ai/InvoicePaymentPanel";
 import { DueRemindersSection, parseReminderDays } from "@/components/ai/DueReminders";
 import { invoicesStore, dueRemindersStore } from "@/data/stores";
 import { fieldsToReview, isOverdue, matchService, normalizeDate, sanitizeExtraction, validateReceiptFile } from "@/lib/domain/receipts";
-import { resolvePaymentLink } from "@/lib/domain/paymentLinks";
+import { checkLinkRequest, extractPaymentUrl, findProvider } from "@/lib/domain/paymentLinks";
 import { dueReminders, pruneReminders, validateReminderDays } from "@/lib/domain/reminders";
 import { seedServices } from "@/data/seed";
 import { addDays, toISODate } from "@/lib/utils";
@@ -140,6 +140,18 @@ describe("HU13 · Validar datos antes de guardar", () => {
     expect(mockRouter().push).toHaveBeenCalledWith(`/es/facturas/${created.id}`);
   });
 
+  it("guarda de inmediato y luego completa el link de pago en segundo plano", async () => {
+    const scanOk = { ok: true, status: 200, json: async () => ({ extraction: claudeExtraction }) };
+    const linkOk = { ok: true, status: 200, json: async () => ({ link: { url: ENEL_PAY, method: "scraping", obtainedAt: "" } }) };
+    global.fetch = jest.fn((url: string) => Promise.resolve(url === "/api/payment-link" ? linkOk : scanOk)) as unknown as typeof fetch;
+    const { user } = renderApp(<ReceiptScanner />);
+    await user.upload(screen.getByLabelText(/Sube o arrastra tu recibo/), receipt());
+    await user.type(await screen.findByLabelText(/Consumo/), "210");
+    await user.click(screen.getByRole("button", { name: "Confirmar y guardar" }));
+    await waitFor(() => expect(invoicesStore.get().at(-1)?.processing?.paymentLink.status).toBe("success"));
+    expect(invoicesStore.get().at(-1)?.paymentLink?.url).toBe(ENEL_PAY);
+  });
+
   it("descartar pide confirmación y vuelve al inicio", async () => {
     mockScan({ ok: true, body: { extraction: claudeExtraction } });
     const { user } = await scanReceipt();
@@ -149,6 +161,8 @@ describe("HU13 · Validar datos antes de guardar", () => {
     await waitFor(() => expect(screen.getByLabelText(/Sube o arrastra tu recibo/)).toBeInTheDocument());
   });
 });
+
+const ENEL_PAY = "https://www.enel.com.co/es/personas/servicio-al-cliente/boton-de-pago.html";
 
 const iaInvoice = (overrides: Partial<Invoice> = {}): Invoice => {
   const inv: Invoice = {
@@ -162,7 +176,7 @@ const iaInvoice = (overrides: Partial<Invoice> = {}): Invoice => {
     status: "pendiente",
     source: "ia",
     reference: "4829105531",
-    paymentLink: { url: "https://www.enel.com.co", method: "api", obtainedAt: new Date().toISOString() },
+    paymentLink: { url: ENEL_PAY, method: "scraping", obtainedAt: new Date().toISOString(), sourcePage: "https://www.enel.com.co/" },
     processing: {
       scan: { status: "success" },
       extraction: { status: "success" },
@@ -176,20 +190,43 @@ const iaInvoice = (overrides: Partial<Invoice> = {}): Invoice => {
 };
 
 describe("HU14 · Obtener link de pago", () => {
-  it("usa la API oficial o el portal web según la empresa", () => {
-    expect(resolvePaymentLink("Enel Colombia", "123")).toMatchObject({ ok: true, link: { method: "api" } });
-    expect(resolvePaymentLink("ETB", "123")).toMatchObject({ ok: true, link: { method: "scraping" } });
+  it("identifica la empresa y exige la referencia", () => {
+    expect(findProvider("ENEL COLOMBIA S.A.")?.id).toBe("enel");
+    expect(checkLinkRequest("Enel", "")).toEqual({ ok: false, error: "noReference" });
+    expect(checkLinkRequest("Essmar", "123")).toEqual({ ok: false, error: "unsupportedProvider" });
   });
 
-  it("falla sin referencia o con empresa no soportada", () => {
-    expect(resolvePaymentLink("Enel", "")).toEqual({ ok: false, error: "noReference" });
-    expect(resolvePaymentLink("Essmar", "123")).toEqual({ ok: false, error: "unsupportedProvider" });
+  it("el scraping extrae el botón de pago de la página pública y rechaza dominios no oficiales", () => {
+    const vanti = findProvider("Vanti")!;
+    const html = `<a href="https://pagos-vanti.example.com/">Falso</a><a href="https://pagosenlinea.grupovanti.com/">Paga aquí</a>`;
+    expect(extractPaymentUrl(html, vanti)).toBe("https://pagosenlinea.grupovanti.com/");
+    expect(extractPaymentUrl(`<a href="http://pagosenlinea.grupovanti.com/">x</a>`, vanti)).toBeNull();
+    const enel = findProvider("Enel")!;
+    expect(extractPaymentUrl(`<a href="/es/personas/servicio-al-cliente/boton-de-pago.html">Pagar aquí</a>`, enel)).toBe(ENEL_PAY);
+    const claro = findProvider("Claro")!;
+    expect(extractPaymentUrl(`<a href="https://portalpagos.claro.com.co/phrame.php?action=x&amp;metodo=formulario&amp;empresa=claro">Pagar</a>`, claro)).toBe(
+      "https://portalpagos.claro.com.co/phrame.php?action=x&metodo=formulario&empresa=claro",
+    );
   });
 
-  it("muestra el origen del link y la referencia en el detalle", () => {
-    renderApp(<InvoicePaymentPanel invoice={iaInvoice()} />);
-    expect(screen.getByText("API oficial")).toBeInTheDocument();
-    expect(screen.getAllByText("4829105531").length).toBeGreaterThan(0);
+  it("muestra el origen del link y permite copiar la referencia", async () => {
+    const { user } = renderApp(<InvoicePaymentPanel invoice={iaInvoice()} />);
+    expect(screen.getByText("Obtenido del portal oficial")).toBeInTheDocument();
+    await user.click(screen.getByRole("button", { name: "Copiar referencia" }));
+    // user-event instala un portapapeles de prueba en navigator.clipboard
+    expect(await navigator.clipboard.readText()).toBe("4829105531");
+    expect(await screen.findByText("Referencia copiada.")).toBeInTheDocument();
+  });
+
+  it("indica cuando el link lo encontró la IA y cuántas páginas revisó", () => {
+    renderApp(<InvoicePaymentPanel invoice={iaInvoice({ paymentLink: { url: ENEL_PAY, method: "scraping", engine: "ia", pagesVisited: 2, obtainedAt: "" } })} />);
+    expect(screen.getByText("Encontrado con IA en el portal oficial")).toBeInTheDocument();
+    expect(screen.getByText(/Claude revisó 2 páginas del sitio oficial/)).toBeInTheDocument();
+  });
+
+  it("indica cuando se usa el enlace de respaldo", () => {
+    renderApp(<InvoicePaymentPanel invoice={iaInvoice({ paymentLink: { url: ENEL_PAY, method: "fallback", obtainedAt: "" } })} />);
+    expect(screen.getByText("Enlace de respaldo al portal oficial")).toBeInTheDocument();
   });
 });
 
@@ -198,7 +235,7 @@ describe("HU15 · Pagar desde la app", () => {
     const { user } = renderApp(<InvoicePaymentPanel invoice={iaInvoice()} />);
     await user.click(screen.getByRole("button", { name: "Pagar" }));
     const link = await screen.findByRole("link", { name: /Ir al portal de pago/ });
-    expect(link).toHaveAttribute("href", "https://www.enel.com.co");
+    expect(link).toHaveAttribute("href", ENEL_PAY);
     expect(link).toHaveAttribute("target", "_blank");
     expect(link).toHaveAttribute("rel", "noopener noreferrer");
   });
@@ -234,9 +271,11 @@ describe("HU16 · Estado del procesamiento", () => {
 
   it("reintentar el paso obtiene el link cuando ya hay referencia", async () => {
     const inv = iaInvoice({ paymentLink: undefined, processing: { scan: { status: "success" }, extraction: { status: "success" }, paymentLink: { status: "error", error: "unsupportedProvider" } } });
+    global.fetch = jest.fn().mockResolvedValue({ ok: true, status: 200, json: async () => ({ link: { url: ENEL_PAY, method: "scraping", obtainedAt: "" } }) });
     const { user } = renderApp(<InvoicePaymentPanel invoice={inv} />);
     await user.click(screen.getByRole("button", { name: "Reintentar paso" }));
-    expect(invoicesStore.get().find((i) => i.id === inv.id)?.paymentLink?.url).toBe("https://www.enel.com.co");
+    await waitFor(() => expect(invoicesStore.get().find((i) => i.id === inv.id)?.paymentLink?.url).toBe(ENEL_PAY));
+    expect(global.fetch).toHaveBeenCalledWith("/api/payment-link", expect.objectContaining({ method: "POST" }));
   });
 });
 

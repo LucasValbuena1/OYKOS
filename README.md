@@ -69,7 +69,7 @@ npm run build && npm start
 | Internacionalización (i18n) | Rutas `/[lang]` (es/en), `src/proxy.ts` con redirección automática por `Accept-Language` y diccionarios JSON cargados de forma asíncrona en Server Components. |
 | Accesibilidad (a11y) | HTML semántico, un `h1` por página, labels asociados, `aria-invalid`/`aria-describedby` en errores, diálogos con *focus trap* y Escape, `aria-live` para toasts y conteos, enlace "saltar al contenido", foco visible, estados con color + ícono + texto. |
 | Hooks personalizados | Lógica de negocio y estados complejos en `src/hooks` (ver sección 6). |
-| Pruebas unitarias | 227 pruebas, **mínimo 3 por cada historia de usuario** (58 HU implementadas). |
+| Pruebas unitarias | 238 pruebas, **mínimo 3 por cada historia de usuario** (58 HU implementadas). |
 | Docker | `Dockerfile` multi-etapa (`output: "standalone"`), usuario sin privilegios; la imagen **no se construye si falla alguna prueba**. |
 | Seguridad | Auth0 (Universal Login, MFA, recuperación de contraseña); rutas privadas protegidas en el servidor. |
 | Inteligencia artificial | Claude (Anthropic) vía rutas de servidor `/api/ai/*`, con *structured outputs*, validación de la respuesta y *skeletons* de carga. |
@@ -145,7 +145,7 @@ npm test
 - `src/__tests__/<integrante>/<funcionalidad>.test.tsx`: un `describe` por HU con **3 o más** casos (criterios de aceptación: listados, validaciones, confirmaciones, cascadas, estados vacíos, cálculos).
 - `src/__tests__/general`: proxy de idioma, rutas privadas/Auth0, diccionarios, accesibilidad de componentes base y store.
 - Las llamadas a Claude y a Auth0 se reemplazan por dobles de prueba (`jest.fn`) **solo dentro de las pruebas**; la app siempre usa los servicios reales.
-- Resultado actual: **15 suites · 227 pruebas · 0 fallos**.
+- Resultado actual: **16 suites · 238 pruebas · 0 fallos**.
 
 ## 8. Funcionalidades con IA (Alejandro) — Claude
 
@@ -165,8 +165,35 @@ Las dos funcionalidades de IA usan la **API de Claude (Anthropic)** con el SDK o
 - HU11 extracción con nivel de confianza por campo; los campos dudosos o no detectados se resaltan.
 - HU12 fecha de corte y fecha límite normalizadas (varios formatos) y aviso si ya venció.
 - HU13 revisión y validación antes de guardar (mismas reglas del registro manual); descartar pide confirmación.
-- HU14 link de pago según la empresa (API oficial o portal web), HU15 pagar abriendo el portal oficial en otra pestaña y marcar como pagada con comprobante, HU16 estado de cada paso del procesamiento con reintento del paso fallido.
+- HU14 link de pago (ver abajo), HU15 pagar abriendo el portal oficial en otra pestaña y marcar como pagada con comprobante, HU16 estado de cada paso del procesamiento con reintento del paso fallido.
 - HU17 avisos de vencimiento configurables (p. ej. 5 y 1 día antes) en el centro de notificaciones y en la campana del encabezado.
+
+**Link de pago (HU14) — scraping con IA + enlaces de respaldo** (`POST /api/payment-link`, `lib/paymentLinkService.ts`)
+
+Ninguna de las empresas publica una API para terceros, así que el servidor de Oykos hace *scraping* de sus páginas **públicas** y Claude decide:
+
+1. **Descarga** la página pública de la empresa (`fetch`, *timeout* de 6 s, `User-Agent` que identifica a Oykos) y sigue las redirecciones por JavaScript o `<meta refresh>`.
+2. **Extrae los enlaces** con su texto (incluye `alt` de imágenes y `aria-label`) y deja solo los `https` de los **dominios oficiales** de esa empresa.
+3. **Claude (Haiku 4.5, `temperature: 0`) elige por número** el enlace que abre el pago en línea o, si no está, la página del mismo sitio a la que conviene ir (hasta **2 saltos**: "la IA navega"). Responder por número impide que invente URLs; el código vuelve a validar dominio y confianza (≥ 0,6). Los textos de la página se tratan como datos, no como instrucciones.
+4. Si una página llega sin enlaces (armada con JavaScript) y **Playwright** está instalado, se abre en un navegador sin interfaz. Es opcional: `npm i -D playwright && npx playwright install chromium`.
+5. Sin `ANTHROPIC_API_KEY` se usa el patrón conocido de cada empresa; si nada funciona, el **enlace de respaldo** al portal oficial.
+6. **Caché** en memoria: 6 h por empresa (como máximo una llamada a Claude por empresa cada 6 h); un respaldo, solo 10 min para que reintentar sirva.
+
+**Cómo se obtiene el link en cada empresa** (verificado en octubre de 2026):
+
+| Empresa | Cómo lo hace Oykos | Link que obtiene |
+|---|---|---|
+| EPM | Abre la página de inicio de EPM. Ahí hay un enlace "Paga tu factura" y Claude lo elige. | `aplicaciones.epm.com.co/facturaweb` |
+| Vanti | Abre la página "Paga tu factura" de Vanti, donde está el botón de pago en línea, y Claude lo elige. | `pagosenlinea.grupovanti.com` |
+| Claro | Abre la página "Portal de pagos" de Claro. Hay varias opciones (app, WhatsApp, pago de personas…) y Claude elige la de pago en línea para personas. | `portalpagos.claro.com.co` |
+| Air-e | Abre la página de inicio de Air-e. Ahí está el botón de pago por PSE y Claude lo elige. | `portal.air-e.com/Pagar` |
+| Acueducto | La página de inicio solo redirige a otra, así que Oykos sigue esa redirección. En el portal no está el botón, pero sí la sección "Pagos": Claude decide entrar ahí y en esa página encuentra el botón "Pagos PSE". Revisa 2 páginas. | `acueducto.com.co/mioficinavirtual` |
+| Enel | La página de Enel no deja entrar a programas automáticos (responde "acceso denegado"). Oykos no intenta saltarse ese bloqueo y usa el link de respaldo, que es la página oficial del botón de pago. | `enel.com.co/.../boton-de-pago.html` (respaldo) |
+| ETB | Igual que Enel: la página solo responde a navegadores reales. Se usa el link de respaldo a su portal de pagos. | `etb.com/pagos` (respaldo) |
+
+En todos los casos Claude solo puede escoger entre los enlaces de la página que van a sitios oficiales de la empresa; si escoge algo raro o no está seguro, Oykos busca el link con una regla fija por empresa y, si tampoco lo encuentra, usa el link de respaldo.
+
+**No se evaden bloqueos anti-bot ni captchas**: si el sitio responde 401/403/429/503 se respeta y se usa el respaldo. El pago siempre lo termina el usuario en el portal oficial con la referencia que muestra Oykos (botón para copiarla). La factura indica si el link lo encontró la IA (y cuántas páginas revisó), un patrón o es de respaldo, y el paso aparece en el estado del procesamiento (HU16) con reintento. Variables opcionales: `ANTHROPIC_LINK_MODEL` (modelo para elegir enlaces) y `OYKOS_DISABLE_BROWSER=1`.
 
 **Errores controlados:** sin sesión → 401; sin `ANTHROPIC_API_KEY` → 503 con mensaje que explica qué configurar; recibo ilegible → 422; falla de Claude → 502. La interfaz muestra cada caso y permite reintentar.
 

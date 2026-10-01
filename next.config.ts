@@ -5,6 +5,8 @@ const nextConfig: NextConfig = {
   // dependencias necesarias: la imagen de Docker queda liviana (~150 MB).
   output: "standalone",
   poweredByHeader: false,
+  // Playwright es opcional (scraping de páginas armadas con JavaScript): no se empaqueta.
+  serverExternalPackages: ["playwright"],
 };
 
 export default nextConfig;
