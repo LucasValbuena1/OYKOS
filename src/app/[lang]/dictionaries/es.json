@@ -1,0 +1,1012 @@
+{
+  "meta": {
+    "title": "Oykos · Tu santuario financiero",
+    "description": "Centraliza servicios públicos, impuestos y gastos fijos de tu hogar.",
+    "pages": {
+      "login": "Iniciar sesión",
+      "register": "Crear cuenta",
+      "recover": "Recuperar contraseña",
+      "dashboard": "Dashboard",
+      "calendar": "Calendario",
+      "households": "Hogares",
+      "householdNew": "Nuevo hogar",
+      "householdEdit": "Editar hogar",
+      "services": "Servicios",
+      "serviceNew": "Registrar servicio",
+      "serviceEdit": "Editar servicio",
+      "invoices": "Facturas",
+      "invoiceNew": "Registrar factura",
+      "invoiceEdit": "Editar factura",
+      "scanner": "Escanear recibo",
+      "taxes": "Impuestos",
+      "taxNew": "Registrar impuesto",
+      "taxEdit": "Editar impuesto",
+      "vehicles": "Vehículos",
+      "vehicleNew": "Registrar vehículo",
+      "vehicleEdit": "Editar vehículo",
+      "alerts": "Alertas",
+      "alertEdit": "Editar regla",
+      "notifications": "Notificaciones",
+      "incidents": "Incidentes",
+      "incidentNew": "Reportar falla",
+      "reports": "Reportes",
+      "profile": "Perfil",
+      "assistant": "Asistente IA"
+    }
+  },
+  "notFound": {
+    "title": "Página no encontrada",
+    "description": "La ruta que buscas no existe o fue movida.",
+    "back": "Volver al dashboard"
+  },
+  "language": {
+    "label": "Idioma",
+    "names": {
+      "es": "Español",
+      "en": "Inglés (English)"
+    }
+  },
+  "common": {
+    "loading": "Cargando…",
+    "cancel": "Cancelar",
+    "confirm": "Confirmar",
+    "delete": "Eliminar",
+    "save": "Guardar",
+    "saveChanges": "Guardar cambios",
+    "close": "Cerrar",
+    "back": "Volver",
+    "select": "Selecciona una opción",
+    "active": "Activo",
+    "all": "Todos",
+    "clear": "Limpiar",
+    "apply": "Aplicar",
+    "retry": "Reintentar",
+    "add": "Agregar",
+    "from": "Desde",
+    "to": "Hasta",
+    "today": "Hoy",
+    "yesterday": "Ayer",
+    "daysAgo": "Hace {days} días",
+    "viewAll": "Ver todo",
+    "none": "Ninguno",
+    "expand": "Expandir detalle",
+    "collapse": "Contraer detalle",
+    "skipToContent": "Saltar al contenido principal"
+  },
+  "validation": {
+    "required": "Este campo es obligatorio.",
+    "positive": "Ingresa un número mayor que cero.",
+    "integer": "Ingresa un número entero.",
+    "email": "El correo debe tener un formato válido (ejemplo@dominio.com).",
+    "phone": "Ingresa un teléfono válido (7 a 15 dígitos, puede iniciar con +).",
+    "passwordWeak": "La contraseña no cumple las reglas de seguridad.",
+    "passwordMismatch": "Las contraseñas no coinciden.",
+    "passwordSame": "La nueva contraseña no puede ser igual a la anterior.",
+    "emailTaken": "Ya existe una cuenta con este correo.",
+    "dateOrder": "La fecha de inicio debe ser anterior a la fecha de fin.",
+    "futureDate": "La fecha no puede ser futura.",
+    "plate": "Formato de placa inválido (ej. ABC123 o ABC12D).",
+    "plateTaken": "Ya tienes un vehículo registrado con esta placa.",
+    "yearRange": "El año está fuera del rango permitido.",
+    "stratum": "El estrato debe estar entre 1 y 6.",
+    "cutoffDay": "El día de corte debe estar entre 1 y 31.",
+    "duplicateService": "Ya existe este tipo de servicio con ese número de cuenta en el hogar.",
+    "percent": "El porcentaje debe estar entre 1 y 99.",
+    "minLength": "El texto es demasiado corto.",
+    "code": "El código no es válido."
+  },
+  "files": {
+    "choose": "Seleccionar archivo",
+    "hint": "PDF, JPG o PNG · máximo {max} MB",
+    "invalidType": "Formato no permitido. Usa PDF, JPG o PNG.",
+    "invalidImage": "Formato no permitido. Usa JPG o PNG.",
+    "tooLarge": "El archivo supera el tamaño máximo de {max} MB.",
+    "remove": "Quitar archivo {name}"
+  },
+  "nav": {
+    "label": "Menú de navegación",
+    "main": "Secciones de la aplicación",
+    "home": "Ir al inicio de Oykos",
+    "dashboard": "Dashboard",
+    "calendar": "Calendario",
+    "households": "Hogares",
+    "services": "Servicios",
+    "invoices": "Facturas",
+    "taxes": "Impuestos",
+    "vehicles": "Vehículos",
+    "alerts": "Alertas",
+    "assistant": "Asistente IA",
+    "incidents": "Incidentes",
+    "reports": "Exportar",
+    "profile": "Perfil"
+  },
+  "header": {
+    "search": "Buscar",
+    "searchPlaceholder": "Buscar en mi santuario…",
+    "household": "Hogar activo",
+    "notifications": "Notificaciones",
+    "notificationsUnread": "Notificaciones: {count} sin leer",
+    "userMenu": "Menú de usuario",
+    "openMenu": "Abrir menú",
+    "closeMenu": "Cerrar menú"
+  },
+  "auth": {
+    "welcomeBack": "Bienvenido de nuevo",
+    "login": "Iniciar sesión",
+    "logout": "Cerrar sesión",
+    "google": "Continuar con Google",
+    "haveAccount": "¿Ya tienes cuenta?",
+    "createAccount": "Crear cuenta",
+    "registerTitle": "Crea tu cuenta",
+    "recoverTitle": "Recupera tu contraseña"
+  },
+  "serviceTypes": {
+    "agua": "Agua",
+    "energia": "Energía",
+    "gas": "Gas natural",
+    "internet": "Internet",
+    "aseo": "Aseo"
+  },
+  "propertyTypes": {
+    "casa": "Casa",
+    "apartamento": "Apartamento",
+    "local": "Local"
+  },
+  "vehicleTypes": {
+    "automovil": "Automóvil",
+    "camioneta": "Camioneta",
+    "moto": "Motocicleta",
+    "otro": "Otro"
+  },
+  "expenseCategories": {
+    "combustible": "Combustible",
+    "mantenimiento": "Mantenimiento",
+    "seguro": "Seguro / SOAT",
+    "otro": "Otro"
+  },
+  "taxTypes": {
+    "predial": "Impuesto predial",
+    "vehicular": "Impuesto vehicular",
+    "valorizacion": "Valorización"
+  },
+  "taxStatus": {
+    "pendiente": "Pendiente",
+    "pagado": "Pagado",
+    "vencido": "Vencido"
+  },
+  "invoiceStatus": {
+    "pendiente": "Pendiente",
+    "pagada": "Pagada",
+    "vencida": "Vencida",
+    "por_vencer": "Por vencer",
+    "dueToday": "Vence hoy",
+    "dueInDays": "Vence en {days} días"
+  },
+  "incidentTypes": {
+    "corte": "Corte de servicio",
+    "falla": "Falla técnica",
+    "cobro": "Cobro incorrecto"
+  },
+  "incidentStatus": {
+    "abierto": "Abierto",
+    "en_gestion": "En gestión",
+    "resuelto": "Resuelto",
+    "cerrado": "Cerrado"
+  },
+  "dashboard": {
+    "greeting": "Hola, {name}",
+    "subtitle": "Tu santuario financiero en un vistazo. Tienes {count} facturas que requieren atención.",
+    "household": "Hogar",
+    "kpis": "Indicadores principales",
+    "kpi": {
+      "services": "Servicios totales",
+      "upcoming": "Facturas próximas",
+      "thisWeek": "Esta semana",
+      "alerts": "Alertas activas",
+      "attention": "Requiere atención",
+      "projection": "Proyección próxima factura",
+      "estimate": "Estimado"
+    },
+    "filters": {
+      "title": "Filtrar consumo",
+      "service": "Tipo de servicio",
+      "allServices": "Todos los servicios",
+      "period": "Periodo",
+      "month": "Mes",
+      "quarter": "Trimestre",
+      "year": "Año",
+      "custom": "Personalizado",
+      "from": "Desde (mes)",
+      "to": "Hasta (mes)",
+      "applied": "Filtros aplicados:",
+      "clear": "Limpiar filtros"
+    },
+    "breakdownTitle": "Gastos por servicio",
+    "periodRange": "{from} – {to}",
+    "noResults": "No hay datos para la combinación de filtros seleccionada.",
+    "emptyTitle": "Aún no hay facturas en este hogar",
+    "emptyDescription": "Registra tu primera factura para ver tu consumo, comparativas y proyecciones.",
+    "history": {
+      "title": "Comparativa histórica",
+      "range": "Rango de la gráfica",
+      "sixMonths": "6 meses",
+      "year": "12 meses",
+      "vsPrevious": "Vs. mes anterior",
+      "vsLastYear": "Vs. mismo mes del año pasado",
+      "increase": "Aumento importante",
+      "saving": "Ahorro importante",
+      "limited": "Solo hay {months} meses de historia disponibles."
+    },
+    "projection": {
+      "title": "Proyección de la próxima factura",
+      "estimateBadge": "Estimación",
+      "disclaimer": "Valor estimado a partir de tu consumo histórico; no es un valor oficial de la empresa prestadora.",
+      "above": "{amount} más que el mes anterior",
+      "below": "{amount} menos que el mes anterior",
+      "basedOn": "Basado en {months} meses de historia",
+      "insufficient": "Datos insuficientes para proyectar ({months} de 3 meses necesarios)."
+    },
+    "health": {
+      "title": "Salud financiera",
+      "description": "Porcentaje de facturas pagadas a tiempo en este hogar."
+    },
+    "upcomingTitle": "Próximos vencimientos",
+    "noUpcoming": "No tienes facturas próximas a vencer. ¡Todo en orden!",
+    "recentTitle": "Actividad reciente",
+    "openCalendar": "Ver calendario de vencimientos"
+  },
+  "calendar": {
+    "title": "Calendario de vencimientos",
+    "subtitle": "Gestiona tus pagos y compromisos de manera eficiente.",
+    "prev": "Mes anterior",
+    "next": "Mes siguiente",
+    "grid": "Calendario del mes",
+    "legend": {
+      "paid": "Pagado",
+      "pending": "Pendiente",
+      "overdue": "Vencido"
+    },
+    "events": "vencimientos",
+    "noEvents": "No hay vencimientos para este día.",
+    "payNow": "Pagar ahora",
+    "payUrgent": "Pagar urgente"
+  },
+  "households": {
+    "title": "Gestión de hogares",
+    "subtitle": "Administra tus propiedades y supervisa los servicios públicos asociados a cada una.",
+    "create": "Añadir nuevo hogar",
+    "createFirst": "Crear mi primer hogar",
+    "createTitle": "Nuevo hogar",
+    "createSubtitle": "Registra una propiedad para empezar a monitorear sus servicios.",
+    "editTitle": "Editar hogar",
+    "addProperty": "Añadir propiedad",
+    "counter": {
+      "one": "{count} hogar",
+      "other": "{count} hogares"
+    },
+    "servicesCount": {
+      "one": "{count} servicio",
+      "other": "{count} servicios"
+    },
+    "detail": "Vista detallada",
+    "verified": "Ubicación registrada",
+    "stratumValue": "Estrato {value}",
+    "linkedServices": "Servicios conectados",
+    "noServices": "Este hogar aún no tiene servicios vinculados.",
+    "linkService": "Vincular nuevo servicio",
+    "emptyTitle": "Todavía no tienes hogares",
+    "emptyDescription": "Crea tu primer hogar para registrar servicios, facturas e impuestos.",
+    "notFound": "No encontramos ese hogar.",
+    "editNamed": "Editar {name}",
+    "deleteNamed": "Eliminar {name}",
+    "confirmDeleteTitle": "¿Eliminar \"{name}\"?",
+    "confirmDeleteMessage": "También se eliminarán sus servicios, facturas, alertas, incidentes, impuestos y vehículos asociados. Esta acción no se puede deshacer.",
+    "created": "Hogar \"{name}\" creado correctamente.",
+    "updated": "Hogar \"{name}\" actualizado.",
+    "deleted": "Hogar \"{name}\" eliminado.",
+    "fields": {
+      "name": "Nombre del hogar",
+      "namePlaceholder": "Ej. Casa principal",
+      "type": "Tipo de propiedad",
+      "address": "Dirección",
+      "city": "Ciudad",
+      "stratum": "Estrato"
+    }
+  },
+  "services": {
+    "title": "Servicios públicos",
+    "subtitle": "Todo lo que administras en tu hogar, en un solo lugar.",
+    "create": "Registrar servicio",
+    "createFirst": "Registrar mi primer servicio",
+    "createTitle": "Registrar servicio",
+    "editTitle": "Editar servicio",
+    "formSubtitle": "Agua, energía, gas, internet o aseo.",
+    "householdFilter": "Hogar",
+    "counter": {
+      "one": "{count} servicio",
+      "other": "{count} servicios"
+    },
+    "contract": "Contrato Nº",
+    "lastInvoice": "Última factura",
+    "noInvoices": "Sin facturas registradas",
+    "emptyTitle": "Este hogar no tiene servicios",
+    "emptyDescription": "Registra un servicio para empezar a monitorear su consumo.",
+    "notFound": "No encontramos ese servicio.",
+    "backToList": "Volver a servicios",
+    "invoiceCount": "Facturas registradas",
+    "history": "Historial de facturas",
+    "editNamed": "Editar {name}",
+    "deleteNamed": "Eliminar {name}",
+    "confirmDeleteTitle": "¿Eliminar {name}?",
+    "confirmDeleteMessage": "Se eliminarán también las facturas, alertas e incidentes asociados a este servicio.",
+    "cascadeCount": "{count} facturas se eliminarán",
+    "created": "Servicio {name} registrado.",
+    "updated": "Servicio {name} actualizado.",
+    "deleted": "Servicio {name} eliminado.",
+    "typeLocked": "El tipo de servicio no se puede cambiar una vez creado.",
+    "providerHint": "Elige una sugerencia o escribe el nombre de la empresa.",
+    "editNote": "Los cambios no afectan las facturas ya registradas.",
+    "fields": {
+      "type": "Tipo de servicio",
+      "household": "Hogar",
+      "provider": "Empresa prestadora",
+      "accountNumber": "Número de cuenta / contrato",
+      "cutoffDay": "Día de corte"
+    }
+  },
+  "invoices": {
+    "title": "Facturas del santuario",
+    "subtitle": "Gestión inteligente de obligaciones. Mantén el orden y la tranquilidad financiera de tu hogar.",
+    "scanAi": "Escanear con IA",
+    "manual": "Manual",
+    "createManual": "Registrar factura",
+    "createTitle": "Registrar factura",
+    "editTitle": "Editar factura",
+    "formSubtitle": "Regístrala manualmente o adjunta la foto / PDF del recibo.",
+    "save": "Guardar factura",
+    "listTitle": "Lista de facturas",
+    "count": {
+      "one": "{count} elemento",
+      "other": "{count} elementos"
+    },
+    "periodRef": "Periodo: {period} • Ref: {ref}",
+    "dueOn": "Vto: {date}",
+    "paidOn": "Pagada el {date}",
+    "unknownService": "Servicio eliminado",
+    "emptyTitle": "No hay facturas que coincidan",
+    "emptyDescription": "Cambia los filtros o registra una nueva factura.",
+    "notFound": "No encontramos esa factura.",
+    "backToList": "Volver a facturas",
+    "edit": "Editar factura",
+    "delete": "Eliminar factura",
+    "noSupport": "Sin soporte adjunto.",
+    "markPaid": "Marcar como pagada",
+    "markedPaid": "Factura marcada como pagada.",
+    "confirmDeleteTitle": "¿Eliminar esta factura?",
+    "confirmDeleteMessage": "La factura dejará de contarse en el dashboard y en los reportes.",
+    "created": "Factura registrada con estado pendiente.",
+    "updated": "Factura actualizada.",
+    "deleted": "Factura de {period} eliminada.",
+    "tipTitle": "Consejo de ahorro",
+    "tip": "Desconectar los aparatos en modo espera puede reducir hasta un 10% tu factura de energía.",
+    "trendTitle": "Tendencias de gasto",
+    "trendSubtitle": "Análisis de los últimos 6 meses",
+    "trendNote": "Evolución mensual",
+    "detailedReport": "Ver reporte detallado",
+    "summary": {
+      "title": "Resumen del mes",
+      "total": "Total a pagar",
+      "paid": "Pagadas",
+      "progress": "Progreso"
+    },
+    "filters": {
+      "title": "Filtros",
+      "household": "Hogar",
+      "allHouseholds": "Todos los hogares",
+      "service": "Servicio",
+      "status": "Estado",
+      "all": "Todas"
+    },
+    "form": {
+      "mode": "Tipo de registro",
+      "manual": "Manual",
+      "photo": "Foto o PDF",
+      "receipt": "Recibo (foto o PDF)",
+      "receiptRequired": "Adjunta la foto o PDF del recibo.",
+      "photoNote": "Aquí completas los datos tú mismo. Para que Claude los lea automáticamente usa «Escanear recibo con IA».",
+      "support": "Soporte de la factura",
+      "referenceHint": "Opcional. Con la referencia Oykos puede obtener el link de pago de la empresa."
+    },
+    "fields": {
+      "service": "Servicio",
+      "period": "Periodo facturado",
+      "consumption": "Consumo",
+      "amount": "Valor",
+      "dueDate": "Fecha límite de pago",
+      "status": "Estado",
+      "reference": "Referencia de pago"
+    },
+    "showMore": "Mostrar {count} más"
+  },
+  "reports": {
+    "eyebrow": "Exportación",
+    "title": "Generador de reportes",
+    "subtitle": "Extrae, analiza y respalda la información financiera de tu hogar.",
+    "newReport": "Nuevo reporte",
+    "historyTab": "Historial",
+    "parameters": "Parámetros del reporte",
+    "types": {
+      "consumo": "Consumo",
+      "gastos": "Gastos",
+      "impuestos": "Impuestos"
+    },
+    "docTitle": {
+      "consumo": "Reporte de consumo",
+      "gastos": "Reporte financiero de gastos",
+      "impuestos": "Reporte de impuestos"
+    },
+    "fields": {
+      "household": "Hogar",
+      "type": "Tipo de reporte",
+      "from": "Fecha de inicio",
+      "to": "Fecha de fin",
+      "range": "Rango"
+    },
+    "quick": {
+      "title": "Rangos rápidos",
+      "lastMonth": "Último mes",
+      "last3": "Últimos 3 meses",
+      "lastYear": "Último año"
+    },
+    "errors": {
+      "household": "Selecciona un hogar.",
+      "order": "La fecha de inicio debe ser anterior a la fecha de fin."
+    },
+    "generate": "Generar vista previa",
+    "generating": "Generando reporte…",
+    "previewSubtitle": "Vista previa del documento generado",
+    "downloadPdf": "Descargar PDF",
+    "exportExcel": "Exportar Excel",
+    "exported": "Archivo {file} descargado.",
+    "exportError": "No se pudo exportar el archivo.",
+    "noData": "No hay datos en el rango seleccionado para generar el reporte.",
+    "total": "Total del periodo",
+    "previous": "Periodo anterior",
+    "variation": "Variación",
+    "byService": "Consumo por servicio",
+    "monthlyFlow": "Evolución del gasto",
+    "breakdown": "Desglose de operaciones",
+    "generatedAt": "Generado",
+    "table": {
+      "concept": "Concepto",
+      "period": "Periodo",
+      "amount": "Monto",
+      "status": "Estado"
+    },
+    "rowStatus": {
+      "pagada": "Pagada",
+      "pendiente": "Pendiente",
+      "pagado": "Pagado"
+    },
+    "historyTitle": "Historial de reportes",
+    "historyEmpty": "Aún no has generado reportes.",
+    "history": {
+      "type": "Tipo",
+      "generated": "Generado",
+      "actions": "Acciones",
+      "view": "Ver reporte",
+      "download": "Abrir para descargar"
+    },
+    "confirmDeleteTitle": "¿Eliminar este reporte del historial?",
+    "confirmDeleteMessage": "Podrás generarlo de nuevo cuando quieras.",
+    "deleted": "Reporte eliminado del historial."
+  },
+  "taxes": {
+    "eyebrow": "Gestión patrimonial",
+    "title": "Obligaciones tributarias",
+    "subtitle": "Visualiza tus compromisos fiscales con claridad y anticípate a los vencimientos.",
+    "create": "Registrar impuesto",
+    "createFirst": "Registrar mi primer impuesto",
+    "createTitle": "Registrar impuesto",
+    "editTitle": "Editar impuesto",
+    "formSubtitle": "Predial, vehicular o valorización.",
+    "summary": "Resumen tributario",
+    "totalYear": "Total estimado {year}",
+    "vsPrevious": "{value} vs. año anterior",
+    "nextDue": "Próximo vencimiento",
+    "noneDue": "No tienes impuestos pendientes.",
+    "currentCycle": "Ciclo actual",
+    "yearLabel": "Año gravable {year}",
+    "dueIn": {
+      "one": "Vence en {count} día",
+      "other": "Vence en {count} días"
+    },
+    "resultCount": "{count} impuestos en la lista",
+    "noResults": "No hay impuestos con esos filtros.",
+    "emptyTitle": "No tienes impuestos registrados",
+    "emptyDescription": "Registra el predial o el impuesto vehicular para llevar el control.",
+    "notFound": "No encontramos ese impuesto.",
+    "backToList": "Volver a impuestos",
+    "manage": "Gestionar impuesto",
+    "finalValue": "Valor a pagar",
+    "assetTypes": {
+      "hogar": "Hogar",
+      "vehiculo": "Vehículo"
+    },
+    "filters": {
+      "status": "Estado",
+      "asset": "Bien asociado"
+    },
+    "fields": {
+      "type": "Tipo de impuesto",
+      "assetType": "Tipo de bien",
+      "asset": "Bien asociado",
+      "year": "Año gravable",
+      "amount": "Valor",
+      "dueDate": "Fecha límite de pago"
+    },
+    "duplicateTitle": "Impuesto duplicado",
+    "duplicateMessage": "Ya existe un {type} para este bien en el año {year}. ¿Deseas registrarlo de todas formas?",
+    "saveAnyway": "Registrar de todas formas",
+    "paidEditTitle": "Este impuesto ya está pagado",
+    "paidEditWarning": "Este impuesto ya fue marcado como pagado. Si lo editas, verifica que coincida con el soporte de pago.",
+    "editAnyway": "Editar de todas formas",
+    "editNamed": "Editar {name}",
+    "deleteNamed": "Eliminar {name}",
+    "confirmDeleteTitle": "¿Eliminar {name}?",
+    "confirmDeleteMessage": "Se perderán el plan de cuotas y los soportes de pago asociados.",
+    "created": "Impuesto registrado con estado pendiente.",
+    "updated": "Impuesto actualizado.",
+    "deleted": "{name} eliminado.",
+    "plan": {
+      "title": "Plan de pago",
+      "mode": "Modalidad de pago",
+      "cash": "De contado",
+      "installments": "En cuotas",
+      "count": "Número de cuotas",
+      "firstDue": "Primera fecha de pago",
+      "generate": "Generar cuotas",
+      "generated": "Tabla de cuotas generada.",
+      "amount": "Valor",
+      "dueDate": "Vencimiento",
+      "status": "Estado",
+      "amountOf": "Valor de la cuota {n}",
+      "dueOf": "Vencimiento de la cuota {n}",
+      "payInstallment": "Marcar pagada",
+      "total": "Total cuotas",
+      "mismatch": "La suma de las cuotas no coincide con el valor del impuesto (diferencia: {diff})."
+    },
+    "discount": {
+      "title": "Descuento por pronto pago",
+      "badge": "Pronto pago disponible",
+      "percent": "Porcentaje de descuento",
+      "deadline": "Fecha límite del descuento",
+      "valueWith": "Valor con {percent}% de descuento",
+      "remaining": "Quedan {days} días para aprovecharlo",
+      "expired": "El descuento ya venció; aplica el valor pleno.",
+      "saved": "Descuento guardado.",
+      "remove": "Quitar descuento"
+    },
+    "payment": {
+      "title": "Registrar pago",
+      "date": "Fecha de pago",
+      "amount": "Valor pagado",
+      "attach": "Adjuntar comprobante",
+      "mark": "Marcar como pagado",
+      "marked": "Impuesto marcado como pagado.",
+      "paidTitle": "Pago registrado",
+      "downloadSupport": "Descargar soporte",
+      "revert": "Revertir marca de pago",
+      "reverted": "Se revirtió la marca de pago."
+    },
+    "history": {
+      "title": "Histórico y proyección",
+      "yoy": "Variación vs. año anterior",
+      "projection": "Proyección {year}",
+      "disclaimer": "La proyección es una estimación basada en el crecimiento histórico, no un valor oficial.",
+      "insufficient": "Aún no hay datos suficientes para proyectar (se necesitan al menos dos años)."
+    }
+  },
+  "vehicles": {
+    "title": "Vehículos",
+    "subtitle": "Gestión de la flota familiar y gastos asociados.",
+    "create": "Añadir vehículo",
+    "createFirst": "Registrar mi primer vehículo",
+    "createTitle": "Registrar vehículo",
+    "editTitle": "Editar vehículo",
+    "formSubtitle": "Placa, marca, modelo y año.",
+    "counter": {
+      "one": "{count} vehículo",
+      "other": "{count} vehículos"
+    },
+    "nextTax": "Próximo impuesto",
+    "emptyTitle": "No tienes vehículos registrados",
+    "emptyDescription": "Registra un vehículo para asociarle impuestos y gastos.",
+    "notFound": "No encontramos ese vehículo.",
+    "backToList": "Volver a vehículos",
+    "plateHint": "Carros: ABC123 · Motos: ABC12D",
+    "period": "Periodo de consulta",
+    "expensesTitle": "Desglose de gastos ({name})",
+    "noExpenses": "No hay gastos registrados en el periodo.",
+    "expenseAdded": "Gasto registrado.",
+    "expense": {
+      "category": "Categoría",
+      "description": "Descripción",
+      "amount": "Valor",
+      "date": "Fecha"
+    },
+    "taxesTitle": "Impuestos asociados",
+    "noTaxes": "Este vehículo no tiene impuestos registrados.",
+    "totalCost": "Costo total acumulado",
+    "taxesPart": "Impuestos",
+    "expensesPart": "Otros gastos",
+    "noCosts": "Sin costos en este periodo.",
+    "editNamed": "Editar {name}",
+    "deleteNamed": "Eliminar {name}",
+    "confirmDeleteTitle": "¿Eliminar {name}?",
+    "confirmDeleteMessage": "También se eliminarán los impuestos y gastos asociados al vehículo.",
+    "cascade": "Se eliminarán {taxes} impuestos y {expenses} gastos.",
+    "created": "Vehículo {name} registrado.",
+    "updated": "Vehículo {name} actualizado.",
+    "deleted": "Vehículo {name} eliminado.",
+    "fields": {
+      "plate": "Placa",
+      "brand": "Marca",
+      "model": "Modelo",
+      "year": "Año",
+      "type": "Tipo de vehículo",
+      "household": "Hogar asociado"
+    }
+  },
+  "alerts": {
+    "title": "Vigilancia activa",
+    "subtitle": "Monitoreo inteligente de tus servicios. Establece umbrales y recibe avisos antes de que los consumos se disparen.",
+    "notificationsCenter": "Centro de notificaciones",
+    "rulesTitle": "Reglas establecidas",
+    "counter": {
+      "one": "{count} regla",
+      "other": "{count} reglas"
+    },
+    "activeCount": "{count} activas",
+    "states": {
+      "exceeded": "Límite superado",
+      "near": "Cerca del límite",
+      "stable": "Estable",
+      "inactive": "Inactiva"
+    },
+    "metric": {
+      "valor": "Monto ($)",
+      "consumo": "Consumo (u)"
+    },
+    "channels": {
+      "app": "Dentro de la app",
+      "email": "Correo",
+      "ambos": "App y correo"
+    },
+    "progress": "Progreso actual",
+    "progressLabel": "{percent}% del umbral",
+    "activate": "Activar regla de {name}",
+    "deactivate": "Desactivar regla de {name}",
+    "activated": "Regla activada.",
+    "deactivated": "Regla desactivada.",
+    "openRule": "Abrir regla de {name}",
+    "newRule": "Nueva regla",
+    "create": "Establecer regla",
+    "created": "Regla creada y activa.",
+    "updated": "Regla actualizada.",
+    "deleted": "Regla eliminada. Sus notificaciones se conservan en el historial.",
+    "emptyTitle": "No tienes reglas configuradas",
+    "emptyDescription": "Crea la primera regla con el formulario de la derecha.",
+    "tagline": "Prevención inteligente antes de la facturación.",
+    "notFound": "No encontramos esa regla.",
+    "backToList": "Volver a alertas",
+    "editTitle": "Editar regla de alerta",
+    "confirmDeleteTitle": "¿Eliminar la regla de {name}?",
+    "confirmDeleteMessage": "La regla dejará de evaluarse. Las notificaciones ya generadas se conservan.",
+    "fields": {
+      "household": "Hogar",
+      "service": "Servicio a monitorear",
+      "servicePlaceholder": "Selecciona un servicio…",
+      "metric": "Tipo de métrica",
+      "threshold": "Límite de alerta",
+      "channel": "Canal de notificación",
+      "active": "Regla activa"
+    }
+  },
+  "notifications": {
+    "title": "Centro de notificaciones",
+    "unreadCount": "{count} sin leer",
+    "markAll": "Marcar todas como leídas",
+    "markRead": "Marcar como leída",
+    "viewService": "Ver servicio",
+    "new": "Nueva",
+    "alertTitle": "Alerta: {name}",
+    "message": "{household} · {period}: se alcanzó {value}, superando el umbral de {threshold}.",
+    "deletedService": "Servicio eliminado",
+    "emptyTitle": "No tienes notificaciones",
+    "emptyDescription": "Aquí aparecerán los avisos cuando un consumo supere tus reglas.",
+    "alertsTitle": "Alertas de consumo"
+  },
+  "incidents": {
+    "eyebrow": "Estado del sistema",
+    "title": "Centro de reportes",
+    "subtitle": "Gestiona y haz seguimiento de fallas o cortes de servicio. Transparencia y resolución en un solo lugar.",
+    "report": "Reportar falla",
+    "stats": "Resumen de incidentes",
+    "recent": "Incidentes recientes",
+    "counter": {
+      "one": "{count} incidente",
+      "other": "{count} incidentes"
+    },
+    "showClosed": "Mostrar incidentes cerrados (historial)",
+    "noResults": "No hay incidentes con esos filtros.",
+    "emptyTitle": "No has reportado incidentes",
+    "emptyDescription": "Cuando tengas una falla o corte, repórtala para dejar constancia.",
+    "selectTitle": "Selecciona un incidente",
+    "selectDescription": "Haz clic en cualquier reporte de la lista para ver su línea de tiempo, estado y notas.",
+    "notFound": "No encontramos ese incidente.",
+    "createTitle": "Reportar falla",
+    "createSubtitle": "Deja constancia del problema para reclamar ante la empresa.",
+    "needService": "Primero registra un servicio para poder reportar fallas.",
+    "descriptionPlaceholder": "Describe qué pasó, desde cuándo y cómo te afecta.",
+    "filingHint": "Número entregado por la empresa prestadora (opcional).",
+    "created": "Incidente {code} reportado.",
+    "filing": "Radicado {number}",
+    "noFiling": "Sin radicado",
+    "startedAt": "Inició: {date}",
+    "description": "Descripción del problema",
+    "editDescription": "Editar descripción y radicado",
+    "updated": "Incidente actualizado.",
+    "updateStatus": "Actualizar estado",
+    "commentPlaceholder": "Ej. La empresa agendó visita técnica.",
+    "saveStatus": "Registrar cambio",
+    "statusChanged": "Estado cambiado a {status}.",
+    "timeline": "Línea de tiempo",
+    "solvedOn": "Solucionado el {date}",
+    "close": "Cerrar incidente",
+    "confirmClose": "Confirmar cierre",
+    "closed": "Incidente cerrado. Queda disponible en el historial.",
+    "delete": "Eliminar",
+    "confirmDeleteTitle": "¿Eliminar el incidente {code}?",
+    "confirmDeleteMessage": "Se perderá su bitácora de forma definitiva.",
+    "deleted": "Incidente eliminado.",
+    "fields": {
+      "service": "Servicio afectado",
+      "type": "Tipo de incidente",
+      "startedAt": "Fecha y hora de inicio",
+      "description": "Descripción",
+      "filingNumber": "Número de radicado",
+      "evidence": "Evidencia (foto o documento)",
+      "status": "Estado",
+      "comment": "Comentario de seguimiento",
+      "solvedAt": "Fecha de solución",
+      "closingComment": "Comentario de cierre"
+    }
+  },
+  "profile": {
+    "title": "Mi perfil",
+    "subtitle": "Tu información personal y la seguridad de tu cuenta.",
+    "role": "Administrador principal",
+    "households": {
+      "one": "{count} hogar",
+      "other": "{count} hogares"
+    },
+    "changePhoto": "Cambiar foto de perfil",
+    "photoAlt": "Foto de perfil",
+    "photoTooLarge": "La foto no puede superar 1 MB.",
+    "photoUpdated": "Foto actualizada.",
+    "personalData": "Datos personales",
+    "saved": "Perfil actualizado.",
+    "security": "Seguridad y acceso",
+    "fields": {
+      "name": "Nombre completo",
+      "email": "Correo electrónico",
+      "phone": "Teléfono"
+    },
+    "twoFactor": {
+      "title": "Autenticación de dos factores (2FA)"
+    },
+    "password": {
+      "title": "Cambiar contraseña"
+    }
+  },
+  "ai": {
+    "eyebrow": "Inteligencia artificial",
+    "poweredBy": "Generado con Claude",
+    "errors": {
+      "aiUnavailable": "El servicio de IA no respondió. Intenta de nuevo en unos segundos.",
+      "aiNotConfigured": "Falta configurar la IA: agrega ANTHROPIC_API_KEY en .env.local y reinicia el servidor.",
+      "unauthorized": "Tu sesión expiró. Vuelve a iniciar sesión para usar la IA.",
+      "network": "No hay conexión con el servidor. Revisa tu red e intenta de nuevo."
+    }
+  },
+  "auth0": {
+    "loginSubtitle": "Inicia sesión de forma segura con Auth0.",
+    "signupSubtitle": "Crea tu cuenta en la página segura de Auth0; verificaremos tu correo.",
+    "recoverSubtitle": "La recuperación se hace en la página segura de Auth0: en el inicio de sesión elige \"¿Olvidaste tu contraseña?\".",
+    "goToRecovery": "Ir a recuperar contraseña",
+    "securedBy": "Tu contraseña nunca pasa por Oykos: la protege Auth0.",
+    "emailManaged": "El correo lo administra tu cuenta de Auth0.",
+    "mfaDescription": "La verificación en dos pasos la gestiona Auth0 (app autenticadora, SMS o correo). Al continuar podrás inscribir o verificar tu segundo factor.",
+    "mfaSetup": "Configurar o verificar MFA en Auth0",
+    "passwordDescription": "Te enviaremos un correo de Auth0 con un enlace temporal para crear una nueva contraseña.",
+    "sendPasswordEmail": "Enviar correo para cambiar contraseña",
+    "passwordEmailSent": "Revisa tu correo: Auth0 te envió el enlace para cambiar la contraseña.",
+    "passwordEmailError": "No se pudo solicitar el cambio de contraseña. Intenta de nuevo.",
+    "notConfiguredTitle": "Falta configurar Auth0",
+    "notConfigured": "Oykos usa Auth0 para la seguridad. Agrega estas variables en el archivo .env.local y reinicia el servidor:",
+    "emailVerified": "Correo verificado"
+  },
+  "scanner": {
+    "title": "Escanear recibo con IA",
+    "subtitle": "Sube la foto o el PDF de tu recibo y Claude completará los datos por ti.",
+    "upload": "Sube o arrastra tu recibo",
+    "formats": "JPG, PNG o PDF · máximo {max} MB",
+    "privacy": "El recibo se envía a Claude (Anthropic) solo para leer sus datos; la factura queda guardada en este navegador.",
+    "progress": "Progreso del escaneo",
+    "steps": {
+      "upload": "Recibo cargado",
+      "scan": "Escaneando recibo",
+      "extract": "Extrayendo datos con IA"
+    },
+    "done": "completado",
+    "running": "en curso",
+    "pendingStep": "pendiente",
+    "processing": "Procesando el recibo, espera un momento.",
+    "original": "Recibo original",
+    "resultTitle": "Datos detectados",
+    "failedTitle": "No pudimos leer el recibo",
+    "errors": {
+      "type": "Formato no permitido. Sube un archivo JPG, PNG o PDF.",
+      "size": "El archivo supera el máximo de {max} MB.",
+      "unreadable": "La imagen no es legible o no parece un recibo. Toma una foto más nítida y vuelve a intentarlo.",
+      "aiUnavailable": "El servicio de IA no respondió. Intenta de nuevo en unos segundos.",
+      "aiNotConfigured": "Falta configurar la IA: agrega ANTHROPIC_API_KEY en .env.local y reinicia el servidor.",
+      "unauthorized": "Tu sesión expiró. Vuelve a iniciar sesión para escanear.",
+      "network": "No hay conexión con el servidor. Revisa tu red e intenta de nuevo."
+    },
+    "manual": "Registrar manualmente",
+    "fields": {
+      "provider": "Empresa",
+      "reference": "Referencia de pago",
+      "amount": "Valor a pagar",
+      "cutoffDate": "Fecha de corte",
+      "dueDate": "Fecha límite de pago",
+      "period": "Periodo facturado",
+      "consumption": "Consumo",
+      "serviceType": "Tipo de servicio"
+    },
+    "confidence": "Confianza {value}%",
+    "lowConfidence": "Revisar · {value}%",
+    "notRead": "No detectado",
+    "reviewFirst": "Revisa los campos resaltados antes de guardar: {fields}.",
+    "overdue": "La fecha límite ya pasó: esta factura está vencida.",
+    "linkedService": "Servicio asociado",
+    "autoMatched": "Asociado automáticamente por la empresa del recibo.",
+    "chooseService": "No encontramos la empresa entre tus servicios: elige a cuál pertenece.",
+    "confirm": "Confirmar y guardar",
+    "discard": "Descartar",
+    "discardTitle": "¿Descartar el escaneo?",
+    "discardMessage": "Se perderán los datos detectados y no se creará la factura.",
+    "saved": "Factura guardada desde el recibo.",
+    "savedWithLink": "Factura guardada. Ya puedes pagarla desde la app."
+  },
+  "processing": {
+    "title": "Estado del procesamiento",
+    "steps": {
+      "scan": "Escaneo del recibo",
+      "extraction": "Extracción de datos",
+      "paymentLink": "Obtención del link de pago"
+    },
+    "status": {
+      "pending": "Pendiente",
+      "running": "En curso",
+      "success": "Completado",
+      "error": "Con error",
+      "skipped": "Omitido"
+    },
+    "errors": {
+      "noReference": "El recibo no tiene referencia de pago.",
+      "unsupportedProvider": "Aún no tenemos conexión con el portal de esta empresa.",
+      "aiUnavailable": "El servicio de IA no respondió."
+    },
+    "retryStep": "Reintentar paso",
+    "linkFound": "Link de pago obtenido.",
+    "linkStillMissing": "Todavía no se pudo obtener el link de pago.",
+    "extractionOk": "Datos del recibo actualizados.",
+    "extractionFailed": "No se pudo volver a extraer el recibo.",
+    "downloadOriginal": "Descargar recibo original"
+  },
+  "payment": {
+    "title": "Pago",
+    "reference": "Referencia",
+    "cutoff": "Fecha de corte",
+    "viaApi": "API oficial",
+    "viaPortal": "Portal web",
+    "pay": "Pagar",
+    "markPaidAfter": "Ya pagué",
+    "unavailable": "No hay link de pago disponible para esta factura. Puedes pagarla por los canales de la empresa y marcarla como pagada.",
+    "leaveTitle": "Vas a salir de Oykos",
+    "leaveMessage": "El pago se hace en el portal oficial de la empresa. Usa la referencia para encontrar tu factura.",
+    "goToPortal": "Ir al portal de pago",
+    "newTab": "se abre en una pestaña nueva",
+    "markPaidTitle": "¿Completaste el pago?",
+    "markPaidMessage": "Marca la factura como pagada y, si quieres, adjunta el comprobante.",
+    "proof": "Comprobante de pago (opcional)"
+  },
+  "assistant": {
+    "title": "Asistente IA",
+    "subtitle": "Predicciones, perfil de consumo, recomendaciones y score de sostenibilidad de tu hogar.",
+    "loading": "Claude está analizando los datos de tu hogar…",
+    "insufficient": "Tienes {months} meses con facturas; se necesitan al menos {needed} para el análisis completo.",
+    "prediction": {
+      "title": "Predicción del próximo mes",
+      "disclaimer": "Estimación basada en tu historial; el valor real puede variar.",
+      "consumption": "Consumo estimado: {value} {unit}",
+      "basedOn": "Basado en {months} meses de historial",
+      "needMore": "Hay {months} meses de datos; se necesitan {needed} para predecir."
+    },
+    "profile": {
+      "title": "Perfil de consumo",
+      "insufficient": "Aún no hay datos suficientes para definir tu perfil.",
+      "levels": {
+        "bajo": "Bajo",
+        "moderado": "Moderado",
+        "alto": "Alto"
+      },
+      "vsReference": "Promedio {avg}/mes vs. {ref} de hogares estrato {stratum}",
+      "basis": "Tu gasto está {ratio} respecto a hogares con patrones similares.",
+      "patterns": "Patrones detectados",
+      "peaks": "Meses de mayor gasto: {months}",
+      "heaviest": "{service} representa el {share}% de tu gasto"
+    },
+    "score": {
+      "title": "Score de sostenibilidad",
+      "insufficient": "Se necesita más historial de energía, agua o gas para calcular el score.",
+      "ranges": {
+        "bajo": "Bajo",
+        "medio": "Medio",
+        "alto": "Alto"
+      },
+      "meaning": {
+        "bajo": "Consumo muy por encima de la referencia",
+        "medio": "Consumo cercano a la referencia",
+        "alto": "Consumo eficiente"
+      },
+      "scale": "Escala del score",
+      "how": "Cómo se calcula",
+      "formula": "Cada servicio recibe 0–100 según su consumo frente a la referencia de un hogar colombiano, y se pondera: energía 45%, agua 35%, gas 20%.",
+      "weight": "Peso {weight}%",
+      "vsRef": "{value} {unit} vs. {ref} {unit}",
+      "evolution": "Evolución del score"
+    },
+    "recommendations": {
+      "title": "Recomendaciones de ahorro",
+      "dismiss": "Descartar recomendación: {title}",
+      "saving": "Ahorro estimado: {amount}/mes",
+      "none": "No hay recomendaciones por ahora.",
+      "allDismissed": "Descartaste todas las recomendaciones. Aparecerán nuevas cuando cambien tus datos."
+    }
+  },
+  "reminders": {
+    "title": "Avisos de vencimiento",
+    "enable": "Avisos antes de la fecha límite",
+    "enableDescription": "Te avisamos cuando una factura pendiente está por vencer.",
+    "enabled": "Avisos de vencimiento activados.",
+    "disabled": "Avisos de vencimiento desactivados.",
+    "days": "Días de anticipación",
+    "daysHint": "Separados por coma, entre 0 y 30. Ej.: 5, 1",
+    "daysError": "Ingresa uno o más números enteros entre 0 y 30, separados por coma.",
+    "saved": "Días de aviso guardados.",
+    "empty": "No tienes facturas próximas a vencer.",
+    "message": "{service} vence {when}",
+    "today": "hoy",
+    "inDays": {
+      "one": "en {count} día",
+      "other": "en {count} días"
+    },
+    "detail": "{amount} · fecha límite {date}",
+    "pay": "Ver y pagar",
+    "view": "Ver factura"
+  }
+}

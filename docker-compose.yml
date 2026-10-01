@@ -1,0 +1,8 @@
+services:
+  oykos-front:
+    build: .
+    image: oykos-front:latest
+    container_name: oykos-front
+    ports:
+      - "3000:3000"
+    restart: unless-stopped

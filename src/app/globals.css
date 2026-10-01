@@ -1,26 +1,79 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/*
+ * Tokens de diseño tomados del Figma de Oykos (paleta tipo Material 3).
+ * Se exponen como utilidades de Tailwind: bg-primary, text-on-surface, etc.
+ */
+@theme {
+  --font-sans: "Nunito Sans Variable", "Nunito Sans", ui-sans-serif, system-ui, sans-serif;
+
+  --color-primary: #24534c;
+  --color-primary-container: #3d6b64;
+  --color-on-primary: #ffffff;
+  --color-on-primary-container: #b9eae0;
+  --color-primary-fixed: #bbece3;
+  --color-primary-fixed-dim: #a0d0c7;
+
+  --color-secondary: #4b645a;
+  --color-secondary-container: #cde9dc;
+  --color-on-secondary-container: #516a60;
+
+  --color-tertiary: #763a28;
+  --color-tertiary-container: #93513e;
+  --color-on-tertiary-container: #ffd7cc;
+  --color-tertiary-fixed: #ffdbd1;
+
+  --color-error: #ba1a1a;
+  --color-error-container: #ffdad6;
+  --color-on-error-container: #93000a;
+
+  --color-surface: #f0fcf8;
+  --color-surface-low: #eaf6f2;
+  --color-surface-container: #e5f0ec;
+  --color-surface-high: #dfebe6;
+  --color-surface-highest: #d9e5e1;
+  --color-surface-inverse: #283330;
+  --color-on-surface-inverse: #e8f3ef;
+  --color-on-surface: #131e1b;
+  --color-on-surface-variant: #404847;
+  --color-outline: #707977;
+  --color-outline-variant: #c0c8c6;
+  --color-placeholder: #6b7280;
+
+  --color-paid: #34a853;
+  --color-pending: #fbbc04;
+  --color-pending-text: #8a6300;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  scroll-behavior: smooth;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--color-surface);
+  color: var(--color-on-surface);
+  font-family: var(--font-sans);
+}
+
+/* a11y: foco siempre visible y consistente (lineamiento visto en clase) */
+:focus-visible {
+  outline: 3px solid var(--color-primary-container);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+@media print {
+  .no-print {
+    display: none !important;
+  }
 }

@@ -1,0 +1,1012 @@
+{
+  "meta": {
+    "title": "Oykos · Your financial sanctuary",
+    "description": "Keep your home's utilities, taxes and fixed expenses in one place.",
+    "pages": {
+      "login": "Sign in",
+      "register": "Create account",
+      "recover": "Recover password",
+      "dashboard": "Dashboard",
+      "calendar": "Calendar",
+      "households": "Homes",
+      "householdNew": "New home",
+      "householdEdit": "Edit home",
+      "services": "Utilities",
+      "serviceNew": "Add utility",
+      "serviceEdit": "Edit utility",
+      "invoices": "Bills",
+      "invoiceNew": "Add bill",
+      "invoiceEdit": "Edit bill",
+      "scanner": "Scan receipt",
+      "taxes": "Taxes",
+      "taxNew": "Add tax",
+      "taxEdit": "Edit tax",
+      "vehicles": "Vehicles",
+      "vehicleNew": "Add vehicle",
+      "vehicleEdit": "Edit vehicle",
+      "alerts": "Alerts",
+      "alertEdit": "Edit rule",
+      "notifications": "Notifications",
+      "incidents": "Incidents",
+      "incidentNew": "Report an issue",
+      "reports": "Reports",
+      "profile": "Profile",
+      "assistant": "AI assistant"
+    }
+  },
+  "notFound": {
+    "title": "Page not found",
+    "description": "The page you are looking for does not exist or was moved.",
+    "back": "Back to dashboard"
+  },
+  "language": {
+    "label": "Language",
+    "names": {
+      "es": "Spanish (Español)",
+      "en": "English"
+    }
+  },
+  "common": {
+    "loading": "Loading…",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "delete": "Delete",
+    "save": "Save",
+    "saveChanges": "Save changes",
+    "close": "Close",
+    "back": "Back",
+    "select": "Select an option",
+    "active": "Active",
+    "all": "All",
+    "clear": "Clear",
+    "apply": "Apply",
+    "retry": "Retry",
+    "add": "Add",
+    "from": "From",
+    "to": "To",
+    "today": "Today",
+    "yesterday": "Yesterday",
+    "daysAgo": "{days} days ago",
+    "viewAll": "View all",
+    "none": "None",
+    "expand": "Expand details",
+    "collapse": "Collapse details",
+    "skipToContent": "Skip to main content"
+  },
+  "validation": {
+    "required": "This field is required.",
+    "positive": "Enter a number greater than zero.",
+    "integer": "Enter a whole number.",
+    "email": "Email must have a valid format (example@domain.com).",
+    "phone": "Enter a valid phone number (7 to 15 digits, may start with +).",
+    "passwordWeak": "The password does not meet the security rules.",
+    "passwordMismatch": "Passwords do not match.",
+    "passwordSame": "The new password cannot be the same as the previous one.",
+    "emailTaken": "An account with this email already exists.",
+    "dateOrder": "Start date must be before end date.",
+    "futureDate": "The date cannot be in the future.",
+    "plate": "Invalid plate format (e.g. ABC123 or ABC12D).",
+    "plateTaken": "You already have a vehicle with this plate.",
+    "yearRange": "The year is out of the allowed range.",
+    "stratum": "Stratum must be between 1 and 6.",
+    "cutoffDay": "Billing day must be between 1 and 31.",
+    "duplicateService": "This utility type with that account number already exists in the home.",
+    "percent": "Percentage must be between 1 and 99.",
+    "minLength": "The text is too short.",
+    "code": "The code is not valid."
+  },
+  "files": {
+    "choose": "Choose file",
+    "hint": "PDF, JPG or PNG · up to {max} MB",
+    "invalidType": "File type not allowed. Use PDF, JPG or PNG.",
+    "invalidImage": "File type not allowed. Use JPG or PNG.",
+    "tooLarge": "The file exceeds the {max} MB limit.",
+    "remove": "Remove file {name}"
+  },
+  "nav": {
+    "label": "Navigation menu",
+    "main": "App sections",
+    "home": "Go to Oykos home",
+    "dashboard": "Dashboard",
+    "calendar": "Calendar",
+    "households": "Homes",
+    "services": "Utilities",
+    "invoices": "Bills",
+    "taxes": "Taxes",
+    "vehicles": "Vehicles",
+    "alerts": "Alerts",
+    "assistant": "AI assistant",
+    "incidents": "Incidents",
+    "reports": "Export",
+    "profile": "Profile"
+  },
+  "header": {
+    "search": "Search",
+    "searchPlaceholder": "Search my sanctuary…",
+    "household": "Active home",
+    "notifications": "Notifications",
+    "notificationsUnread": "Notifications: {count} unread",
+    "userMenu": "User menu",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu"
+  },
+  "auth": {
+    "welcomeBack": "Welcome back",
+    "login": "Sign in",
+    "logout": "Sign out",
+    "google": "Continue with Google",
+    "haveAccount": "Already have an account?",
+    "createAccount": "Create account",
+    "registerTitle": "Create your account",
+    "recoverTitle": "Recover your password"
+  },
+  "serviceTypes": {
+    "agua": "Water",
+    "energia": "Electricity",
+    "gas": "Natural gas",
+    "internet": "Internet",
+    "aseo": "Waste collection"
+  },
+  "propertyTypes": {
+    "casa": "House",
+    "apartamento": "Apartment",
+    "local": "Commercial unit"
+  },
+  "vehicleTypes": {
+    "automovil": "Car",
+    "camioneta": "SUV / Pickup",
+    "moto": "Motorcycle",
+    "otro": "Other"
+  },
+  "expenseCategories": {
+    "combustible": "Fuel",
+    "mantenimiento": "Maintenance",
+    "seguro": "Insurance / SOAT",
+    "otro": "Other"
+  },
+  "taxTypes": {
+    "predial": "Property tax",
+    "vehicular": "Vehicle tax",
+    "valorizacion": "Betterment levy"
+  },
+  "taxStatus": {
+    "pendiente": "Pending",
+    "pagado": "Paid",
+    "vencido": "Overdue"
+  },
+  "invoiceStatus": {
+    "pendiente": "Pending",
+    "pagada": "Paid",
+    "vencida": "Overdue",
+    "por_vencer": "Due soon",
+    "dueToday": "Due today",
+    "dueInDays": "Due in {days} days"
+  },
+  "incidentTypes": {
+    "corte": "Service outage",
+    "falla": "Technical failure",
+    "cobro": "Incorrect charge"
+  },
+  "incidentStatus": {
+    "abierto": "Open",
+    "en_gestion": "In progress",
+    "resuelto": "Resolved",
+    "cerrado": "Closed"
+  },
+  "dashboard": {
+    "greeting": "Hi, {name}",
+    "subtitle": "Your financial sanctuary at a glance. You have {count} bills that need attention.",
+    "household": "Home",
+    "kpis": "Key indicators",
+    "kpi": {
+      "services": "Total utilities",
+      "upcoming": "Upcoming bills",
+      "thisWeek": "This week",
+      "alerts": "Active alerts",
+      "attention": "Needs attention",
+      "projection": "Next bill projection",
+      "estimate": "Estimated"
+    },
+    "filters": {
+      "title": "Filter consumption",
+      "service": "Utility type",
+      "allServices": "All utilities",
+      "period": "Period",
+      "month": "Month",
+      "quarter": "Quarter",
+      "year": "Year",
+      "custom": "Custom",
+      "from": "From (month)",
+      "to": "To (month)",
+      "applied": "Active filters:",
+      "clear": "Clear filters"
+    },
+    "breakdownTitle": "Spending by utility",
+    "periodRange": "{from} – {to}",
+    "noResults": "There is no data for the selected filters.",
+    "emptyTitle": "There are no bills for this home yet",
+    "emptyDescription": "Add your first bill to see consumption, comparisons and projections.",
+    "history": {
+      "title": "Historical comparison",
+      "range": "Chart range",
+      "sixMonths": "6 months",
+      "year": "12 months",
+      "vsPrevious": "Vs. previous month",
+      "vsLastYear": "Vs. same month last year",
+      "increase": "Significant increase",
+      "saving": "Significant saving",
+      "limited": "Only {months} months of history are available."
+    },
+    "projection": {
+      "title": "Next bill projection",
+      "estimateBadge": "Estimate",
+      "disclaimer": "Estimated from your historical consumption; this is not an official value from the provider.",
+      "above": "{amount} more than last month",
+      "below": "{amount} less than last month",
+      "basedOn": "Based on {months} months of history",
+      "insufficient": "Not enough data to project ({months} of 3 required months)."
+    },
+    "health": {
+      "title": "Financial health",
+      "description": "Share of bills paid on time in this home."
+    },
+    "upcomingTitle": "Upcoming due dates",
+    "noUpcoming": "No bills are due soon. Everything is in order!",
+    "recentTitle": "Recent activity",
+    "openCalendar": "Open due-date calendar"
+  },
+  "calendar": {
+    "title": "Due-date calendar",
+    "subtitle": "Manage your payments and commitments efficiently.",
+    "prev": "Previous month",
+    "next": "Next month",
+    "grid": "Month calendar",
+    "legend": {
+      "paid": "Paid",
+      "pending": "Pending",
+      "overdue": "Overdue"
+    },
+    "events": "due items",
+    "noEvents": "Nothing is due on this day.",
+    "payNow": "Pay now",
+    "payUrgent": "Pay urgently"
+  },
+  "households": {
+    "title": "Home management",
+    "subtitle": "Manage your properties and monitor the utilities linked to each one.",
+    "create": "Add new home",
+    "createFirst": "Create my first home",
+    "createTitle": "New home",
+    "createSubtitle": "Register a property to start monitoring its utilities.",
+    "editTitle": "Edit home",
+    "addProperty": "Add property",
+    "counter": {
+      "one": "{count} home",
+      "other": "{count} homes"
+    },
+    "servicesCount": {
+      "one": "{count} utility",
+      "other": "{count} utilities"
+    },
+    "detail": "Detailed view",
+    "verified": "Location registered",
+    "stratumValue": "Stratum {value}",
+    "linkedServices": "Connected utilities",
+    "noServices": "This home has no linked utilities yet.",
+    "linkService": "Link a new utility",
+    "emptyTitle": "You don't have any homes yet",
+    "emptyDescription": "Create your first home to add utilities, bills and taxes.",
+    "notFound": "We couldn't find that home.",
+    "editNamed": "Edit {name}",
+    "deleteNamed": "Delete {name}",
+    "confirmDeleteTitle": "Delete \"{name}\"?",
+    "confirmDeleteMessage": "Its utilities, bills, alerts, incidents, taxes and vehicles will also be deleted. This action cannot be undone.",
+    "created": "Home \"{name}\" created successfully.",
+    "updated": "Home \"{name}\" updated.",
+    "deleted": "Home \"{name}\" deleted.",
+    "fields": {
+      "name": "Home name",
+      "namePlaceholder": "e.g. Main house",
+      "type": "Property type",
+      "address": "Address",
+      "city": "City",
+      "stratum": "Stratum"
+    }
+  },
+  "services": {
+    "title": "Utilities",
+    "subtitle": "Everything you manage at home, in one place.",
+    "create": "Add utility",
+    "createFirst": "Add my first utility",
+    "createTitle": "Add utility",
+    "editTitle": "Edit utility",
+    "formSubtitle": "Water, electricity, gas, internet or waste collection.",
+    "householdFilter": "Home",
+    "counter": {
+      "one": "{count} utility",
+      "other": "{count} utilities"
+    },
+    "contract": "Contract No.",
+    "lastInvoice": "Last bill",
+    "noInvoices": "No bills yet",
+    "emptyTitle": "This home has no utilities",
+    "emptyDescription": "Add a utility to start monitoring its consumption.",
+    "notFound": "We couldn't find that utility.",
+    "backToList": "Back to utilities",
+    "invoiceCount": "Registered bills",
+    "history": "Bill history",
+    "editNamed": "Edit {name}",
+    "deleteNamed": "Delete {name}",
+    "confirmDeleteTitle": "Delete {name}?",
+    "confirmDeleteMessage": "Its bills, alerts and incidents will also be deleted.",
+    "cascadeCount": "{count} bills will be deleted",
+    "created": "Utility {name} added.",
+    "updated": "Utility {name} updated.",
+    "deleted": "Utility {name} deleted.",
+    "typeLocked": "The utility type cannot be changed once created.",
+    "providerHint": "Pick a suggestion or type the provider's name.",
+    "editNote": "Changes do not affect bills already registered.",
+    "fields": {
+      "type": "Utility type",
+      "household": "Home",
+      "provider": "Provider",
+      "accountNumber": "Account / contract number",
+      "cutoffDay": "Billing day"
+    }
+  },
+  "invoices": {
+    "title": "Sanctuary bills",
+    "subtitle": "Smart management of your obligations. Keep your home's finances calm and organized.",
+    "scanAi": "Scan with AI",
+    "manual": "Manual",
+    "createManual": "Add bill",
+    "createTitle": "Add bill",
+    "editTitle": "Edit bill",
+    "formSubtitle": "Enter it manually or attach a photo / PDF of the receipt.",
+    "save": "Save bill",
+    "listTitle": "Bill list",
+    "count": {
+      "one": "{count} item",
+      "other": "{count} items"
+    },
+    "periodRef": "Period: {period} • Ref: {ref}",
+    "dueOn": "Due: {date}",
+    "paidOn": "Paid on {date}",
+    "unknownService": "Deleted utility",
+    "emptyTitle": "No bills match",
+    "emptyDescription": "Change the filters or add a new bill.",
+    "notFound": "We couldn't find that bill.",
+    "backToList": "Back to bills",
+    "edit": "Edit bill",
+    "delete": "Delete bill",
+    "noSupport": "No receipt attached.",
+    "markPaid": "Mark as paid",
+    "markedPaid": "Bill marked as paid.",
+    "confirmDeleteTitle": "Delete this bill?",
+    "confirmDeleteMessage": "The bill will no longer count in the dashboard or reports.",
+    "created": "Bill added with pending status.",
+    "updated": "Bill updated.",
+    "deleted": "Bill for {period} deleted.",
+    "tipTitle": "Saving tip",
+    "tip": "Unplugging devices on standby can cut your electricity bill by up to 10%.",
+    "trendTitle": "Spending trends",
+    "trendSubtitle": "Analysis of the last 6 months",
+    "trendNote": "Monthly evolution",
+    "detailedReport": "View detailed report",
+    "summary": {
+      "title": "Month summary",
+      "total": "Total due",
+      "paid": "Paid",
+      "progress": "Progress"
+    },
+    "filters": {
+      "title": "Filters",
+      "household": "Home",
+      "allHouseholds": "All homes",
+      "service": "Utility",
+      "status": "Status",
+      "all": "All"
+    },
+    "form": {
+      "mode": "Entry type",
+      "manual": "Manual",
+      "photo": "Photo or PDF",
+      "receipt": "Receipt (photo or PDF)",
+      "receiptRequired": "Attach the receipt photo or PDF.",
+      "photoNote": "Here you fill in the data yourself. To have Claude read it automatically, use \"Scan receipt with AI\".",
+      "support": "Bill receipt",
+      "referenceHint": "Optional. With the reference Oykos can get the company's payment link."
+    },
+    "fields": {
+      "service": "Utility",
+      "period": "Billing period",
+      "consumption": "Consumption",
+      "amount": "Amount",
+      "dueDate": "Payment due date",
+      "status": "Status",
+      "reference": "Payment reference"
+    },
+    "showMore": "Show {count} more"
+  },
+  "reports": {
+    "eyebrow": "Export",
+    "title": "Report builder",
+    "subtitle": "Extract, analyze and back up your home's financial information.",
+    "newReport": "New report",
+    "historyTab": "History",
+    "parameters": "Report parameters",
+    "types": {
+      "consumo": "Consumption",
+      "gastos": "Spending",
+      "impuestos": "Taxes"
+    },
+    "docTitle": {
+      "consumo": "Consumption report",
+      "gastos": "Spending financial report",
+      "impuestos": "Tax report"
+    },
+    "fields": {
+      "household": "Home",
+      "type": "Report type",
+      "from": "Start date",
+      "to": "End date",
+      "range": "Range"
+    },
+    "quick": {
+      "title": "Quick ranges",
+      "lastMonth": "Last month",
+      "last3": "Last 3 months",
+      "lastYear": "Last year"
+    },
+    "errors": {
+      "household": "Select a home.",
+      "order": "Start date must be before end date."
+    },
+    "generate": "Generate preview",
+    "generating": "Generating report…",
+    "previewSubtitle": "Preview of the generated document",
+    "downloadPdf": "Download PDF",
+    "exportExcel": "Export Excel",
+    "exported": "File {file} downloaded.",
+    "exportError": "The file could not be exported.",
+    "noData": "There is no data in the selected range to build the report.",
+    "total": "Period total",
+    "previous": "Previous period",
+    "variation": "Change",
+    "byService": "Consumption by utility",
+    "monthlyFlow": "Spending evolution",
+    "breakdown": "Transaction breakdown",
+    "generatedAt": "Generated",
+    "table": {
+      "concept": "Item",
+      "period": "Period",
+      "amount": "Amount",
+      "status": "Status"
+    },
+    "rowStatus": {
+      "pagada": "Paid",
+      "pendiente": "Pending",
+      "pagado": "Paid"
+    },
+    "historyTitle": "Report history",
+    "historyEmpty": "You haven't generated any reports yet.",
+    "history": {
+      "type": "Type",
+      "generated": "Generated",
+      "actions": "Actions",
+      "view": "View report",
+      "download": "Open to download"
+    },
+    "confirmDeleteTitle": "Delete this report from history?",
+    "confirmDeleteMessage": "You can generate it again at any time.",
+    "deleted": "Report removed from history."
+  },
+  "taxes": {
+    "eyebrow": "Asset management",
+    "title": "Tax obligations",
+    "subtitle": "See your tax commitments clearly and stay ahead of due dates.",
+    "create": "Add tax",
+    "createFirst": "Add my first tax",
+    "createTitle": "Add tax",
+    "editTitle": "Edit tax",
+    "formSubtitle": "Property, vehicle or betterment levy.",
+    "summary": "Tax summary",
+    "totalYear": "Estimated total {year}",
+    "vsPrevious": "{value} vs. previous year",
+    "nextDue": "Next due date",
+    "noneDue": "You have no pending taxes.",
+    "currentCycle": "Current cycle",
+    "yearLabel": "Tax year {year}",
+    "dueIn": {
+      "one": "Due in {count} day",
+      "other": "Due in {count} days"
+    },
+    "resultCount": "{count} taxes in the list",
+    "noResults": "No taxes match those filters.",
+    "emptyTitle": "You have no taxes registered",
+    "emptyDescription": "Add your property or vehicle tax to keep track of it.",
+    "notFound": "We couldn't find that tax.",
+    "backToList": "Back to taxes",
+    "manage": "Manage tax",
+    "finalValue": "Amount due",
+    "assetTypes": {
+      "hogar": "Home",
+      "vehiculo": "Vehicle"
+    },
+    "filters": {
+      "status": "Status",
+      "asset": "Related asset"
+    },
+    "fields": {
+      "type": "Tax type",
+      "assetType": "Asset type",
+      "asset": "Related asset",
+      "year": "Tax year",
+      "amount": "Amount",
+      "dueDate": "Payment due date"
+    },
+    "duplicateTitle": "Duplicate tax",
+    "duplicateMessage": "A {type} already exists for this asset in {year}. Do you want to add it anyway?",
+    "saveAnyway": "Add anyway",
+    "paidEditTitle": "This tax is already paid",
+    "paidEditWarning": "This tax was already marked as paid. If you edit it, make sure it matches the payment receipt.",
+    "editAnyway": "Edit anyway",
+    "editNamed": "Edit {name}",
+    "deleteNamed": "Delete {name}",
+    "confirmDeleteTitle": "Delete {name}?",
+    "confirmDeleteMessage": "The installment plan and payment receipts will be lost.",
+    "created": "Tax added with pending status.",
+    "updated": "Tax updated.",
+    "deleted": "{name} deleted.",
+    "plan": {
+      "title": "Payment plan",
+      "mode": "Payment method",
+      "cash": "Single payment",
+      "installments": "Installments",
+      "count": "Number of installments",
+      "firstDue": "First payment date",
+      "generate": "Generate installments",
+      "generated": "Installment table generated.",
+      "amount": "Amount",
+      "dueDate": "Due date",
+      "status": "Status",
+      "amountOf": "Amount of installment {n}",
+      "dueOf": "Due date of installment {n}",
+      "payInstallment": "Mark paid",
+      "total": "Installments total",
+      "mismatch": "The installments don't add up to the tax amount (difference: {diff})."
+    },
+    "discount": {
+      "title": "Early payment discount",
+      "badge": "Early payment available",
+      "percent": "Discount percentage",
+      "deadline": "Discount deadline",
+      "valueWith": "Amount with {percent}% discount",
+      "remaining": "{days} days left to use it",
+      "expired": "The discount has expired; the full amount applies.",
+      "saved": "Discount saved.",
+      "remove": "Remove discount"
+    },
+    "payment": {
+      "title": "Register payment",
+      "date": "Payment date",
+      "amount": "Amount paid",
+      "attach": "Attach receipt",
+      "mark": "Mark as paid",
+      "marked": "Tax marked as paid.",
+      "paidTitle": "Payment registered",
+      "downloadSupport": "Download receipt",
+      "revert": "Undo payment",
+      "reverted": "Payment mark removed."
+    },
+    "history": {
+      "title": "History and projection",
+      "yoy": "Change vs. previous year",
+      "projection": "{year} projection",
+      "disclaimer": "The projection is an estimate based on historical growth, not an official value.",
+      "insufficient": "There is not enough data to project yet (at least two years are needed)."
+    }
+  },
+  "vehicles": {
+    "title": "Vehicles",
+    "subtitle": "Family fleet management and related expenses.",
+    "create": "Add vehicle",
+    "createFirst": "Add my first vehicle",
+    "createTitle": "Add vehicle",
+    "editTitle": "Edit vehicle",
+    "formSubtitle": "Plate, make, model and year.",
+    "counter": {
+      "one": "{count} vehicle",
+      "other": "{count} vehicles"
+    },
+    "nextTax": "Next tax",
+    "emptyTitle": "You have no vehicles registered",
+    "emptyDescription": "Add a vehicle to link taxes and expenses to it.",
+    "notFound": "We couldn't find that vehicle.",
+    "backToList": "Back to vehicles",
+    "plateHint": "Cars: ABC123 · Motorcycles: ABC12D",
+    "period": "Query period",
+    "expensesTitle": "Expense breakdown ({name})",
+    "noExpenses": "No expenses recorded in this period.",
+    "expenseAdded": "Expense recorded.",
+    "expense": {
+      "category": "Category",
+      "description": "Description",
+      "amount": "Amount",
+      "date": "Date"
+    },
+    "taxesTitle": "Related taxes",
+    "noTaxes": "This vehicle has no taxes registered.",
+    "totalCost": "Accumulated total cost",
+    "taxesPart": "Taxes",
+    "expensesPart": "Other expenses",
+    "noCosts": "No costs in this period.",
+    "editNamed": "Edit {name}",
+    "deleteNamed": "Delete {name}",
+    "confirmDeleteTitle": "Delete {name}?",
+    "confirmDeleteMessage": "Its related taxes and expenses will also be deleted.",
+    "cascade": "{taxes} taxes and {expenses} expenses will be deleted.",
+    "created": "Vehicle {name} added.",
+    "updated": "Vehicle {name} updated.",
+    "deleted": "Vehicle {name} deleted.",
+    "fields": {
+      "plate": "Plate",
+      "brand": "Make",
+      "model": "Model",
+      "year": "Year",
+      "type": "Vehicle type",
+      "household": "Related home"
+    }
+  },
+  "alerts": {
+    "title": "Active watch",
+    "subtitle": "Smart monitoring of your utilities. Set thresholds and get notified before consumption spikes.",
+    "notificationsCenter": "Notification center",
+    "rulesTitle": "Established rules",
+    "counter": {
+      "one": "{count} rule",
+      "other": "{count} rules"
+    },
+    "activeCount": "{count} active",
+    "states": {
+      "exceeded": "Limit exceeded",
+      "near": "Close to limit",
+      "stable": "Stable",
+      "inactive": "Inactive"
+    },
+    "metric": {
+      "valor": "Amount ($)",
+      "consumo": "Consumption (u)"
+    },
+    "channels": {
+      "app": "In the app",
+      "email": "Email",
+      "ambos": "App and email"
+    },
+    "progress": "Current progress",
+    "progressLabel": "{percent}% of the threshold",
+    "activate": "Activate {name} rule",
+    "deactivate": "Deactivate {name} rule",
+    "activated": "Rule activated.",
+    "deactivated": "Rule deactivated.",
+    "openRule": "Open {name} rule",
+    "newRule": "New rule",
+    "create": "Set rule",
+    "created": "Rule created and active.",
+    "updated": "Rule updated.",
+    "deleted": "Rule deleted. Its notifications are kept in the history.",
+    "emptyTitle": "You have no rules configured",
+    "emptyDescription": "Create your first rule with the form on the right.",
+    "tagline": "Smart prevention before billing.",
+    "notFound": "We couldn't find that rule.",
+    "backToList": "Back to alerts",
+    "editTitle": "Edit alert rule",
+    "confirmDeleteTitle": "Delete the {name} rule?",
+    "confirmDeleteMessage": "The rule will stop being evaluated. Notifications already generated are kept.",
+    "fields": {
+      "household": "Home",
+      "service": "Utility to monitor",
+      "servicePlaceholder": "Select a utility…",
+      "metric": "Metric type",
+      "threshold": "Alert threshold",
+      "channel": "Notification channel",
+      "active": "Rule active"
+    }
+  },
+  "notifications": {
+    "title": "Notification center",
+    "unreadCount": "{count} unread",
+    "markAll": "Mark all as read",
+    "markRead": "Mark as read",
+    "viewService": "View utility",
+    "new": "New",
+    "alertTitle": "Alert: {name}",
+    "message": "{household} · {period}: reached {value}, above the {threshold} threshold.",
+    "deletedService": "Deleted utility",
+    "emptyTitle": "You have no notifications",
+    "emptyDescription": "Alerts will appear here when consumption exceeds your rules.",
+    "alertsTitle": "Consumption alerts"
+  },
+  "incidents": {
+    "eyebrow": "System status",
+    "title": "Report center",
+    "subtitle": "Manage and track service failures or outages. Transparency and resolution in one place.",
+    "report": "Report an issue",
+    "stats": "Incident summary",
+    "recent": "Recent incidents",
+    "counter": {
+      "one": "{count} incident",
+      "other": "{count} incidents"
+    },
+    "showClosed": "Show closed incidents (history)",
+    "noResults": "No incidents match those filters.",
+    "emptyTitle": "You haven't reported any incidents",
+    "emptyDescription": "When you have a failure or outage, report it to keep a record.",
+    "selectTitle": "Select an incident",
+    "selectDescription": "Click any report in the list to see its timeline, status and notes.",
+    "notFound": "We couldn't find that incident.",
+    "createTitle": "Report an issue",
+    "createSubtitle": "Keep a record of the problem to file a claim with the provider.",
+    "needService": "Add a utility first to be able to report issues.",
+    "descriptionPlaceholder": "Describe what happened, since when and how it affects you.",
+    "filingHint": "Claim number given by the provider (optional).",
+    "created": "Incident {code} reported.",
+    "filing": "Claim {number}",
+    "noFiling": "No claim number",
+    "startedAt": "Started: {date}",
+    "description": "Problem description",
+    "editDescription": "Edit description and claim number",
+    "updated": "Incident updated.",
+    "updateStatus": "Update status",
+    "commentPlaceholder": "e.g. The provider scheduled a technician.",
+    "saveStatus": "Save change",
+    "statusChanged": "Status changed to {status}.",
+    "timeline": "Timeline",
+    "solvedOn": "Solved on {date}",
+    "close": "Close incident",
+    "confirmClose": "Confirm closing",
+    "closed": "Incident closed. It remains available in the history.",
+    "delete": "Delete",
+    "confirmDeleteTitle": "Delete incident {code}?",
+    "confirmDeleteMessage": "Its log will be permanently lost.",
+    "deleted": "Incident deleted.",
+    "fields": {
+      "service": "Affected utility",
+      "type": "Incident type",
+      "startedAt": "Start date and time",
+      "description": "Description",
+      "filingNumber": "Claim number",
+      "evidence": "Evidence (photo or document)",
+      "status": "Status",
+      "comment": "Follow-up comment",
+      "solvedAt": "Solution date",
+      "closingComment": "Closing comment"
+    }
+  },
+  "profile": {
+    "title": "My profile",
+    "subtitle": "Your personal information and account security.",
+    "role": "Main administrator",
+    "households": {
+      "one": "{count} home",
+      "other": "{count} homes"
+    },
+    "changePhoto": "Change profile photo",
+    "photoAlt": "Profile photo",
+    "photoTooLarge": "The photo cannot exceed 1 MB.",
+    "photoUpdated": "Photo updated.",
+    "personalData": "Personal data",
+    "saved": "Profile updated.",
+    "security": "Security and access",
+    "fields": {
+      "name": "Full name",
+      "email": "Email",
+      "phone": "Phone"
+    },
+    "twoFactor": {
+      "title": "Two-factor authentication (2FA)"
+    },
+    "password": {
+      "title": "Change password"
+    }
+  },
+  "ai": {
+    "eyebrow": "Artificial intelligence",
+    "poweredBy": "Generated with Claude",
+    "errors": {
+      "aiUnavailable": "The AI service did not respond. Try again in a few seconds.",
+      "aiNotConfigured": "AI is not configured: add ANTHROPIC_API_KEY to .env.local and restart the server.",
+      "unauthorized": "Your session expired. Sign in again to use the AI.",
+      "network": "Can't reach the server. Check your connection and try again."
+    }
+  },
+  "auth0": {
+    "loginSubtitle": "Sign in securely with Auth0.",
+    "signupSubtitle": "Create your account on Auth0's secure page; we'll verify your email.",
+    "recoverSubtitle": "Recovery happens on Auth0's secure page: on sign-in choose \"Forgot your password?\".",
+    "goToRecovery": "Go to password recovery",
+    "securedBy": "Your password never goes through Oykos: Auth0 protects it.",
+    "emailManaged": "Your email is managed by your Auth0 account.",
+    "mfaDescription": "Two-step verification is managed by Auth0 (authenticator app, SMS or email). Continue to enroll or verify your second factor.",
+    "mfaSetup": "Set up or verify MFA in Auth0",
+    "passwordDescription": "We'll send you an Auth0 email with a temporary link to create a new password.",
+    "sendPasswordEmail": "Send password change email",
+    "passwordEmailSent": "Check your email: Auth0 sent you the link to change your password.",
+    "passwordEmailError": "The password change could not be requested. Try again.",
+    "notConfiguredTitle": "Auth0 is not configured",
+    "notConfigured": "Oykos uses Auth0 for security. Add these variables to the .env.local file and restart the server:",
+    "emailVerified": "Email verified"
+  },
+  "scanner": {
+    "title": "Scan receipt with AI",
+    "subtitle": "Upload a photo or PDF of your receipt and Claude will fill in the details for you.",
+    "upload": "Upload or drop your receipt",
+    "formats": "JPG, PNG or PDF · up to {max} MB",
+    "privacy": "The receipt is sent to Claude (Anthropic) only to read its data; the invoice is saved in this browser.",
+    "progress": "Scan progress",
+    "steps": {
+      "upload": "Receipt uploaded",
+      "scan": "Scanning receipt",
+      "extract": "Extracting data with AI"
+    },
+    "done": "done",
+    "running": "in progress",
+    "pendingStep": "pending",
+    "processing": "Processing the receipt, please wait.",
+    "original": "Original receipt",
+    "resultTitle": "Detected data",
+    "failedTitle": "We couldn't read the receipt",
+    "errors": {
+      "type": "File type not allowed. Upload a JPG, PNG or PDF file.",
+      "size": "The file is larger than {max} MB.",
+      "unreadable": "The image isn't legible or doesn't look like a receipt. Take a sharper photo and try again.",
+      "aiUnavailable": "The AI service did not respond. Try again in a few seconds.",
+      "aiNotConfigured": "AI is not configured: add ANTHROPIC_API_KEY to .env.local and restart the server.",
+      "unauthorized": "Your session expired. Sign in again to scan.",
+      "network": "Can't reach the server. Check your connection and try again."
+    },
+    "manual": "Register manually",
+    "fields": {
+      "provider": "Company",
+      "reference": "Payment reference",
+      "amount": "Amount due",
+      "cutoffDate": "Cutoff date",
+      "dueDate": "Payment due date",
+      "period": "Billing period",
+      "consumption": "Consumption",
+      "serviceType": "Service type"
+    },
+    "confidence": "Confidence {value}%",
+    "lowConfidence": "Check · {value}%",
+    "notRead": "Not detected",
+    "reviewFirst": "Review the highlighted fields before saving: {fields}.",
+    "overdue": "The due date has passed: this invoice is overdue.",
+    "linkedService": "Linked service",
+    "autoMatched": "Matched automatically by the company on the receipt.",
+    "chooseService": "We couldn't find the company among your services: choose which one it belongs to.",
+    "confirm": "Confirm and save",
+    "discard": "Discard",
+    "discardTitle": "Discard the scan?",
+    "discardMessage": "The detected data will be lost and no invoice will be created.",
+    "saved": "Invoice saved from the receipt.",
+    "savedWithLink": "Invoice saved. You can now pay it from the app."
+  },
+  "processing": {
+    "title": "Processing status",
+    "steps": {
+      "scan": "Receipt scan",
+      "extraction": "Data extraction",
+      "paymentLink": "Payment link lookup"
+    },
+    "status": {
+      "pending": "Pending",
+      "running": "In progress",
+      "success": "Completed",
+      "error": "Failed",
+      "skipped": "Skipped"
+    },
+    "errors": {
+      "noReference": "The receipt has no payment reference.",
+      "unsupportedProvider": "We don't have a connection to this company's portal yet.",
+      "aiUnavailable": "The AI service did not respond."
+    },
+    "retryStep": "Retry step",
+    "linkFound": "Payment link obtained.",
+    "linkStillMissing": "The payment link still couldn't be obtained.",
+    "extractionOk": "Receipt data updated.",
+    "extractionFailed": "The receipt couldn't be extracted again.",
+    "downloadOriginal": "Download original receipt"
+  },
+  "payment": {
+    "title": "Payment",
+    "reference": "Reference",
+    "cutoff": "Cutoff date",
+    "viaApi": "Official API",
+    "viaPortal": "Web portal",
+    "pay": "Pay",
+    "markPaidAfter": "I already paid",
+    "unavailable": "No payment link is available for this invoice. You can pay it through the company's channels and mark it as paid.",
+    "leaveTitle": "You're leaving Oykos",
+    "leaveMessage": "Payment happens on the company's official portal. Use the reference to find your invoice.",
+    "goToPortal": "Go to payment portal",
+    "newTab": "opens in a new tab",
+    "markPaidTitle": "Did you complete the payment?",
+    "markPaidMessage": "Mark the invoice as paid and, if you like, attach the receipt.",
+    "proof": "Payment receipt (optional)"
+  },
+  "assistant": {
+    "title": "AI Assistant",
+    "subtitle": "Predictions, consumption profile, recommendations and sustainability score for your household.",
+    "loading": "Claude is analyzing your household data…",
+    "insufficient": "You have {months} months of invoices; at least {needed} are needed for the full analysis.",
+    "prediction": {
+      "title": "Next month's prediction",
+      "disclaimer": "Estimate based on your history; the actual amount may vary.",
+      "consumption": "Estimated consumption: {value} {unit}",
+      "basedOn": "Based on {months} months of history",
+      "needMore": "There are {months} months of data; {needed} are needed to predict."
+    },
+    "profile": {
+      "title": "Consumption profile",
+      "insufficient": "There isn't enough data yet to define your profile.",
+      "levels": {
+        "bajo": "Low",
+        "moderado": "Moderate",
+        "alto": "High"
+      },
+      "vsReference": "Average {avg}/month vs. {ref} for stratum {stratum} households",
+      "basis": "Your spending is {ratio} compared with households with similar patterns.",
+      "patterns": "Detected patterns",
+      "peaks": "Highest-spending months: {months}",
+      "heaviest": "{service} accounts for {share}% of your spending"
+    },
+    "score": {
+      "title": "Sustainability score",
+      "insufficient": "More energy, water or gas history is needed to compute the score.",
+      "ranges": {
+        "bajo": "Low",
+        "medio": "Medium",
+        "alto": "High"
+      },
+      "meaning": {
+        "bajo": "Consumption well above the reference",
+        "medio": "Consumption close to the reference",
+        "alto": "Efficient consumption"
+      },
+      "scale": "Score scale",
+      "how": "How it's calculated",
+      "formula": "Each service gets 0–100 based on its consumption versus the reference for a Colombian household, weighted: energy 45%, water 35%, gas 20%.",
+      "weight": "Weight {weight}%",
+      "vsRef": "{value} {unit} vs. {ref} {unit}",
+      "evolution": "Score over time"
+    },
+    "recommendations": {
+      "title": "Saving recommendations",
+      "dismiss": "Dismiss recommendation: {title}",
+      "saving": "Estimated saving: {amount}/month",
+      "none": "No recommendations for now.",
+      "allDismissed": "You dismissed all recommendations. New ones will appear when your data changes."
+    }
+  },
+  "reminders": {
+    "title": "Due date reminders",
+    "enable": "Reminders before the due date",
+    "enableDescription": "We'll let you know when a pending invoice is about to be due.",
+    "enabled": "Due date reminders turned on.",
+    "disabled": "Due date reminders turned off.",
+    "days": "Days in advance",
+    "daysHint": "Comma-separated, between 0 and 30. E.g.: 5, 1",
+    "daysError": "Enter one or more whole numbers between 0 and 30, separated by commas.",
+    "saved": "Reminder days saved.",
+    "empty": "You have no invoices coming due.",
+    "message": "{service} is due {when}",
+    "today": "today",
+    "inDays": {
+      "one": "in {count} day",
+      "other": "in {count} days"
+    },
+    "detail": "{amount} · due {date}",
+    "pay": "View and pay",
+    "view": "View invoice"
+  }
+}
