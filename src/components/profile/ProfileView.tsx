@@ -14,6 +14,7 @@ import { Card, PageHeader } from "@/components/ui/Surface";
 import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Feedback";
 import { TextField } from "@/components/ui/Field";
+import { ConfirmDialog } from "@/components/ui/Modal";
 import { Auth0Link } from "@/components/auth/Auth0Screens";
 import { validateProfile, type ProfileInput } from "@/lib/domain/profile";
 import { MFA_RETURN_PARAM } from "@/lib/authRoutes";
@@ -51,12 +52,16 @@ function PersonalData({ user }: { user: User }) {
   );
 }
 
-function Mfa({ verified }: { verified: boolean }) {
+function Mfa({ enabled, verified }: { enabled: boolean; verified: boolean }) {
   const { dict, href } = useI18n();
   const { notify } = useToast();
   const router = useRouter();
   const params = useSearchParams();
   const returned = params.get(MFA_RETURN_PARAM) === "1";
+  const [confirmOff, setConfirmOff] = useState(false);
+  const [disabling, setDisabling] = useState(false);
+  const [needsStepUp, setNeedsStepUp] = useState(false);
+  const verifyUrl = `${href("/perfil")}?${MFA_RETURN_PARAM}=1`;
 
   // Al volver de Auth0 se avisa el resultado y se limpia la URL
   useEffect(() => {
@@ -65,29 +70,65 @@ function Mfa({ verified }: { verified: boolean }) {
     router.replace(href("/perfil"));
   }, [returned, verified, notify, dict, router, href]);
 
+  const disable = async () => {
+    setConfirmOff(false);
+    setDisabling(true);
+    try {
+      const res = await fetch("/api/auth/mfa", { method: "DELETE" });
+      if (res.status === 403) {
+        setNeedsStepUp(true);
+        return;
+      }
+      if (!res.ok) throw new Error(String(res.status));
+      notify(dict.auth0.mfaDisabled, "success");
+      router.refresh();
+    } catch {
+      notify(dict.auth0.mfaDisableError, "error");
+    } finally {
+      setDisabling(false);
+    }
+  };
+
   return (
     <div className="flex flex-col gap-3">
       <p className="flex flex-wrap items-center gap-2 text-lg font-bold">
         {dict.profile.twoFactor.title}
-        {verified && (
-          <Badge tone="success">
-            <BadgeCheck aria-hidden="true" className="size-3" /> {dict.auth0.mfaVerified}
-          </Badge>
-        )}
+        <Badge tone={enabled ? "success" : "neutral"}>
+          {enabled && <BadgeCheck aria-hidden="true" className="size-3" />} {enabled ? dict.auth0.mfaVerified : dict.auth0.mfaInactive}
+        </Badge>
       </p>
-      {verified ? (
+      {enabled ? (
         <>
           <p className="text-on-surface-variant">{dict.auth0.mfaActiveDescription}</p>
-          <p className="text-sm text-on-surface-variant">{dict.auth0.mfaDisableHint}</p>
+          {needsStepUp ? (
+            <div role="alert" className="flex flex-col gap-3 rounded-xl bg-tertiary-fixed p-4 text-sm text-tertiary">
+              <p className="font-semibold">{dict.auth0.mfaStepUp}</p>
+              <Auth0Link intent="mfa" returnTo={verifyUrl} variant="tonal">
+                <ShieldCheck aria-hidden="true" className="size-5" /> {dict.auth0.mfaVerifyNow}
+              </Auth0Link>
+            </div>
+          ) : (
+            <Button variant="danger" loading={disabling} onClick={() => setConfirmOff(true)} className="w-fit">
+              {dict.auth0.mfaDisable}
+            </Button>
+          )}
         </>
       ) : (
         <>
           <p className="text-on-surface-variant">{dict.auth0.mfaDescription}</p>
-          <Auth0Link intent="mfa" returnTo={`${href("/perfil")}?${MFA_RETURN_PARAM}=1`} variant="tonal">
+          <Auth0Link intent="mfa" returnTo={verifyUrl} variant="tonal">
             <ShieldCheck aria-hidden="true" className="size-5" /> {dict.auth0.mfaSetup}
           </Auth0Link>
         </>
       )}
+      <ConfirmDialog
+        open={confirmOff}
+        title={dict.auth0.mfaDisableTitle}
+        message={dict.auth0.mfaDisableMessage}
+        confirmLabel={dict.auth0.mfaDisable}
+        onCancel={() => setConfirmOff(false)}
+        onConfirm={disable}
+      />
     </div>
   );
 }
@@ -189,7 +230,7 @@ export function ProfileView() {
             <h2 id="security-title" className="flex items-center gap-3 text-xl font-bold">
               <ShieldCheck aria-hidden="true" className="size-5" /> {dict.profile.security}
             </h2>
-            <Mfa verified={user.mfaVerified} />
+            <Mfa enabled={user.mfaEnabled} verified={user.mfaVerified} />
           </Card>
         </div>
         <div className="flex flex-col gap-8">

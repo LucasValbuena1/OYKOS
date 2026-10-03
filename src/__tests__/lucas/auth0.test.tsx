@@ -1,13 +1,13 @@
 // Lucas · Funcionalidad 3 (HU09–HU12) con Auth0: la app delega registro,
 // login, MFA y contraseñas en Universal Login y conserva solo los datos de
 // perfil propios de Oykos (nombre visible, teléfono, foto) en localStorage.
-import { screen } from "@testing-library/react";
+import { screen, within } from "@testing-library/react";
 import { Auth0Login, Auth0Recovery, Auth0Signup } from "@/components/auth/Auth0Screens";
 import { ProfileView } from "@/components/profile/ProfileView";
 import { AuthGuard } from "@/components/layout/AppShell";
 import { profilesStore } from "@/data/stores";
 import { validateProfile } from "@/lib/domain/profile";
-import { auth0LoginUrl, isPrivatePath, usedMfa } from "@/lib/authRoutes";
+import { auth0LoginUrl, hasMfaEnrolled, isPrivatePath, MFA_ENROLLED_CLAIM, usedMfa } from "@/lib/authRoutes";
 import { mockRouter, renderApp, setSearch, TEST_USER } from "../test-utils";
 
 describe("HU09 · Registro / login con Auth0", () => {
@@ -109,7 +109,7 @@ describe("HU11 · MFA con Auth0", () => {
   });
 
   it("con la verificación activa muestra el estado y no ofrece activarla de nuevo", () => {
-    renderApp(<ProfileView />, { auth0User: { ...TEST_USER, mfaVerified: true } });
+    renderApp(<ProfileView />, { auth0User: { ...TEST_USER, mfaEnabled: true } });
     expect(screen.getByText("Activa")).toBeInTheDocument();
     expect(screen.getByText(/en cada inicio de sesión/)).toBeInTheDocument();
     expect(screen.queryByRole("link", { name: /Activar verificación en dos pasos/ })).not.toBeInTheDocument();
@@ -120,6 +120,49 @@ describe("HU11 · MFA con Auth0", () => {
     renderApp(<ProfileView />);
     expect(await screen.findByRole("alert")).toHaveTextContent("Auth0 no pidió el segundo factor");
     expect(screen.queryByText("Activa")).not.toBeInTheDocument();
+  });
+
+  it("recuerda en la sesión si el usuario tiene el factor inscrito (claim de la Action)", () => {
+    expect(hasMfaEnrolled({ [MFA_ENROLLED_CLAIM]: true })).toBe(true);
+    expect(hasMfaEnrolled({ [MFA_ENROLLED_CLAIM]: false })).toBe(false);
+    expect(hasMfaEnrolled({})).toBe(false);
+    renderApp(<ProfileView />);
+    expect(screen.getByText("Inactiva")).toBeInTheDocument();
+  });
+});
+
+describe("HU11 · Desactivar la verificación en dos pasos", () => {
+  const enabledUser = { ...TEST_USER, mfaEnabled: true, mfaVerified: true };
+  beforeEach(() => {
+    global.fetch = jest.fn();
+  });
+
+  it("pide confirmación antes de desactivarla", async () => {
+    const { user } = renderApp(<ProfileView />, { auth0User: enabledUser });
+    await user.click(screen.getByRole("button", { name: "Desactivar verificación en dos pasos" }));
+    const dialog = await screen.findByRole("alertdialog");
+    expect(dialog).toHaveTextContent("ya no se pedirá el código");
+    await user.click(within(dialog).getByRole("button", { name: "Cancelar" }));
+    expect(global.fetch).not.toHaveBeenCalled();
+  });
+
+  it("al confirmar la quita en Auth0 y actualiza el perfil", async () => {
+    (global.fetch as jest.Mock).mockResolvedValue({ ok: true, status: 200 });
+    const { user } = renderApp(<ProfileView />, { auth0User: enabledUser });
+    await user.click(screen.getByRole("button", { name: "Desactivar verificación en dos pasos" }));
+    await user.click(within(await screen.findByRole("alertdialog")).getByRole("button", { name: "Desactivar verificación en dos pasos" }));
+    expect(global.fetch).toHaveBeenCalledWith("/api/auth/mfa", { method: "DELETE" });
+    expect(await screen.findByText("Verificación en dos pasos desactivada.")).toBeInTheDocument();
+    expect(mockRouter().refresh).toHaveBeenCalled();
+  });
+
+  it("si la sesión no pasó por el segundo factor, pide verificarlo primero", async () => {
+    (global.fetch as jest.Mock).mockResolvedValue({ ok: false, status: 403 });
+    const { user } = renderApp(<ProfileView />, { auth0User: { ...enabledUser, mfaVerified: false } });
+    await user.click(screen.getByRole("button", { name: "Desactivar verificación en dos pasos" }));
+    await user.click(within(await screen.findByRole("alertdialog")).getByRole("button", { name: "Desactivar verificación en dos pasos" }));
+    expect(await screen.findByText(/primero confirma tu segundo factor/)).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: /Verificar mi segundo factor/ }).getAttribute("href")).toContain("acr_values=");
   });
 });
 

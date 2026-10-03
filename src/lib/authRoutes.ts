@@ -17,6 +17,17 @@ export type Auth0Intent = "login" | "signup" | "google" | "mfa";
 /** Valor estándar (OpenID PAPE) para pedirle a Auth0 un segundo factor. */
 export const MFA_ACR = "http://schemas.openid.net/pape/policies/2007/06/multi-factor";
 
+/** Claim que agrega la Action de Auth0: el usuario tiene un segundo factor inscrito. */
+export const MFA_ENROLLED_CLAIM = "https://oykos.app/mfa_enrolled";
+
+/** HU11: true si el usuario tiene la verificación en dos pasos activa (según Auth0). */
+export function hasMfaEnrolled(claims: Record<string, unknown> | null | undefined): boolean {
+  return claims?.[MFA_ENROLLED_CLAIM] === true;
+}
+
+/** Tipos de método de Auth0 que son segundo factor (no la contraseña ni el login social). */
+export const MFA_METHOD_TYPES = ["totp", "phone", "email", "push-notification", "webauthn-roaming", "webauthn-platform", "recovery-code", "guardian"];
+
 /** Parámetro que agrega la app al volver de la verificación (para avisar el resultado). */
 export const MFA_RETURN_PARAM = "mfa";
 

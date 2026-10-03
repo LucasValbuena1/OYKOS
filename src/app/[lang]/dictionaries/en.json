@@ -840,7 +840,14 @@
     "mfaDone": "Two-step verification turned on. From now on Auth0 will ask for the code every time you sign in.",
     "mfaNotApplied": "Auth0 didn't ask for the second factor. Check that the MFA Action is active in Auth0.",
     "mfaActiveDescription": "Two-step verification is on for your account: Auth0 asks for the code from your authenticator app every time you sign in.",
-    "mfaDisableHint": "To turn it off, an administrator must remove the factor from your user in the Auth0 dashboard."
+    "mfaInactive": "Off",
+    "mfaDisable": "Turn off two-step verification",
+    "mfaDisableTitle": "Turn off two-step verification?",
+    "mfaDisableMessage": "Your authenticator app will be removed from Auth0 and the code will no longer be asked at sign-in. Your account will be less protected.",
+    "mfaDisabled": "Two-step verification turned off.",
+    "mfaDisableError": "Two-step verification couldn't be turned off. Try again.",
+    "mfaStepUp": "For security, first confirm your second factor and then turn it off again.",
+    "mfaVerifyNow": "Verify my second factor"
   },
   "scanner": {
     "title": "Scan receipt with AI",

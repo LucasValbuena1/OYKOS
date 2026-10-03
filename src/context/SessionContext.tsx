@@ -9,6 +9,8 @@ export interface SessionUser {
   email?: string;
   picture?: string;
   emailVerified?: boolean;
+  /** El usuario tiene la verificación en dos pasos activa en Auth0 (HU11). */
+  mfaEnabled?: boolean;
   /** El inicio de sesión actual pasó por verificación en dos pasos (HU11). */
   mfaVerified?: boolean;
 }

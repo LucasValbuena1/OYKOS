@@ -6,7 +6,7 @@
 // variables, `auth0` es null y la app muestra cómo configurarlo.
 import { Auth0Client, filterDefaultIdTokenClaims } from "@auth0/nextjs-auth0/server";
 
-import { isAuth0Configured, usedMfa } from "./authRoutes";
+import { hasMfaEnrolled, isAuth0Configured, usedMfa } from "./authRoutes";
 
 export const auth0 = isAuth0Configured()
   ? new Auth0Client({
@@ -14,11 +14,17 @@ export const auth0 = isAuth0Configured()
       authorizationParameters: {
         scope: "openid profile email",
       },
-      // Se guardan los claims estándar y, además, si el login usó segundo
-      // factor (claim `amr`), para mostrarlo en el perfil (HU11).
+      // Se guardan los claims estándar y, además (HU11), si el usuario tiene
+      // la verificación en dos pasos activa (claim de la Action de Auth0) y si
+      // este inicio de sesión la usó (claim `amr`).
       async beforeSessionSaved(session) {
-        const user = filterDefaultIdTokenClaims(session.user);
-        return { ...session, user: usedMfa(session.user) ? { ...user, mfa_verified: true } : user };
+        const verified = usedMfa(session.user);
+        const user = {
+          ...filterDefaultIdTokenClaims(session.user),
+          mfa_enrolled: verified || hasMfaEnrolled(session.user),
+          mfa_verified: verified,
+        };
+        return { ...session, user };
       },
     })
   : null;

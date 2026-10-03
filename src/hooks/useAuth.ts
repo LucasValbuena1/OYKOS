@@ -26,6 +26,7 @@ export function useAuth() {
       phone: extra.phone ?? "",
       photo: extra.photo ?? sessionUser.picture,
       emailVerified: sessionUser.emailVerified ?? false,
+      mfaEnabled: sessionUser.mfaEnabled ?? false,
       mfaVerified: sessionUser.mfaVerified ?? false,
     };
   }, [sessionUser, profiles]);

@@ -21,6 +21,8 @@ export interface User {
   phone: string;
   photo?: string;
   emailVerified: boolean;
+  /** La verificación en dos pasos está activa para el usuario (HU11). */
+  mfaEnabled: boolean;
   /** El inicio de sesión actual usó verificación en dos pasos (HU11). */
   mfaVerified: boolean;
 }

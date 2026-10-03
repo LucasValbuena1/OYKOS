@@ -38,6 +38,7 @@ export default async function RootLayout({ children, params }: LayoutProps<"/[la
         email: session.user.email,
         picture: session.user.picture,
         emailVerified: session.user.email_verified,
+        mfaEnabled: session.user.mfa_enrolled === true,
         mfaVerified: session.user.mfa_verified === true,
       }
     : null;
