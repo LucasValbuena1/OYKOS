@@ -77,16 +77,16 @@ describe("HU10 · Editar perfil", () => {
 });
 
 describe("HU11 · MFA con Auth0", () => {
-  it("ofrece configurar la MFA en Auth0 solicitando el factor adicional", () => {
+  it("ofrece activar la verificación en dos pasos solicitando el factor adicional", () => {
     renderApp(<ProfileView />);
-    const link = screen.getByRole("link", { name: /Configurar o verificar MFA en Auth0/ });
+    const link = screen.getByRole("link", { name: /Activar verificación en dos pasos/ });
     expect(link.getAttribute("href")).toContain("acr_values=");
     expect(link.getAttribute("href")).toContain("returnTo=%2Fes%2Fperfil%3Fmfa%3D1");
   });
 
-  it("explica que el segundo factor lo gestiona Auth0", () => {
+  it("explica que al activarla se pedirá el código en cada inicio de sesión", () => {
     renderApp(<ProfileView />);
-    expect(screen.getByText(/La verificación en dos pasos la gestiona Auth0/)).toBeInTheDocument();
+    expect(screen.getByText(/Auth0 te pedirá un código cada vez que inicies sesión/)).toBeInTheDocument();
   });
 
   it("no muestra un interruptor de 2FA propio", () => {
@@ -101,19 +101,25 @@ describe("HU11 · MFA con Auth0", () => {
     expect(usedMfa(null)).toBe(false);
   });
 
-  it("al volver de Auth0 con el segundo factor lo confirma y lo muestra en el perfil", async () => {
+  it("al volver de Auth0 con el segundo factor confirma que quedó activa", async () => {
     setSearch("mfa=1");
     renderApp(<ProfileView />, { auth0User: { ...TEST_USER, mfaVerified: true } });
-    expect(await screen.findByText("Verificación en dos pasos completada.")).toBeInTheDocument();
-    expect(screen.getByText("Verificado en esta sesión")).toBeInTheDocument();
+    expect(await screen.findByText(/Verificación en dos pasos activada/)).toBeInTheDocument();
     expect(mockRouter().replace).toHaveBeenCalledWith("/es/perfil");
+  });
+
+  it("con la verificación activa muestra el estado y no ofrece activarla de nuevo", () => {
+    renderApp(<ProfileView />, { auth0User: { ...TEST_USER, mfaVerified: true } });
+    expect(screen.getByText("Activa")).toBeInTheDocument();
+    expect(screen.getByText(/en cada inicio de sesión/)).toBeInTheDocument();
+    expect(screen.queryByRole("link", { name: /Activar verificación en dos pasos/ })).not.toBeInTheDocument();
   });
 
   it("si Auth0 no pidió el segundo factor avisa que revise la configuración", async () => {
     setSearch("mfa=1");
     renderApp(<ProfileView />);
     expect(await screen.findByRole("alert")).toHaveTextContent("Auth0 no pidió el segundo factor");
-    expect(screen.queryByText("Verificado en esta sesión")).not.toBeInTheDocument();
+    expect(screen.queryByText("Activa")).not.toBeInTheDocument();
   });
 });
 

@@ -69,7 +69,7 @@ npm run build && npm start
 | Internacionalización (i18n) | Rutas `/[lang]` (es/en), `src/proxy.ts` con redirección automática por `Accept-Language` y diccionarios JSON cargados de forma asíncrona en Server Components. |
 | Accesibilidad (a11y) | HTML semántico, un `h1` por página, labels asociados, `aria-invalid`/`aria-describedby` en errores, diálogos con *focus trap* y Escape, `aria-live` para toasts y conteos, enlace "saltar al contenido", foco visible, estados con color + ícono + texto. |
 | Hooks personalizados | Lógica de negocio y estados complejos en `src/hooks` (ver sección 6). |
-| Pruebas unitarias | 241 pruebas, **mínimo 3 por cada historia de usuario** (58 HU implementadas). |
+| Pruebas unitarias | 242 pruebas, **mínimo 3 por cada historia de usuario** (58 HU implementadas). |
 | Docker | `Dockerfile` multi-etapa (`output: "standalone"`), usuario sin privilegios; la imagen **no se construye si falla alguna prueba**. |
 | Seguridad | Auth0 (Universal Login, MFA, recuperación de contraseña); rutas privadas protegidas en el servidor. |
 | Inteligencia artificial | Claude (Anthropic) vía rutas de servidor `/api/ai/*`, con *structured outputs*, validación de la respuesta y *skeletons* de carga. |
@@ -80,7 +80,7 @@ La autenticación (Lucas · F3) se hace **solo con Auth0**, con el SDK oficial `
 
   - HU09: registro y login en Universal Login (`/auth/login`, `screen_hint=signup`, Google); el `proxy.ts` protege las rutas privadas **en el servidor**; `/auth/logout` cierra la sesión.
   - HU10: nombre, correo y foto vienen de la sesión de Auth0; el teléfono y el nombre visible se guardan como datos propios de Oykos. El correo lo administra Auth0.
-  - HU11: verificación en dos pasos de Auth0 (app autenticadora, SMS o correo), opcional para cada usuario: desde **Perfil → Configurar o verificar MFA en Auth0** la app la pide con `acr_values`. Al volver, el perfil confirma el resultado y muestra "Verificado en esta sesión" (Auth0 lo informa en el claim `amr` del token, que la app guarda en la sesión con `beforeSessionSaved`).
+  - HU11: verificación en dos pasos de Auth0 (app autenticadora), que cada usuario **activa** desde **Perfil → Activar verificación en dos pasos**: la app la pide con `acr_values` y Auth0 inscribe el factor. Desde ese momento, una Action de Auth0 pide el código **en cada inicio de sesión** de ese usuario. El perfil muestra el estado "Activa" (Auth0 lo informa en el claim `amr` del token, que la app guarda en la sesión con `beforeSessionSaved`). Para desactivarla, un administrador quita el factor del usuario en el panel de Auth0.
   - HU12: "¿Olvidaste tu contraseña?" en Universal Login y cambio de contraseña autenticado con `POST /api/auth/change-password` (Auth0 envía el enlace temporal).
 
 ### Configuración en el panel de Auth0
@@ -98,12 +98,15 @@ La autenticación (Lucas · F3) se hace **solo con Auth0**, con el SDK oficial `
      ```js
      exports.onExecutePostLogin = async (event, api) => {
        const acr = event.transaction?.acr_values ?? [];
-       if (acr.includes("http://schemas.openid.net/pape/policies/2007/06/multi-factor")) {
+       const pidioMfa = acr.includes("http://schemas.openid.net/pape/policies/2007/06/multi-factor");
+       const yaLoTiene = (event.user.enrolledFactors ?? []).length > 0;
+       // Activarla desde el perfil y, desde ahí, pedirla en cada login
+       if (pidioMfa || yaLoTiene) {
          api.multifactor.enable("any", { allowRememberBrowser: false });
        }
      };
      ```
-   - **Actions → Triggers → post-login:** arrastrar la Action entre *Start* y *Complete* y **Apply**. Sin esta Action, Auth0 ignora la solicitud de MFA con la política en "Never".
+   - **Actions → Triggers → post-login:** arrastrar la Action entre *Start* y *Complete* y **Apply**. Sin esta Action, Auth0 no pide el segundo factor con la política en "Never".
 7. **Branding → Universal Login:** opcionalmente poner el logo y los colores de Oykos (`#24534c`).
 8. Reiniciar `npm run dev` o el contenedor.
 
@@ -155,7 +158,7 @@ npm test
 - `src/__tests__/<integrante>/<funcionalidad>.test.tsx`: un `describe` por HU con **3 o más** casos (criterios de aceptación: listados, validaciones, confirmaciones, cascadas, estados vacíos, cálculos).
 - `src/__tests__/general`: proxy de idioma, rutas privadas/Auth0, diccionarios, accesibilidad de componentes base y store.
 - Las llamadas a Claude y a Auth0 se reemplazan por dobles de prueba (`jest.fn`) **solo dentro de las pruebas**; la app siempre usa los servicios reales.
-- Resultado actual: **16 suites · 241 pruebas · 0 fallos**.
+- Resultado actual: **16 suites · 242 pruebas · 0 fallos**.
 
 ## 8. Funcionalidades con IA (Alejandro) — Claude
 

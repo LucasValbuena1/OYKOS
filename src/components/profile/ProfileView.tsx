@@ -1,5 +1,6 @@
 "use client";
-// Lucas · F3 — HU10 Editar perfil, HU11 Configurar 2FA (MFA de Auth0),
+// Lucas · F3 — HU10 Editar perfil, HU11 Configurar 2FA (MFA de Auth0: al
+// activarla, Auth0 pide el código en cada inicio de sesión siguiente),
 // HU12 Cambiar contraseña (correo de Auth0). Diseño Figma "perfil".
 import { useCallback, useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -74,10 +75,19 @@ function Mfa({ verified }: { verified: boolean }) {
           </Badge>
         )}
       </p>
-      <p className="text-on-surface-variant">{dict.auth0.mfaDescription}</p>
-      <Auth0Link intent="mfa" returnTo={`${href("/perfil")}?${MFA_RETURN_PARAM}=1`} variant="tonal">
-        <ShieldCheck aria-hidden="true" className="size-5" /> {dict.auth0.mfaSetup}
-      </Auth0Link>
+      {verified ? (
+        <>
+          <p className="text-on-surface-variant">{dict.auth0.mfaActiveDescription}</p>
+          <p className="text-sm text-on-surface-variant">{dict.auth0.mfaDisableHint}</p>
+        </>
+      ) : (
+        <>
+          <p className="text-on-surface-variant">{dict.auth0.mfaDescription}</p>
+          <Auth0Link intent="mfa" returnTo={`${href("/perfil")}?${MFA_RETURN_PARAM}=1`} variant="tonal">
+            <ShieldCheck aria-hidden="true" className="size-5" /> {dict.auth0.mfaSetup}
+          </Auth0Link>
+        </>
+      )}
     </div>
   );
 }

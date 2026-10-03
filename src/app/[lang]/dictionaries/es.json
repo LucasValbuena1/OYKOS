@@ -827,8 +827,8 @@
     "goToRecovery": "Ir a recuperar contraseña",
     "securedBy": "Tu contraseña nunca pasa por Oykos: la protege Auth0.",
     "emailManaged": "El correo lo administra tu cuenta de Auth0.",
-    "mfaDescription": "La verificación en dos pasos la gestiona Auth0 (app autenticadora, SMS o correo). Al continuar podrás inscribir o verificar tu segundo factor.",
-    "mfaSetup": "Configurar o verificar MFA en Auth0",
+    "mfaDescription": "Al activarla inscribes una app autenticadora (Google Authenticator, Authy) y, desde ese momento, Auth0 te pedirá un código cada vez que inicies sesión.",
+    "mfaSetup": "Activar verificación en dos pasos",
     "passwordDescription": "Te enviaremos un correo de Auth0 con un enlace temporal para crear una nueva contraseña.",
     "sendPasswordEmail": "Enviar correo para cambiar contraseña",
     "passwordEmailSent": "Revisa tu correo: Auth0 te envió el enlace para cambiar la contraseña.",
@@ -836,9 +836,11 @@
     "notConfiguredTitle": "Falta configurar Auth0",
     "notConfigured": "Oykos usa Auth0 para la seguridad. Agrega estas variables en el archivo .env.local y reinicia el servidor:",
     "emailVerified": "Correo verificado",
-    "mfaVerified": "Verificado en esta sesión",
-    "mfaDone": "Verificación en dos pasos completada.",
-    "mfaNotApplied": "Auth0 no pidió el segundo factor. Revisa que la Action de MFA esté activa en Auth0."
+    "mfaVerified": "Activa",
+    "mfaDone": "Verificación en dos pasos activada. Desde ahora Auth0 te pedirá el código en cada inicio de sesión.",
+    "mfaNotApplied": "Auth0 no pidió el segundo factor. Revisa que la Action de MFA esté activa en Auth0.",
+    "mfaActiveDescription": "Tu cuenta tiene la verificación en dos pasos activa: Auth0 te pide el código de tu app autenticadora en cada inicio de sesión.",
+    "mfaDisableHint": "Para desactivarla, el administrador debe quitar el factor de tu usuario en el panel de Auth0."
   },
   "scanner": {
     "title": "Escanear recibo con IA",

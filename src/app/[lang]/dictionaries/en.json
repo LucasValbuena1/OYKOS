@@ -827,8 +827,8 @@
     "goToRecovery": "Go to password recovery",
     "securedBy": "Your password never goes through Oykos: Auth0 protects it.",
     "emailManaged": "Your email is managed by your Auth0 account.",
-    "mfaDescription": "Two-step verification is managed by Auth0 (authenticator app, SMS or email). Continue to enroll or verify your second factor.",
-    "mfaSetup": "Set up or verify MFA in Auth0",
+    "mfaDescription": "Turning it on enrolls an authenticator app (Google Authenticator, Authy) and, from then on, Auth0 will ask for a code every time you sign in.",
+    "mfaSetup": "Turn on two-step verification",
     "passwordDescription": "We'll send you an Auth0 email with a temporary link to create a new password.",
     "sendPasswordEmail": "Send password change email",
     "passwordEmailSent": "Check your email: Auth0 sent you the link to change your password.",
@@ -836,9 +836,11 @@
     "notConfiguredTitle": "Auth0 is not configured",
     "notConfigured": "Oykos uses Auth0 for security. Add these variables to the .env.local file and restart the server:",
     "emailVerified": "Email verified",
-    "mfaVerified": "Verified this session",
-    "mfaDone": "Two-step verification completed.",
-    "mfaNotApplied": "Auth0 didn't ask for the second factor. Check that the MFA Action is active in Auth0."
+    "mfaVerified": "On",
+    "mfaDone": "Two-step verification turned on. From now on Auth0 will ask for the code every time you sign in.",
+    "mfaNotApplied": "Auth0 didn't ask for the second factor. Check that the MFA Action is active in Auth0.",
+    "mfaActiveDescription": "Two-step verification is on for your account: Auth0 asks for the code from your authenticator app every time you sign in.",
+    "mfaDisableHint": "To turn it off, an administrator must remove the factor from your user in the Auth0 dashboard."
   },
   "scanner": {
     "title": "Scan receipt with AI",
