@@ -14,13 +14,28 @@ export function isPrivatePath(pathname: string): boolean {
 
 export type Auth0Intent = "login" | "signup" | "google" | "mfa";
 
+/** Valor estándar (OpenID PAPE) para pedirle a Auth0 un segundo factor. */
+export const MFA_ACR = "http://schemas.openid.net/pape/policies/2007/06/multi-factor";
+
+/** Parámetro que agrega la app al volver de la verificación (para avisar el resultado). */
+export const MFA_RETURN_PARAM = "mfa";
+
+/**
+ * HU11: true si el inicio de sesión usó segundo factor. Auth0 lo indica en el
+ * claim `amr` del ID token ("mfa") cuando la verificación en dos pasos se hizo.
+ */
+export function usedMfa(claims: Record<string, unknown> | null | undefined): boolean {
+  const amr = claims?.amr;
+  return Array.isArray(amr) && amr.includes("mfa");
+}
+
 /** URL de Universal Login de Auth0 (rutas montadas por el SDK en /auth/*). */
 export function auth0LoginUrl(intent: Auth0Intent, returnTo: string, locale: string): string {
   const params = new URLSearchParams({ returnTo, ui_locales: locale });
   if (intent === "signup") params.set("screen_hint", "signup");
   if (intent === "google") params.set("connection", "google-oauth2");
   // Pide un segundo factor (dispara la inscripción de MFA si aún no la tiene)
-  if (intent === "mfa") params.set("acr_values", "http://schemas.openid.net/pape/policies/2007/06/multi-factor");
+  if (intent === "mfa") params.set("acr_values", MFA_ACR);
   return `/auth/login?${params.toString()}`;
 }
 

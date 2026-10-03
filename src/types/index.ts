@@ -21,6 +21,8 @@ export interface User {
   phone: string;
   photo?: string;
   emailVerified: boolean;
+  /** El inicio de sesión actual usó verificación en dos pasos (HU11). */
+  mfaVerified: boolean;
 }
 
 // ---------- Hogares (Felipe F1) ----------

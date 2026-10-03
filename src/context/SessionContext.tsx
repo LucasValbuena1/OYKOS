@@ -9,6 +9,8 @@ export interface SessionUser {
   email?: string;
   picture?: string;
   emailVerified?: boolean;
+  /** El inicio de sesión actual pasó por verificación en dos pasos (HU11). */
+  mfaVerified?: boolean;
 }
 
 interface SessionValue {

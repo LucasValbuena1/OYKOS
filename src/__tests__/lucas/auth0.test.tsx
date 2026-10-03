@@ -7,7 +7,7 @@ import { ProfileView } from "@/components/profile/ProfileView";
 import { AuthGuard } from "@/components/layout/AppShell";
 import { profilesStore } from "@/data/stores";
 import { validateProfile } from "@/lib/domain/profile";
-import { auth0LoginUrl, isPrivatePath } from "@/lib/authRoutes";
+import { auth0LoginUrl, isPrivatePath, usedMfa } from "@/lib/authRoutes";
 import { mockRouter, renderApp, setSearch, TEST_USER } from "../test-utils";
 
 describe("HU09 · Registro / login con Auth0", () => {
@@ -81,7 +81,7 @@ describe("HU11 · MFA con Auth0", () => {
     renderApp(<ProfileView />);
     const link = screen.getByRole("link", { name: /Configurar o verificar MFA en Auth0/ });
     expect(link.getAttribute("href")).toContain("acr_values=");
-    expect(link.getAttribute("href")).toContain("returnTo=%2Fes%2Fperfil");
+    expect(link.getAttribute("href")).toContain("returnTo=%2Fes%2Fperfil%3Fmfa%3D1");
   });
 
   it("explica que el segundo factor lo gestiona Auth0", () => {
@@ -92,6 +92,28 @@ describe("HU11 · MFA con Auth0", () => {
   it("no muestra un interruptor de 2FA propio", () => {
     renderApp(<ProfileView />);
     expect(screen.queryByRole("switch")).not.toBeInTheDocument();
+  });
+
+  it("detecta si el inicio de sesión usó segundo factor (claim amr de Auth0)", () => {
+    expect(usedMfa({ amr: ["pwd", "mfa"] })).toBe(true);
+    expect(usedMfa({ amr: ["pwd"] })).toBe(false);
+    expect(usedMfa({})).toBe(false);
+    expect(usedMfa(null)).toBe(false);
+  });
+
+  it("al volver de Auth0 con el segundo factor lo confirma y lo muestra en el perfil", async () => {
+    setSearch("mfa=1");
+    renderApp(<ProfileView />, { auth0User: { ...TEST_USER, mfaVerified: true } });
+    expect(await screen.findByText("Verificación en dos pasos completada.")).toBeInTheDocument();
+    expect(screen.getByText("Verificado en esta sesión")).toBeInTheDocument();
+    expect(mockRouter().replace).toHaveBeenCalledWith("/es/perfil");
+  });
+
+  it("si Auth0 no pidió el segundo factor avisa que revise la configuración", async () => {
+    setSearch("mfa=1");
+    renderApp(<ProfileView />);
+    expect(await screen.findByRole("alert")).toHaveTextContent("Auth0 no pidió el segundo factor");
+    expect(screen.queryByText("Verificado en esta sesión")).not.toBeInTheDocument();
   });
 });
 

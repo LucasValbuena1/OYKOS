@@ -835,7 +835,10 @@
     "passwordEmailError": "No se pudo solicitar el cambio de contraseña. Intenta de nuevo.",
     "notConfiguredTitle": "Falta configurar Auth0",
     "notConfigured": "Oykos usa Auth0 para la seguridad. Agrega estas variables en el archivo .env.local y reinicia el servidor:",
-    "emailVerified": "Correo verificado"
+    "emailVerified": "Correo verificado",
+    "mfaVerified": "Verificado en esta sesión",
+    "mfaDone": "Verificación en dos pasos completada.",
+    "mfaNotApplied": "Auth0 no pidió el segundo factor. Revisa que la Action de MFA esté activa en Auth0."
   },
   "scanner": {
     "title": "Escanear recibo con IA",

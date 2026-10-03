@@ -1,7 +1,8 @@
 "use client";
 // Lucas · F3 — HU10 Editar perfil, HU11 Configurar 2FA (MFA de Auth0),
 // HU12 Cambiar contraseña (correo de Auth0). Diseño Figma "perfil".
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import { BadgeCheck, Camera, KeyRound, ShieldCheck, UserRound } from "lucide-react";
 import { useI18n } from "@/i18n/I18nProvider";
 import { useAuth } from "@/hooks/useAuth";
@@ -14,6 +15,7 @@ import { Badge } from "@/components/ui/Feedback";
 import { TextField } from "@/components/ui/Field";
 import { Auth0Link } from "@/components/auth/Auth0Screens";
 import { validateProfile, type ProfileInput } from "@/lib/domain/profile";
+import { MFA_RETURN_PARAM } from "@/lib/authRoutes";
 import { readFileAsDataUrl } from "@/lib/utils";
 import type { User } from "@/types";
 
@@ -48,13 +50,32 @@ function PersonalData({ user }: { user: User }) {
   );
 }
 
-function Mfa() {
+function Mfa({ verified }: { verified: boolean }) {
   const { dict, href } = useI18n();
+  const { notify } = useToast();
+  const router = useRouter();
+  const params = useSearchParams();
+  const returned = params.get(MFA_RETURN_PARAM) === "1";
+
+  // Al volver de Auth0 se avisa el resultado y se limpia la URL
+  useEffect(() => {
+    if (!returned) return;
+    notify(verified ? dict.auth0.mfaDone : dict.auth0.mfaNotApplied, verified ? "success" : "error");
+    router.replace(href("/perfil"));
+  }, [returned, verified, notify, dict, router, href]);
+
   return (
     <div className="flex flex-col gap-3">
-      <p className="text-lg font-bold">{dict.profile.twoFactor.title}</p>
+      <p className="flex flex-wrap items-center gap-2 text-lg font-bold">
+        {dict.profile.twoFactor.title}
+        {verified && (
+          <Badge tone="success">
+            <BadgeCheck aria-hidden="true" className="size-3" /> {dict.auth0.mfaVerified}
+          </Badge>
+        )}
+      </p>
       <p className="text-on-surface-variant">{dict.auth0.mfaDescription}</p>
-      <Auth0Link intent="mfa" returnTo={href("/perfil")} variant="tonal">
+      <Auth0Link intent="mfa" returnTo={`${href("/perfil")}?${MFA_RETURN_PARAM}=1`} variant="tonal">
         <ShieldCheck aria-hidden="true" className="size-5" /> {dict.auth0.mfaSetup}
       </Auth0Link>
     </div>
@@ -158,7 +179,7 @@ export function ProfileView() {
             <h2 id="security-title" className="flex items-center gap-3 text-xl font-bold">
               <ShieldCheck aria-hidden="true" className="size-5" /> {dict.profile.security}
             </h2>
-            <Mfa />
+            <Mfa verified={user.mfaVerified} />
           </Card>
         </div>
         <div className="flex flex-col gap-8">

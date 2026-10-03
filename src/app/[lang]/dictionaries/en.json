@@ -835,7 +835,10 @@
     "passwordEmailError": "The password change could not be requested. Try again.",
     "notConfiguredTitle": "Auth0 is not configured",
     "notConfigured": "Oykos uses Auth0 for security. Add these variables to the .env.local file and restart the server:",
-    "emailVerified": "Email verified"
+    "emailVerified": "Email verified",
+    "mfaVerified": "Verified this session",
+    "mfaDone": "Two-step verification completed.",
+    "mfaNotApplied": "Auth0 didn't ask for the second factor. Check that the MFA Action is active in Auth0."
   },
   "scanner": {
     "title": "Scan receipt with AI",
