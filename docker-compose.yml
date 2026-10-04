@@ -5,4 +5,9 @@ services:
     container_name: oykos-front
     ports:
       - "3000:3000"
+    # Variables de Auth0 y Claude (ver .env.example). Si no existe, la app
+    # arranca y muestra el aviso de configuración.
+    env_file:
+      - path: .env.local
+        required: false
     restart: unless-stopped

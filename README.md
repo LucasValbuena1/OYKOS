@@ -36,11 +36,13 @@ docker compose up --build        # levantar
 docker compose down              # detener
 ```
 
-La app necesita las variables de Auth0 y de Claude (secciones 4 y 8). Se pasan al contenedor desde `.env.local`:
+La app necesita las variables de Auth0 y de Claude (secciones 4 y 8), que se leen de `.env.local`. Docker Compose las carga solo; con `docker run` hay que pasarlas así:
 
 ```bash
 docker run --rm -p 3000:3000 --env-file .env.local oykos-front
 ```
+
+`.env.local` nunca entra en la imagen (está en `.dockerignore`): las variables se entregan al contenedor al arrancar.
 
 > Si Docker Hub responde `429 Too Many Requests` al descargar la imagen base, usar un espejo:
 > `docker build --build-arg NODE_IMAGE=mirror.gcr.io/library/node:22-alpine -t oykos-front .`
