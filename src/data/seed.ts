@@ -84,6 +84,42 @@ export function seedInvoices(now: Date = new Date()): Invoice[] {
       });
     }
   }
+
+  // Alejandro F3 — HU14/HU15: la factura actual de Enel y la de Vanti vienen
+  // con referencia y link de pago oficial, para que el panel de pago sea
+  // visible desde el primer uso aunque el usuario no haya escaneado nada.
+  const nowIso = now.toISOString();
+  const enel = out.find((i) => i.serviceId === "s2" && i.period === current);
+  if (enel && enel.status === "pendiente") {
+    enel.source = "ia";
+    enel.reference = "4829105531";
+    enel.cutoffDate = toISODate(addDays(now, -22));
+    enel.paymentLink = {
+      url: "https://www.enel.com.co/es/personas/servicio-al-cliente/boton-de-pago.html",
+      method: "scraping",
+      sourcePage: "https://www.enel.com.co/",
+      engine: "ia",
+      pagesVisited: 2,
+      rendered: false,
+      obtainedAt: nowIso,
+    };
+    enel.processing = {
+      scan: { status: "success", finishedAt: nowIso },
+      extraction: { status: "success", finishedAt: nowIso },
+      paymentLink: { status: "success", finishedAt: nowIso },
+    };
+  }
+  const vanti = out.find((i) => i.serviceId === "s3" && i.period === current);
+  if (vanti && vanti.status === "pendiente") {
+    vanti.reference = "7703920018";
+    vanti.paymentLink = {
+      url: "https://pagosenlinea.grupovanti.com/",
+      method: "scraping",
+      sourcePage: "https://www.grupovanti.com/tramites-y-ayuda/factura/paga-tu-factura",
+      engine: "patron",
+      obtainedAt: nowIso,
+    };
+  }
   return out;
 }
 

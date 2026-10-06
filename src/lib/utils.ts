@@ -88,6 +88,19 @@ export function formatMoney(value: number, locale: Locale): string {
   }).format(value);
 }
 
+/**
+ * Formato corto de dinero para gráficas con muchas barras:
+ * $1.280.000 → $1,28 M · $450.000 → $450 K · $800 → $800.
+ */
+export function formatMoneyShort(value: number, locale: Locale): string {
+  const sign = value < 0 ? "-" : "";
+  const abs = Math.abs(value);
+  const fmt = (v: number, digits: number) => new Intl.NumberFormat(intlLocale[locale], { maximumFractionDigits: digits }).format(v);
+  if (abs >= 1_000_000) return `${sign}$${fmt(abs / 1_000_000, 1)} M`;
+  if (abs >= 1_000) return `${sign}$${fmt(abs / 1_000, 0)} K`;
+  return `${sign}$${fmt(abs, 0)}`;
+}
+
 export function formatNumber(value: number, locale: Locale, digits = 0): string {
   return new Intl.NumberFormat(intlLocale[locale], { maximumFractionDigits: digits }).format(value);
 }

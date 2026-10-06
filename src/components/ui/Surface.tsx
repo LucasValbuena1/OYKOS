@@ -131,6 +131,7 @@ export function BarChart({
   title,
   data,
   formatValue,
+  formatTooltip,
   highlightLast = true,
   height = 200,
   dark = false,
@@ -138,22 +139,27 @@ export function BarChart({
   title: string;
   data: { label: string; value: number; highlight?: boolean; dashed?: boolean }[];
   formatValue: (v: number) => string;
+  /** Formato completo que se muestra al pasar el cursor; por defecto, el mismo que formatValue. */
+  formatTooltip?: (v: number) => string;
   highlightLast?: boolean;
   height?: number;
   dark?: boolean;
 }) {
   const max = Math.max(1, ...data.map((d) => d.value));
+  const dense = data.length > 8;
+  const tip = formatTooltip ?? formatValue;
   return (
     <figure aria-label={title} className="flex flex-col gap-3">
       <figcaption className="sr-only">{title}</figcaption>
-      <div aria-hidden="true" className="flex items-end gap-2" style={{ height }}>
+      <div aria-hidden="true" className={cx("flex items-end", dense ? "gap-1" : "gap-2")} style={{ height }}>
         {data.map((d, i) => {
           const active = d.highlight ?? (highlightLast && i === data.length - 1);
           return (
-            <div key={`${d.label}-${i}`} className="flex h-full min-w-0 flex-1 flex-col items-center justify-end gap-2">
+            <div key={`${d.label}-${i}`} className="flex h-full min-w-0 flex-1 flex-col items-center justify-end gap-2" title={`${d.label}: ${tip(d.value)}`}>
               <span
                 className={cx(
-                  "max-w-full truncate rounded px-1 py-0.5 text-[10px] font-bold whitespace-nowrap sm:px-1.5 sm:text-xs",
+                  "max-w-full truncate rounded px-1 py-0.5 font-bold whitespace-nowrap",
+                  dense ? "text-[9px] sm:px-1 sm:text-[11px]" : "text-[10px] sm:px-1.5 sm:text-xs",
                   // En celular solo se muestra el valor destacado para no desbordar
                   !active && "hidden sm:block",
                   active ? "bg-primary-container text-on-primary-container" : "bg-surface-inverse text-on-surface-inverse",
@@ -163,7 +169,8 @@ export function BarChart({
               </span>
               <div
                 className={cx(
-                  "w-full max-w-14 rounded-t-lg transition-all",
+                  "w-full rounded-t-lg transition-all",
+                  dense ? "max-w-10" : "max-w-14",
                   d.dashed
                     ? "border-2 border-dashed border-primary bg-primary-fixed/50"
                     : active
@@ -178,9 +185,9 @@ export function BarChart({
           );
         })}
       </div>
-      <div aria-hidden="true" className="flex gap-2">
+      <div aria-hidden="true" className={cx("flex", dense ? "gap-1" : "gap-2")}>
         {data.map((d, i) => (
-          <span key={`${d.label}-l-${i}`} className="min-w-0 flex-1 truncate text-center text-xs font-semibold text-on-surface-variant first-letter:uppercase sm:text-sm">
+          <span key={`${d.label}-l-${i}`} className={cx("min-w-0 flex-1 truncate text-center font-semibold text-on-surface-variant first-letter:uppercase", dense ? "text-[11px] sm:text-xs" : "text-xs sm:text-sm")}>
             {d.label}
           </span>
         ))}
@@ -191,7 +198,7 @@ export function BarChart({
           {data.map((d, i) => (
             <tr key={`${d.label}-r-${i}`}>
               <th scope="row">{d.label}</th>
-              <td>{formatValue(d.value)}</td>
+              <td>{tip(d.value)}</td>
             </tr>
           ))}
         </tbody>

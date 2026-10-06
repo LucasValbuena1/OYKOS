@@ -92,7 +92,7 @@ function Filters({ ctrl }: { ctrl: ReturnType<typeof useConsumptionFilters> }) {
 }
 
 export function DashboardView() {
-  const { dict, href, money, t, period, date } = useI18n();
+  const { dict, href, money, moneyShort, t, period, date } = useI18n();
   const { user } = useAuth();
   const { households, selectedId, setSelectedId } = useSelectedHousehold();
   const services = useServices();
@@ -205,7 +205,12 @@ export function DashboardView() {
                   ))}
                 </div>
               </div>
-              <BarChart title={dict.dashboard.history.title} data={chartSeries.map((p) => ({ label: period(p.period, true), value: p.amount }))} formatValue={money} />
+              <BarChart
+                title={dict.dashboard.history.title}
+                data={chartSeries.map((p) => ({ label: period(p.period, true), value: p.amount }))}
+                formatValue={range === "12" ? moneyShort : money}
+                formatTooltip={money}
+              />
               <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
                 <VariationPill label={dict.dashboard.history.vsPrevious} value={data.history.vsPrevious} kind={data.history.vsPreviousKind} />
                 <VariationPill label={dict.dashboard.history.vsLastYear} value={data.history.vsLastYear} kind={data.history.vsLastYearKind} />
