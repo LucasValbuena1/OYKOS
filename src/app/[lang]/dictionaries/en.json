@@ -660,8 +660,14 @@
       "model": "Model",
       "year": "Year",
       "type": "Vehicle type",
-      "household": "Related home"
-    }
+      "household": "Related home",
+      "photo": "Vehicle photo"
+    },
+    "photoAlt": "Photo of {name}",
+    "photoHint": "Optional. JPG or PNG, up to 1 MB.",
+    "photoTooLarge": "Photo cannot exceed 1 MB.",
+    "photoRemove": "Remove photo",
+    "photoUpload": "Upload photo"
   },
   "alerts": {
     "title": "Active watch",

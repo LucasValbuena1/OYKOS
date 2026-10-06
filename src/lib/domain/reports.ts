@@ -44,11 +44,27 @@ function invoicesIn(invoices: Invoice[], householdId: string, from: string, to: 
   return invoices.filter((i) => i.householdId === householdId && periods.has(i.period));
 }
 
+/** Fecha efectiva de un impuesto: pago de contado, pago de cuotas más reciente, o vencimiento. */
+function taxEffectiveDate(x: Tax): string {
+  if (x.payment?.date) return x.payment.date;
+  const paid = x.installments.filter((i) => i.paid && i.paidAt).map((i) => i.paidAt!);
+  if (paid.length > 0) return paid.sort().slice(-1)[0];
+  return x.dueDate;
+}
+
+/** Monto efectivamente pagado (con descuento si lo hubo); si está pendiente, el facturado. */
+function taxEffectiveAmount(x: Tax): number {
+  if (x.payment?.amount != null) return x.payment.amount;
+  const paidSum = x.installments.filter((i) => i.paid).reduce((s, i) => s + (i.paidAmount ?? i.amount), 0);
+  if (paidSum > 0) return paidSum;
+  return x.amount;
+}
+
 function taxesIn(taxes: Tax[], assetIds: Set<string>, from: string, to: string) {
   const f = parseDate(from).getTime();
   const t = parseDate(to).getTime();
   return taxes.filter((x) => {
-    const d = parseDate(x.dueDate).getTime();
+    const d = parseDate(taxEffectiveDate(x)).getTime();
     return assetIds.has(x.assetId) && d >= f && d <= t;
   });
 }
@@ -67,17 +83,24 @@ export function generateReportData(
     const assets = new Set([sel.householdId, ...vehicleIds]);
     const current = taxesIn(taxes, assets, sel.from, sel.to);
     const before = taxesIn(taxes, assets, prev.from, prev.to);
-    const total = sum(current.map((t) => t.amount));
-    const previousTotal = sum(before.map((t) => t.amount));
+    const amountOf = (x: Tax) => taxEffectiveAmount(x);
+    const dateOf = (x: Tax) => taxEffectiveDate(x);
+    const total = sum(current.map(amountOf));
+    const previousTotal = sum(before.map(amountOf));
     const monthlyMap = new Map<string, number>();
-    for (const t of current) monthlyMap.set(periodOf(t.dueDate), (monthlyMap.get(periodOf(t.dueDate)) ?? 0) + t.amount);
+    for (const x of current) {
+      const p = periodOf(dateOf(x));
+      monthlyMap.set(p, (monthlyMap.get(p) ?? 0) + amountOf(x));
+    }
+    const byTypeMap = new Map<Tax["type"], number>();
+    for (const x of current) byTypeMap.set(x.type, (byTypeMap.get(x.type) ?? 0) + amountOf(x));
     return {
       total,
       previousTotal,
       variation: variation(total, previousTotal),
-      byService: [],
+      byService: [...byTypeMap.entries()].map(([taxType, amount]) => ({ serviceType: taxType, consumption: 0, amount })),
       monthly: periodRange(periodOf(sel.from), periodOf(sel.to)).map((p) => ({ period: p, amount: monthlyMap.get(p) ?? 0 })),
-      rows: current.map((t) => ({ label: `${t.type} ${t.year}`, period: periodOf(t.dueDate), amount: t.amount, status: t.status })),
+      rows: current.map((x) => ({ label: x.type, period: periodOf(dateOf(x)), amount: amountOf(x), status: x.status })),
     };
   }
 

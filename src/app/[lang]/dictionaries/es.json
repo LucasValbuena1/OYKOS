@@ -660,8 +660,14 @@
       "model": "Modelo",
       "year": "Año",
       "type": "Tipo de vehículo",
-      "household": "Hogar asociado"
-    }
+      "household": "Hogar asociado",
+      "photo": "Foto del vehículo"
+    },
+    "photoAlt": "Foto de {name}",
+    "photoHint": "Opcional. JPG o PNG, máximo 1 MB.",
+    "photoTooLarge": "La foto no puede superar 1 MB.",
+    "photoRemove": "Quitar foto",
+    "photoUpload": "Subir foto"
   },
   "alerts": {
     "title": "Vigilancia activa",

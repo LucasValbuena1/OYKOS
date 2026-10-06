@@ -205,6 +205,7 @@ export interface Vehicle {
   year: number;
   type: VehicleType;
   householdId: ID;
+  photo?: string;
   createdAt: string;
 }
 
@@ -276,7 +277,7 @@ export interface Incident {
 export type ReportType = "consumo" | "gastos" | "impuestos";
 
 export interface ReportServiceRow {
-  serviceType: ServiceType;
+  serviceType: ServiceType | TaxType;
   consumption: number;
   amount: number;
 }

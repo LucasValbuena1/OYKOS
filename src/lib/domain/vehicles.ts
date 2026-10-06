@@ -24,6 +24,7 @@ export const emptyVehicle = (householdId = ""): VehicleInput => ({
   year: new Date().getFullYear(),
   type: "automovil",
   householdId,
+  photo: undefined,
 });
 
 export function validateVehicle(

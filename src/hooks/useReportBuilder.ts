@@ -28,7 +28,17 @@ export function useReportBuilder(initial: Partial<ReportSelection> = {}, delayMs
 
   const error = validateSelection(selection);
 
-  const update = useCallback((changes: Partial<ReportSelection>) => setSelection((s) => ({ ...s, ...changes })), []);
+  const update = useCallback(
+    (changes: Partial<ReportSelection>) =>
+      setSelection((s) => {
+        // Impuestos suelen ser anuales — amplía el rango por defecto al cambiar de tipo.
+        if (changes.type && changes.type !== s.type && changes.type === "impuestos") {
+          return { ...s, ...changes, ...quickRange("12m") };
+        }
+        return { ...s, ...changes };
+      }),
+    [],
+  );
   const applyQuickRange = useCallback((r: QuickRange) => setSelection((s) => ({ ...s, ...quickRange(r) })), []);
 
   const generate = useCallback(async () => {

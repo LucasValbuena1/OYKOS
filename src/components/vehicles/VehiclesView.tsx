@@ -22,7 +22,7 @@ import type { VehicleExpenseCategory } from "@/types";
 const CATEGORY_ICON: Record<VehicleExpenseCategory, typeof Fuel> = { combustible: Fuel, mantenimiento: Wrench, seguro: ShieldCheck, otro: Wallet };
 
 export function VehiclesView() {
-  const { dict, href, plural, date } = useI18n();
+  const { dict, href, plural, date, t } = useI18n();
   const vehicles = useVehicles();
   const taxes = useTaxes();
   const { households } = useSelectedHousehold();
@@ -58,8 +58,17 @@ export function VehiclesView() {
               <li key={v.id}>
                 <Link href={href(`/vehiculos/${v.id}`)} className="relative flex h-full flex-col gap-6 overflow-hidden rounded-3xl bg-surface-container p-6 transition hover:shadow-md">
                   <span aria-hidden="true" className="absolute -top-16 -right-16 size-40 rounded-full bg-primary-fixed/60" />
-                  <div aria-hidden="true" className="relative flex h-28 items-center justify-center rounded-xl bg-surface-high">
-                    <Car className="size-16 text-primary-container" />
+                  <div className="relative flex h-28 items-center justify-center overflow-hidden rounded-xl bg-surface-high">
+                    {v.photo ? (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img
+                        src={v.photo}
+                        alt={t(dict.vehicles.photoAlt, { name: `${v.brand} ${v.model}` })}
+                        className="size-full object-cover"
+                      />
+                    ) : (
+                      <Car aria-hidden="true" className="size-16 text-primary-container" />
+                    )}
                   </div>
                   <div className="relative flex items-center justify-between gap-2">
                     <span className="rounded-full border border-outline-variant bg-surface px-4 py-1.5 font-mono text-sm font-bold tracking-widest">{formatPlate(v.plate)}</span>
@@ -121,9 +130,18 @@ export function VehicleDetail({ id }: { id: string }) {
       <Card tone="container" className="flex flex-col gap-4 md:p-8">
         <div className="flex flex-wrap items-start justify-between gap-4">
           <div className="flex items-center gap-4">
-            <span aria-hidden="true" className="flex size-16 items-center justify-center rounded-2xl bg-surface shadow">
-              <Car className="size-8 text-primary" />
-            </span>
+            {vehicle.photo ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                src={vehicle.photo}
+                alt={t(dict.vehicles.photoAlt, { name })}
+                className="size-16 rounded-2xl object-cover shadow"
+              />
+            ) : (
+              <span aria-hidden="true" className="flex size-16 items-center justify-center rounded-2xl bg-surface shadow">
+                <Car className="size-8 text-primary" />
+              </span>
+            )}
             <div>
               <span className="rounded-full border border-outline-variant bg-surface px-3 py-1 font-mono text-sm font-bold tracking-widest">{formatPlate(vehicle.plate)}</span>
               <h1 className="mt-2 text-3xl font-extrabold md:text-4xl">{name}</h1>

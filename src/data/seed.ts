@@ -114,20 +114,32 @@ export function seedVehicleExpenses(now: Date = new Date()): VehicleExpense[] {
 export function seedTaxes(now: Date = new Date()): Tax[] {
   const year = now.getFullYear();
   const created = addMonths(now, -2).toISOString();
-  const paidTax = (id: string, type: Tax["type"], assetType: Tax["assetType"], assetId: string, y: number, amount: number): Tax => ({
+  const paidTax = (
+    id: string,
+    type: Tax["type"],
+    assetType: Tax["assetType"],
+    assetId: string,
+    y: number,
+    amount: number,
+    payment?: { date: string; amount: number },
+  ): Tax => ({
     id, type, assetType, assetId, year: y, amount,
     dueDate: `${y}-04-15`,
     status: "pagado",
     paymentMode: "contado",
     installments: [],
-    payment: { date: `${y}-04-10`, amount },
+    payment: payment ?? { date: `${y}-04-10`, amount },
     createdAt: created,
   });
   return [
     paidTax("t1", "predial", "hogar", "h1", year - 4, 1_020_000),
     paidTax("t2", "predial", "hogar", "h1", year - 3, 1_080_000),
     paidTax("t3", "predial", "hogar", "h1", year - 2, 1_130_000),
-    paidTax("t4", "predial", "hogar", "h1", year - 1, 1_200_000),
+    // Pagado con descuento vigente a los pocos meses del año fiscal — aparece en reportes recientes.
+    paidTax("t4", "predial", "hogar", "h1", year - 1, 1_200_000, {
+      date: toISODate(addDays(now, -180)),
+      amount: 1_080_000,
+    }),
     {
       id: "t5",
       type: "predial",

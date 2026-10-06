@@ -194,15 +194,20 @@ function ReportPreview({ report }: { report: Report }) {
                   </h3>
                   <ul className="grid grid-cols-1 gap-2 sm:grid-cols-2">
                     {report.data.byService.map((s) => {
-                      // En el reporte de consumo se destaca el consumo físico; en el de gastos, el valor.
-                      const usage = `${number(s.consumption, 1)} ${SERVICE_UNITS[s.serviceType]}`;
+                      const isTax = report.type === "impuestos";
+                      const label = isTax
+                        ? (dict.taxTypes as Record<string, string>)[s.serviceType] ?? s.serviceType
+                        : dict.serviceTypes[s.serviceType as keyof typeof dict.serviceTypes];
+                      const unit = isTax ? "" : (SERVICE_UNITS as Record<string, string>)[s.serviceType] ?? "";
+                      const usage = unit ? `${number(s.consumption, 1)} ${unit}` : "";
+                      // En el reporte de consumo se destaca el consumo físico; en los demás, el valor.
                       const [main, secondary] = report.type === "consumo" ? [usage, money(s.amount)] : [money(s.amount), usage];
                       return (
                         <li key={s.serviceType} className="flex items-center justify-between gap-3 rounded-lg bg-surface-low px-4 py-2" data-testid="by-service-row">
-                          <span>{dict.serviceTypes[s.serviceType]}</span>
+                          <span>{label}</span>
                           <span className="text-right">
                             <span className="block font-bold">{main}</span>
-                            <span className="block text-sm text-on-surface-variant">{secondary}</span>
+                            {secondary && <span className="block text-sm text-on-surface-variant">{secondary}</span>}
                           </span>
                         </li>
                       );
@@ -227,7 +232,7 @@ function ReportPreview({ report }: { report: Report }) {
                   {dict.reports.breakdown}
                 </h3>
                 <div className="max-h-96 overflow-auto rounded-xl border border-surface-high">
-                  <table className="w-full min-w-[480px] text-left">
+                  <table className="w-full min-w-120 text-left">
                     <thead className="sticky top-0 bg-surface-low text-xs tracking-wider text-on-surface-variant uppercase">
                       <tr>
                         <th scope="col" className="px-4 py-3">{dict.reports.table.concept}</th>
@@ -239,7 +244,11 @@ function ReportPreview({ report }: { report: Report }) {
                     <tbody>
                       {report.data.rows.map((r, i) => (
                         <tr key={`${r.label}-${r.period}-${i}`} className="border-t border-surface-high">
-                          <td className="px-4 py-3 first-letter:uppercase">{(dict.serviceTypes as Record<string, string>)[r.label] ?? r.label}</td>
+                          <td className="px-4 py-3 first-letter:uppercase">
+                            {(dict.serviceTypes as Record<string, string>)[r.label]
+                              ?? (dict.taxTypes as Record<string, string>)[r.label]
+                              ?? r.label}
+                          </td>
                           <td className="px-4 py-3 first-letter:uppercase">{period(r.period)}</td>
                           <td className="px-4 py-3 font-semibold text-primary">{money(r.amount)}</td>
                           <td className="px-4 py-3">
