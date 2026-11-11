@@ -93,7 +93,9 @@
     "duplicateService": "Ya existe este tipo de servicio con ese número de cuenta en el hogar.",
     "percent": "El porcentaje debe estar entre 1 y 99.",
     "minLength": "El texto es demasiado corto.",
-    "code": "El código no es válido."
+    "code": "El código no es válido.",
+    "duplicateProvider": "Este hogar ya tiene registrado este tipo de servicio con esa empresa.",
+    "duplicateInvoice": "Ya existe una factura de este servicio para ese periodo."
   },
   "files": {
     "choose": "Seleccionar archivo",
@@ -269,7 +271,10 @@
     "events": "vencimientos",
     "noEvents": "No hay vencimientos para este día.",
     "payNow": "Pagar ahora",
-    "payUrgent": "Pagar urgente"
+    "payUrgent": "Pagar urgente",
+    "paymentEvent": "Pago registrado",
+    "dueOn": "Vencía el {date}",
+    "paidOn": "Pagada el {date}"
   },
   "households": {
     "title": "Gestión de hogares",
@@ -426,7 +431,9 @@
       "status": "Estado",
       "reference": "Referencia de pago"
     },
-    "showMore": "Mostrar {count} más"
+    "showMore": "Mostrar {count} más",
+    "unmarkPaid": "Desmarcar pago",
+    "unmarkedPaid": "La factura volvió a quedar pendiente."
   },
   "reports": {
     "eyebrow": "Exportación",

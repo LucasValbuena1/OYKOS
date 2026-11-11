@@ -93,7 +93,9 @@
     "duplicateService": "This utility type with that account number already exists in the home.",
     "percent": "Percentage must be between 1 and 99.",
     "minLength": "The text is too short.",
-    "code": "The code is not valid."
+    "code": "The code is not valid.",
+    "duplicateProvider": "This home already has this utility type with that provider.",
+    "duplicateInvoice": "A bill for this utility and period already exists."
   },
   "files": {
     "choose": "Choose file",
@@ -269,7 +271,10 @@
     "events": "due items",
     "noEvents": "Nothing is due on this day.",
     "payNow": "Pay now",
-    "payUrgent": "Pay urgently"
+    "payUrgent": "Pay urgently",
+    "paymentEvent": "Payment recorded",
+    "dueOn": "Was due on {date}",
+    "paidOn": "Paid on {date}"
   },
   "households": {
     "title": "Home management",
@@ -426,7 +431,9 @@
       "status": "Status",
       "reference": "Payment reference"
     },
-    "showMore": "Show {count} more"
+    "showMore": "Show {count} more",
+    "unmarkPaid": "Undo payment",
+    "unmarkedPaid": "The bill is pending again."
   },
   "reports": {
     "eyebrow": "Export",

@@ -17,7 +17,7 @@ import { intlLocale } from "@/i18n/config";
 const DOT: Record<CalendarEvent["state"], string> = { paid: "bg-paid", pending: "bg-pending", overdue: "bg-error" };
 
 export function CalendarView() {
-  const { dict, locale, money, href } = useI18n();
+  const { dict, locale, money, href, date, t } = useI18n();
   const invoices = useInvoices();
   const services = useServices();
   const taxes = useTaxes();
@@ -143,11 +143,18 @@ export function CalendarView() {
                   )}
                 >
                   <div className="flex items-start justify-between gap-3">
-                    <p className="font-bold">{e.title}</p>
-                    <Badge tone={e.state === "overdue" ? "danger" : e.state === "paid" ? "success" : "warning"}>{dict.calendar.legend[e.state]}</Badge>
+                    <p className="min-w-0 font-bold break-words">{e.title}</p>
+                    <Badge tone={e.state === "overdue" ? "danger" : e.state === "paid" ? "success" : "warning"}>
+                      {e.kind === "payment" ? dict.calendar.paymentEvent : dict.calendar.legend[e.state]}
+                    </Badge>
                   </div>
-                  <div className="flex items-center justify-between gap-3">
-                    <p className={cx("text-2xl font-extrabold", e.state === "overdue" && "text-error")}>{money(e.amount)}</p>
+                  {e.kind === "payment" && e.dueDate ? (
+                    <p className="text-sm text-on-surface-variant">{t(dict.calendar.dueOn, { date: date(e.dueDate) })}</p>
+                  ) : e.paidAt ? (
+                    <p className="text-sm text-on-surface-variant">{t(dict.calendar.paidOn, { date: date(e.paidAt) })}</p>
+                  ) : null}
+                  <div className="flex flex-wrap items-center justify-between gap-3">
+                    <p className={cx("min-w-0 text-2xl font-extrabold break-words", e.state === "overdue" && "text-error")}>{money(e.amount)}</p>
                     {e.state !== "paid" && (
                       <Link
                         href={href(e.href)}

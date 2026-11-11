@@ -10,6 +10,12 @@ export interface CalendarEvent {
   amount: number;
   state: "paid" | "pending" | "overdue";
   href: string;
+  /** "due": fecha límite; "payment": día en que se registró el pago de una factura. */
+  kind: "due" | "payment";
+  /** Vencimiento original (en los eventos de pago). */
+  dueDate?: string;
+  /** Fecha en que se pagó (facturas pagadas). */
+  paidAt?: string;
 }
 
 export function buildCalendarEvents(
@@ -19,16 +25,23 @@ export function buildCalendarEvents(
   taxTitle: (tax: Tax) => string,
   now: Date = new Date(),
 ): CalendarEvent[] {
-  const inv = invoices.map<CalendarEvent>((i) => {
+  const inv = invoices.flatMap<CalendarEvent>((i) => {
     const st = invoiceDisplayStatus(i, now);
-    return {
+    const due: CalendarEvent = {
       id: i.id,
       date: i.dueDate,
       title: invoiceTitle(i.serviceId),
       amount: i.amount,
       state: st === "pagada" ? "paid" : st === "vencida" ? "overdue" : "pending",
       href: `/facturas/${i.id}`,
+      kind: "due",
+      paidAt: st === "pagada" ? i.paidAt : undefined,
     };
+    // Factura pagada: además del vencimiento, se marca el día en que se pagó
+    if (st === "pagada" && i.paidAt && i.paidAt !== i.dueDate) {
+      return [due, { ...due, id: `${i.id}-pago`, date: i.paidAt, kind: "payment", dueDate: i.dueDate }];
+    }
+    return [due];
   });
   const tx = taxes.flatMap<CalendarEvent>((t) => {
     const st = taxDisplayStatus(t, now);
@@ -40,6 +53,7 @@ export function buildCalendarEvents(
         amount: c.amount,
         state: c.paid ? "paid" : new Date(`${c.dueDate}T23:59`) < now ? "overdue" : "pending",
         href: `/impuestos/${t.id}`,
+        kind: "due" as const,
       }));
     }
     return [
@@ -50,6 +64,7 @@ export function buildCalendarEvents(
         amount: t.amount,
         state: st === "pagado" ? "paid" : st === "vencido" ? "overdue" : "pending",
         href: `/impuestos/${t.id}`,
+        kind: "due",
       },
     ];
   });
