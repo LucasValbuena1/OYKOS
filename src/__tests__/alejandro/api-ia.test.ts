@@ -26,7 +26,11 @@ beforeEach(() => {
   getSession.mockResolvedValue({ user: { sub: "auth0|1" } });
   process.env.ANTHROPIC_API_KEY = "test-key";
   jest.clearAllMocks();
+  // Los casos de error de Claude se registran con console.error: se capturan
+  // para verificarlos sin ensuciar la salida de las pruebas.
+  jest.spyOn(console, "error").mockImplementation(() => {});
 });
+afterEach(() => jest.restoreAllMocks());
 afterAll(() => delete process.env.ANTHROPIC_API_KEY);
 
 describe("POST /api/ai/scan-receipt", () => {
@@ -52,6 +56,7 @@ describe("POST /api/ai/scan-receipt", () => {
     expect((await scan(post(png))).status).toBe(422);
     extractReceipt.mockRejectedValue(new Error("timeout"));
     expect((await scan(post(png))).status).toBe(502);
+    expect(console.error).toHaveBeenCalledWith("[scan-receipt] Claude error", expect.any(Error));
   });
 });
 
@@ -76,5 +81,6 @@ describe("POST /api/ai/assistant", () => {
   it("si Claude falla responde 502 (no inventa recomendaciones)", async () => {
     assistantInsights.mockRejectedValue(new Error("down"));
     expect((await assistant(post({ facts }))).status).toBe(502);
+    expect(console.error).toHaveBeenCalledWith("[assistant] Claude error", expect.any(Error));
   });
 });
