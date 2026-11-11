@@ -167,6 +167,9 @@ export interface Installment {
   dueDate: string;
   paid: boolean;
   paidAt?: string;
+  /** Valor efectivamente pagado y soporte de la cuota (HU15). */
+  paidAmount?: number;
+  attachment?: Attachment;
 }
 
 export interface TaxPayment {

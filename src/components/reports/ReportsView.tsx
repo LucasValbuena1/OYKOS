@@ -2,7 +2,7 @@
 // Felipe · F2 — HU05 seleccionar rango/tipo, HU06 generar, HU07 exportar,
 // HU08 historial. Diseño Figma "reportes".
 import { useState } from "react";
-import { Download, Eye, FileSpreadsheet, FileText, History, Trash2, Upload, BarChart3, Table2 } from "lucide-react";
+import { Eye, FileSpreadsheet, FileText, History, Trash2, Upload, BarChart3, Table2 } from "lucide-react";
 import { useI18n } from "@/i18n/I18nProvider";
 import { useReportBuilder } from "@/hooks/useReportBuilder";
 import { useHouseholds } from "@/hooks/useDomain";
@@ -13,6 +13,7 @@ import { ErrorAlert, InfoNote, Spinner, Badge } from "@/components/ui/Feedback";
 import { SelectField, TextField } from "@/components/ui/Field";
 import { ConfirmDialog } from "@/components/ui/Modal";
 import { REPORT_TYPES, hasReportData, reportFileName, type QuickRange } from "@/lib/domain/reports";
+import { SERVICE_UNITS } from "@/lib/domain/services";
 import { exportExcel, exportPdf, type ExportLabels } from "@/lib/export";
 import type { Household, Report } from "@/types";
 import { cx } from "@/lib/utils";
@@ -41,22 +42,65 @@ function useExportLabels() {
   });
 }
 
-function ExportActions({ report }: { report: Report }) {
+type ExportKind = "pdf" | "xls";
+
+/** Exporta un reporte ya generado; lanza si la exportación falla. */
+function useReportExport() {
   const { dict, t } = useI18n();
   const { notify } = useToast();
   const labelsFor = useExportLabels();
-  const [busy, setBusy] = useState<"pdf" | "xls" | null>(null);
-  const [failed, setFailed] = useState<"pdf" | "xls" | null>(null);
   const { items: households } = useHouseholds();
-  const household = households.find((h) => h.id === report.householdId) ?? ({ name: "hogar" } as Household);
 
-  async function run(kind: "pdf" | "xls") {
+  return async (report: Report, kind: ExportKind) => {
+    const household = households.find((h) => h.id === report.householdId) ?? ({ name: "hogar" } as Household);
+    const fn = kind === "pdf" ? exportPdf : exportExcel;
+    const fileName = await fn(report, household, labelsFor(report));
+    notify(t(dict.reports.exported, { file: fileName }));
+  };
+}
+
+/** HU08 — descarga directa desde el historial, sin regenerar el reporte. */
+function HistoryDownloads({ report }: { report: Report }) {
+  const { dict } = useI18n();
+  const { notify } = useToast();
+  const exportReport = useReportExport();
+  const [busy, setBusy] = useState<ExportKind | null>(null);
+
+  async function run(kind: ExportKind) {
+    setBusy(kind);
+    try {
+      await exportReport(report, kind);
+    } catch {
+      notify(dict.reports.exportError, "error");
+    } finally {
+      setBusy(null);
+    }
+  }
+
+  if (!hasReportData(report.data)) return null;
+  return (
+    <>
+      <IconButton label={dict.reports.history.downloadPdf} variant="ghost" disabled={busy !== null} onClick={() => run("pdf")}>
+        <FileText aria-hidden="true" className="size-4" />
+      </IconButton>
+      <IconButton label={dict.reports.history.downloadExcel} variant="ghost" disabled={busy !== null} onClick={() => run("xls")}>
+        <FileSpreadsheet aria-hidden="true" className="size-4" />
+      </IconButton>
+    </>
+  );
+}
+
+function ExportActions({ report }: { report: Report }) {
+  const { dict } = useI18n();
+  const exportReport = useReportExport();
+  const [busy, setBusy] = useState<ExportKind | null>(null);
+  const [failed, setFailed] = useState<ExportKind | null>(null);
+
+  async function run(kind: ExportKind) {
     setBusy(kind);
     setFailed(null);
     try {
-      const fn = kind === "pdf" ? exportPdf : exportExcel;
-      const fileName = await fn(report, household as Household, labelsFor(report));
-      notify(t(dict.reports.exported, { file: fileName }));
+      await exportReport(report, kind);
     } catch {
       setFailed(kind);
     } finally {
@@ -84,7 +128,7 @@ function ExportActions({ report }: { report: Report }) {
 }
 
 function ReportPreview({ report }: { report: Report }) {
-  const { dict, money, date, period, percent } = useI18n();
+  const { dict, money, number, date, period, percent } = useI18n();
   const { items: households } = useHouseholds();
   const household = households.find((h) => h.id === report.householdId);
   const fileName = household ? reportFileName(report, household, "pdf") : "";
@@ -149,12 +193,20 @@ function ReportPreview({ report }: { report: Report }) {
                     {dict.reports.byService}
                   </h3>
                   <ul className="grid grid-cols-1 gap-2 sm:grid-cols-2">
-                    {report.data.byService.map((s) => (
-                      <li key={s.serviceType} className="flex justify-between rounded-lg bg-surface-low px-4 py-2">
-                        <span>{dict.serviceTypes[s.serviceType]}</span>
-                        <span className="font-bold">{money(s.amount)}</span>
-                      </li>
-                    ))}
+                    {report.data.byService.map((s) => {
+                      // En el reporte de consumo se destaca el consumo físico; en el de gastos, el valor.
+                      const usage = `${number(s.consumption, 1)} ${SERVICE_UNITS[s.serviceType]}`;
+                      const [main, secondary] = report.type === "consumo" ? [usage, money(s.amount)] : [money(s.amount), usage];
+                      return (
+                        <li key={s.serviceType} className="flex items-center justify-between gap-3 rounded-lg bg-surface-low px-4 py-2" data-testid="by-service-row">
+                          <span>{dict.serviceTypes[s.serviceType]}</span>
+                          <span className="text-right">
+                            <span className="block font-bold">{main}</span>
+                            <span className="block text-sm text-on-surface-variant">{secondary}</span>
+                          </span>
+                        </li>
+                      );
+                    })}
                   </ul>
                 </section>
               )}
@@ -331,9 +383,7 @@ export function ReportsView() {
                           <IconButton label={dict.reports.history.view} variant="ghost" onClick={() => { builder.open(r); setTab("new"); }}>
                             <Eye aria-hidden="true" className="size-4" />
                           </IconButton>
-                          <IconButton label={dict.reports.history.download} variant="ghost" onClick={() => { builder.open(r); setTab("new"); }}>
-                            <Download aria-hidden="true" className="size-4" />
-                          </IconButton>
+                          <HistoryDownloads report={r} />
                           <IconButton label={dict.common.delete} variant="ghost" onClick={() => setToDelete(r)}>
                             <Trash2 aria-hidden="true" className="size-4" />
                           </IconButton>

@@ -13,13 +13,48 @@ import { Button, IconButton, LinkButton } from "@/components/ui/Button";
 import { EmptyState, InfoNote, Badge } from "@/components/ui/Feedback";
 import { SegmentedControl, TextField } from "@/components/ui/Field";
 import { FileField } from "@/components/ui/FileField";
-import { ConfirmDialog } from "@/components/ui/Modal";
+import { ConfirmDialog, Modal } from "@/components/ui/Modal";
 import { TaxStatusBadge, EarlyPaymentBadge } from "./TaxStatusBadge";
 import { discountedAmount, validateDiscount } from "@/lib/domain/taxes";
 import { daysUntil, toISODate, addDays } from "@/lib/utils";
-import type { Attachment } from "@/types";
+import type { Attachment, Installment, TaxPayment } from "@/types";
 
 type Detail = ReturnType<typeof useTaxDetail>;
+
+const MIN_INSTALLMENTS = 2;
+const MAX_INSTALLMENTS = 12;
+
+/** HU15 — pago de una cuota indicando fecha, valor y soporte. */
+function InstallmentPaymentDialog({ installment, onClose, onPay }: { installment: Installment | null; onClose: () => void; onPay: (payment: TaxPayment) => void }) {
+  const { dict, t } = useI18n();
+  const [payDate, setPayDate] = useState(toISODate(new Date()));
+  const [amount, setAmount] = useState(installment?.amount ?? 0);
+  const [attachment, setAttachment] = useState<Attachment | undefined>();
+
+  return (
+    <Modal
+      open={!!installment}
+      onClose={onClose}
+      title={installment ? t(dict.taxes.plan.payTitle, { n: installment.number }) : ""}
+      footer={
+        <>
+          <Button variant="tonal" onClick={onClose}>
+            {dict.common.cancel}
+          </Button>
+          <Button disabled={!payDate || amount <= 0} icon={<CheckCircle2 aria-hidden="true" className="size-4" />} onClick={() => onPay({ date: payDate, amount, attachment })}>
+            {dict.taxes.payment.mark}
+          </Button>
+        </>
+      }
+    >
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+        <TextField label={dict.taxes.payment.date} type="date" value={payDate} max={toISODate(new Date())} onChange={(e) => setPayDate(e.target.value)} />
+        <TextField label={dict.taxes.payment.amount} type="number" min={0} value={amount} onChange={(e) => setAmount(Number(e.target.value))} />
+      </div>
+      <FileField label={dict.taxes.payment.attach} value={attachment} onChange={setAttachment} />
+    </Modal>
+  );
+}
 
 function InstallmentPlan({ ctx }: { ctx: Detail }) {
   const { dict, money, t } = useI18n();
@@ -27,7 +62,9 @@ function InstallmentPlan({ ctx }: { ctx: Detail }) {
   const tax = ctx.tax!;
   const [count, setCount] = useState(tax.installments.length || 4);
   const [firstDue, setFirstDue] = useState(tax.installments[0]?.dueDate ?? tax.dueDate);
+  const [paying, setPaying] = useState<Installment | null>(null);
   const locked = tax.status === "pagado";
+  const countValid = Number.isInteger(count) && count >= MIN_INSTALLMENTS && count <= MAX_INSTALLMENTS;
 
   return (
     <Card aria-labelledby="plan-title" className="flex flex-col gap-5">
@@ -41,7 +78,7 @@ function InstallmentPlan({ ctx }: { ctx: Detail }) {
         onChange={(mode) => {
           if (locked) return;
           if (mode === "contado") ctx.setCash();
-          else ctx.createPlan(count, firstDue);
+          else ctx.createPlan(countValid ? count : 4, firstDue);
         }}
         options={[
           { value: "contado", label: dict.taxes.plan.cash },
@@ -51,11 +88,20 @@ function InstallmentPlan({ ctx }: { ctx: Detail }) {
       {tax.paymentMode === "cuotas" && (
         <>
           <div className="grid grid-cols-1 items-end gap-4 sm:grid-cols-[1fr_1fr_auto]">
-            <TextField label={dict.taxes.plan.count} type="number" min={2} max={12} value={count} onChange={(e) => setCount(Math.max(1, Number(e.target.value)))} disabled={locked} />
+            <TextField
+              label={dict.taxes.plan.count}
+              type="number"
+              min={MIN_INSTALLMENTS}
+              max={MAX_INSTALLMENTS}
+              value={count}
+              onChange={(e) => setCount(Number(e.target.value))}
+              disabled={locked}
+              errorText={countValid ? undefined : t(dict.taxes.plan.countRange, { min: MIN_INSTALLMENTS, max: MAX_INSTALLMENTS })}
+            />
             <TextField label={dict.taxes.plan.firstDue} type="date" value={firstDue} onChange={(e) => setFirstDue(e.target.value)} disabled={locked} />
             <Button
               variant="tonal"
-              disabled={locked || count < 2 || !firstDue}
+              disabled={locked || !countValid || !firstDue}
               onClick={() => {
                 ctx.createPlan(count, firstDue);
                 notify(dict.taxes.plan.generated);
@@ -110,9 +156,28 @@ function InstallmentPlan({ ctx }: { ctx: Detail }) {
                     </td>
                     <td className="px-4 py-2">
                       {c.paid ? (
-                        <Badge tone="success">{dict.taxStatus.pagado}</Badge>
+                        <div className="flex flex-wrap items-center gap-2">
+                          <Badge tone="success">{dict.taxStatus.pagado}</Badge>
+                          {c.attachment && (
+                            <a className="text-sm font-semibold text-primary underline" href={c.attachment.dataUrl} download={c.attachment.name}>
+                              {dict.taxes.payment.downloadSupport}
+                            </a>
+                          )}
+                          {!locked && (
+                            <IconButton
+                              label={t(dict.taxes.plan.revertInstallment, { n: c.number })}
+                              variant="ghost"
+                              onClick={() => {
+                                ctx.revertInstallment(c.number);
+                                notify(dict.taxes.payment.reverted);
+                              }}
+                            >
+                              <RotateCcw aria-hidden="true" className="size-4" />
+                            </IconButton>
+                          )}
+                        </div>
                       ) : (
-                        <Button size="sm" variant="ghost" disabled={locked} onClick={() => ctx.payInstallment(c.number, toISODate(new Date()))}>
+                        <Button size="sm" variant="ghost" disabled={locked} onClick={() => setPaying(c)}>
                           {dict.taxes.plan.payInstallment}
                         </Button>
                       )}
@@ -138,6 +203,16 @@ function InstallmentPlan({ ctx }: { ctx: Detail }) {
           )}
         </>
       )}
+      <InstallmentPaymentDialog
+        key={paying?.number ?? "none"}
+        installment={paying}
+        onClose={() => setPaying(null)}
+        onPay={(payment) => {
+          if (paying) ctx.payInstallment(paying.number, payment);
+          setPaying(null);
+          notify(dict.taxes.plan.installmentPaid);
+        }}
+      />
     </Card>
   );
 }

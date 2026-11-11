@@ -495,7 +495,8 @@
       "generated": "Generated",
       "actions": "Actions",
       "view": "View report",
-      "download": "Open to download"
+      "downloadPdf": "Download PDF",
+      "downloadExcel": "Download Excel"
     },
     "confirmDeleteTitle": "Delete this report from history?",
     "confirmDeleteMessage": "You can generate it again at any time.",
@@ -574,7 +575,11 @@
       "dueOf": "Due date of installment {n}",
       "payInstallment": "Mark paid",
       "total": "Installments total",
-      "mismatch": "The installments don't add up to the tax amount (difference: {diff})."
+      "mismatch": "The installments don't add up to the tax amount (difference: {diff}).",
+      "countRange": "Must be between {min} and {max} installments.",
+      "payTitle": "Pay installment {n}",
+      "revertInstallment": "Revert payment of installment {n}",
+      "installmentPaid": "Installment marked as paid."
     },
     "discount": {
       "title": "Early payment discount",

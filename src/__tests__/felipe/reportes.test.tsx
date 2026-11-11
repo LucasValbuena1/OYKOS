@@ -88,6 +88,15 @@ describe("HU06 · Generar reporte", () => {
     expect(screen.getByTestId("report-total")).toBeInTheDocument();
   });
 
+  it("muestra el consumo físico por servicio con su unidad", async () => {
+    const { user } = renderApp(<ReportsView />);
+    await user.click(screen.getByRole("radio", { name: "Consumo" }));
+    await generate(user);
+    const energia = screen.getAllByTestId("by-service-row").find((row) => row.textContent?.includes("Energía"))!;
+    expect(energia).toHaveTextContent("kWh");
+    expect(energia).toHaveTextContent("$");
+  });
+
   it("incluye una gráfica de evolución del gasto", async () => {
     const { user } = renderApp(<ReportsView />);
     await generate(user);
@@ -181,6 +190,21 @@ describe("HU08 · Ver historial de reportes", () => {
     await user.click(screen.getByRole("tab", { name: /Historial/ }));
     await user.click(screen.getByRole("button", { name: "Ver reporte" }));
     expect(screen.getByRole("region", { name: /oykos-gastos-casa-principal/ })).toBeInTheDocument();
+    expect(reportsStore.get()).toHaveLength(1);
+  });
+
+  it("permite descargar un reporte del historial en PDF o Excel sin generarlo de nuevo", async () => {
+    const withData: Report = {
+      ...make("a", "2026-01-01T00:00:00Z"),
+      data: { total: 1000, previousTotal: 0, variation: null, byService: [], monthly: [], rows: [{ label: "agua", period: "2026-01", amount: 1000, status: "pagada" }] },
+    };
+    reportsStore.set([withData]);
+    const { user } = renderApp(<ReportsView />);
+    await user.click(screen.getByRole("tab", { name: /Historial/ }));
+    await user.click(screen.getByRole("button", { name: "Descargar PDF" }));
+    await user.click(screen.getByRole("button", { name: "Descargar Excel" }));
+    expect(exportMock.exportPdf).toHaveBeenLastCalledWith(expect.objectContaining({ id: "a" }), expect.anything(), expect.anything());
+    expect(exportMock.exportExcel).toHaveBeenLastCalledWith(expect.objectContaining({ id: "a" }), expect.anything(), expect.anything());
     expect(reportsStore.get()).toHaveLength(1);
   });
 

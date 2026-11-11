@@ -162,6 +162,16 @@ describe("HU13 · Configurar plan de cuotas", () => {
     await user.type(first, "1");
     expect(screen.getByRole("alert")).toHaveTextContent("La suma de las cuotas no coincide");
   });
+
+  it("solo permite generar entre 2 y 12 cuotas", async () => {
+    const { user } = renderApp(<TaxDetail id="t5" />);
+    await user.click(screen.getByRole("radio", { name: "En cuotas" }));
+    const count = screen.getByLabelText("Número de cuotas");
+    await user.clear(count);
+    await user.type(count, "20");
+    expect(screen.getByText("Debe estar entre 2 y 12 cuotas.")).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Generar cuotas" })).toBeDisabled();
+  });
 });
 
 describe("HU14 · Registrar descuento por pronto pago", () => {
@@ -209,6 +219,28 @@ describe("HU15 · Marcar impuesto como pagado", () => {
     expect(await screen.findByRole("link", { name: /soporte.pdf/ })).toBeInTheDocument();
     await user.click(screen.getByRole("button", { name: "Marcar como pagado" }));
     expect(taxesStore.get().find((t) => t.id === "t8")?.payment?.attachment?.name).toBe("soporte.pdf");
+  });
+
+  it("paga una cuota indicando fecha, valor y soporte, y permite revertirla", async () => {
+    const { user } = renderApp(<TaxDetail id="t5" />);
+    await user.click(screen.getByRole("radio", { name: "En cuotas" }));
+    await user.click(screen.getAllByRole("button", { name: "Marcar pagada" })[0]);
+    const dialog = screen.getByRole("dialog", { name: "Pagar cuota 1" });
+    const amount = within(dialog).getByLabelText("Valor pagado");
+    await user.clear(amount);
+    await user.type(amount, "300000");
+    await user.upload(within(dialog).getByLabelText("Adjuntar comprobante"), new File(["%PDF-1.4"], "cuota1.pdf", { type: "application/pdf" }));
+    await within(dialog).findByRole("link", { name: /cuota1.pdf/ });
+    await user.click(within(dialog).getByRole("button", { name: "Marcar como pagado" }));
+
+    let first = taxesStore.get().find((t) => t.id === "t5")!.installments[0];
+    expect(first).toMatchObject({ paid: true, paidAmount: 300_000, attachment: { name: "cuota1.pdf" } });
+    expect(first.paidAt).toBeTruthy();
+
+    await user.click(screen.getByRole("button", { name: "Revertir el pago de la cuota 1" }));
+    first = taxesStore.get().find((t) => t.id === "t5")!.installments[0];
+    expect(first.paid).toBe(false);
+    expect(first.paidAmount).toBeUndefined();
   });
 
   it("permite revertir la marca de pago", async () => {

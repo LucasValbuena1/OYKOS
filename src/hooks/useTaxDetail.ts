@@ -14,6 +14,7 @@ import {
   taxDisplayStatus,
   taxHistory,
 } from "@/lib/domain/taxes";
+import { sum } from "@/lib/utils";
 
 export function useAssetName() {
   const households = useHouseholds();
@@ -87,24 +88,55 @@ export function useTaxDetail(id: string, now: Date = new Date()) {
       taxes.update(id, {
         status: "pendiente",
         payment: undefined,
-        installments: tax?.installments.map((c) => ({ ...c, paid: false, paidAt: undefined })) ?? [],
+        installments: tax?.installments.map((c) => ({ ...c, paid: false, paidAt: undefined, paidAmount: undefined, attachment: undefined })) ?? [],
       }),
     [taxes, id, tax],
   );
 
   /** Pago de una cuota; si quedan todas pagadas el impuesto pasa a "pagado". */
   const payInstallment = useCallback(
-    (number: number, date: string) => {
+    (number: number, payment: TaxPayment) => {
       if (!tax) return;
-      const installments = tax.installments.map((c) => (c.number === number ? { ...c, paid: true, paidAt: date } : c));
+      const installments = tax.installments.map((c) =>
+        c.number === number ? { ...c, paid: true, paidAt: payment.date, paidAmount: payment.amount, attachment: payment.attachment } : c,
+      );
       const allPaid = installments.every((c) => c.paid);
+      const paidTotal = sum(installments.map((c) => c.paidAmount ?? c.amount));
       taxes.update(id, {
         installments,
-        ...(allPaid ? { status: "pagado" as const, payment: { date, amount: installmentsTotal(installments) } } : {}),
+        ...(allPaid ? { status: "pagado" as const, payment: { date: payment.date, amount: paidTotal } } : {}),
       });
     },
     [taxes, id, tax],
   );
 
-  return { tax, derived, setCash, createPlan, updateInstallment, saveDiscount, removeDiscount, markPaid, revertPayment, payInstallment, remove: () => taxes.remove(id) };
+  /** Revierte el pago de una sola cuota (registrado por error). */
+  const revertInstallment = useCallback(
+    (number: number) => {
+      if (!tax) return;
+      taxes.update(id, {
+        status: "pendiente",
+        payment: undefined,
+        installments: tax.installments.map((c) =>
+          c.number === number ? { ...c, paid: false, paidAt: undefined, paidAmount: undefined, attachment: undefined } : c,
+        ),
+      });
+    },
+    [taxes, id, tax],
+  );
+
+  return {
+    tax,
+    derived,
+    setCash,
+    createPlan,
+    updateInstallment,
+    saveDiscount,
+    removeDiscount,
+    markPaid,
+    revertPayment,
+    payInstallment,
+    revertInstallment,
+    remove: () => taxes.remove(id),
+  };
 }

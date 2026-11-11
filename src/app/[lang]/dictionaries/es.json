@@ -495,7 +495,8 @@
       "generated": "Generado",
       "actions": "Acciones",
       "view": "Ver reporte",
-      "download": "Abrir para descargar"
+      "downloadPdf": "Descargar PDF",
+      "downloadExcel": "Descargar Excel"
     },
     "confirmDeleteTitle": "¿Eliminar este reporte del historial?",
     "confirmDeleteMessage": "Podrás generarlo de nuevo cuando quieras.",
@@ -574,7 +575,11 @@
       "dueOf": "Vencimiento de la cuota {n}",
       "payInstallment": "Marcar pagada",
       "total": "Total cuotas",
-      "mismatch": "La suma de las cuotas no coincide con el valor del impuesto (diferencia: {diff})."
+      "mismatch": "La suma de las cuotas no coincide con el valor del impuesto (diferencia: {diff}).",
+      "countRange": "Debe estar entre {min} y {max} cuotas.",
+      "payTitle": "Pagar cuota {n}",
+      "revertInstallment": "Revertir el pago de la cuota {n}",
+      "installmentPaid": "Cuota marcada como pagada."
     },
     "discount": {
       "title": "Descuento por pronto pago",
