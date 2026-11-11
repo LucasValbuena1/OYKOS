@@ -214,8 +214,15 @@ export function IncidentsView({ selectedId }: { selectedId?: string }) {
   const services = useServices();
   const relative = useRelative();
   const [filters, setFilters] = useState<IncidentFilters>(defaultIncidentFilters);
-  const list = useMemo(() => filterIncidents(incidents.items, filters), [incidents.items, filters]);
-  const counts = countByStatus(incidents.items);
+  // Incidentes del hogar activo (selector de hogar del encabezado)
+  const { selectedId: homeId } = useSelectedHousehold();
+  // El incidente pertenece al hogar de su servicio afectado
+  const homeIncidents = useMemo(
+    () => (homeId ? incidents.items.filter((i) => services.getById(i.serviceId)?.householdId === homeId) : incidents.items),
+    [incidents.items, services, homeId],
+  );
+  const list = useMemo(() => filterIncidents(homeIncidents, filters), [homeIncidents, filters]);
+  const counts = countByStatus(homeIncidents);
   const selected = incidents.getById(selectedId);
 
   const stats: { key: IncidentStatus; label: string; icon: typeof AlertOctagon; tone: string }[] = [
@@ -284,7 +291,7 @@ export function IncidentsView({ selectedId }: { selectedId?: string }) {
               <input type="checkbox" className="size-4 accent-primary" checked={filters.showClosed} onChange={(e) => setFilters((f) => ({ ...f, showClosed: e.target.checked }))} />
               {dict.incidents.showClosed}
             </label>
-            {incidents.items.length === 0 ? (
+            {homeIncidents.length === 0 ? (
               <EmptyState
                 icon={<ClipboardList className="size-8" />}
                 title={dict.incidents.emptyTitle}

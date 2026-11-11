@@ -86,16 +86,21 @@ function GlobalSearch() {
   );
 }
 
-/** Formularios que ya piden el hogar en sus propios campos: no se repite el selector. */
-const OWN_HOUSEHOLD_FIELD = /\/servicios\/(nuevo|[^/]+\/editar)\/?$/;
+/**
+ * El selector de hogar solo aparece en las pestañas cuyo contenido se filtra
+ * por él y que no tienen un selector propio (Dashboard, Servicios y Asistente
+ * ya traen el suyo, sincronizado con el mismo hogar activo). En el resto
+ * —contenido sin clasificar por hogar o con filtro propio— no se muestra.
+ */
+const HOUSEHOLD_SCOPED = /^\/(es|en)\/(calendario|alertas|incidentes)\/?$/;
 
 function HouseholdSelector() {
   const { dict } = useI18n();
   const pathname = usePathname() ?? "";
   const { households, selectedId, setSelectedId } = useSelectedHousehold();
-  if (households.length < 2 || OWN_HOUSEHOLD_FIELD.test(pathname)) return null;
+  if (households.length < 2 || !HOUSEHOLD_SCOPED.test(pathname)) return null;
   return (
-    <label className="hidden items-center gap-2 lg:flex">
+    <label className="hidden items-center gap-2 sm:flex">
       <span className="sr-only">{dict.header.household}</span>
       <select
         value={selectedId ?? ""}

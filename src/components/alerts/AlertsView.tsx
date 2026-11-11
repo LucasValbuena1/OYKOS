@@ -51,7 +51,9 @@ export function AlertsView() {
   const { notify } = useToast();
   const labels = useRuleLabels();
   const [formKey, setFormKey] = useState(0);
-  const activeCount = rules.items.filter((r) => r.active).length;
+  // Reglas del hogar activo (selector de hogar del encabezado)
+  const homeRules = selectedId ? rules.items.filter((r) => r.householdId === selectedId) : rules.items;
+  const activeCount = homeRules.filter((r) => r.active).length;
 
   return (
     <>
@@ -72,14 +74,14 @@ export function AlertsView() {
               {dict.alerts.rulesTitle}
             </h2>
             <span aria-live="polite" className="rounded-full bg-tertiary-container px-3 py-1 text-sm font-semibold text-on-tertiary-container">
-              {plural(dict.alerts.counter, rules.items.length)} · {t(dict.alerts.activeCount, { count: activeCount })}
+              {plural(dict.alerts.counter, homeRules.length)} · {t(dict.alerts.activeCount, { count: activeCount })}
             </span>
           </div>
-          {rules.items.length === 0 ? (
+          {homeRules.length === 0 ? (
             <EmptyState icon={<BellRing className="size-8" />} title={dict.alerts.emptyTitle} description={dict.alerts.emptyDescription} />
           ) : (
             <ul className="flex flex-col gap-4">
-              {rules.items.map((rule) => {
+              {homeRules.map((rule) => {
                 const progress = ruleProgress(rule, invoices.items);
                 const service = services.getById(rule.serviceId);
                 const household = households.find((h) => h.id === rule.householdId);

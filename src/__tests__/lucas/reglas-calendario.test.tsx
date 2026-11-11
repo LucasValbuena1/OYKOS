@@ -6,7 +6,8 @@ import { isDuplicateProvider, validateService, emptyService } from "@/lib/domain
 import { isDuplicateInvoice, validateInvoice, emptyInvoice } from "@/lib/domain/invoices";
 import { InvoiceDetail } from "@/components/invoices/InvoiceDetail";
 import { Header } from "@/components/layout/Header";
-import { invoicesStore, servicesStore } from "@/data/stores";
+import { invoicesStore, servicesStore, selectedHouseholdStore } from "@/data/stores";
+import { CalendarView } from "@/components/calendar/CalendarView";
 import type { Invoice } from "@/types";
 import { renderApp, setPathname } from "../test-utils";
 
@@ -30,15 +31,34 @@ describe("Calendario · fecha de pago de las facturas", () => {
   });
 });
 
-describe("Registrar servicio · un solo selector de hogar", () => {
-  it("el encabezado oculta su selector de hogar en el formulario de servicio (el hogar se elige en el formulario)", () => {
-    setPathname("/es/servicios/nuevo");
-    const { unmount } = renderApp(<Header onOpenMenu={() => {}} menuOpen={false} menuId="m" />);
-    expect(screen.queryByLabelText("Hogar activo")).not.toBeInTheDocument();
-    unmount();
-    setPathname("/es/servicios");
-    renderApp(<Header onOpenMenu={() => {}} menuOpen={false} menuId="m" />);
+describe("Selector de hogar del encabezado", () => {
+  const header = () => renderApp(<Header onOpenMenu={() => {}} menuOpen={false} menuId="m" />);
+  it.each(["/es/calendario", "/es/alertas", "/es/incidentes"])("aparece en %s, que se filtra por el hogar activo", (path) => {
+    setPathname(path);
+    header();
     expect(screen.getByLabelText("Hogar activo")).toBeInTheDocument();
+  });
+  it.each(["/es/servicios/nuevo", "/es/servicios", "/es/dashboard", "/es/hogares", "/es/facturas", "/es/vehiculos", "/es/impuestos", "/es/reportes", "/es/perfil"])(
+    "no aparece en %s (sin clasificar por hogar, o con selector o filtro propio)",
+    (path) => {
+      setPathname(path);
+      header();
+      expect(screen.queryByLabelText("Hogar activo")).not.toBeInTheDocument();
+    },
+  );
+});
+
+describe("Calendario · fecha límite en lugar de 'Pendiente'", () => {
+  it("cada vencimiento indica su fecha límite y se filtra por el hogar activo", async () => {
+    invoicesStore.set([inv({ id: "c1", dueDate: "2030-01-15", period: "2029-12" }), inv({ id: "c2", serviceId: "s5", householdId: "h2", dueDate: "2030-01-15", period: "2029-12" })]);
+    selectedHouseholdStore.set("h1");
+    const { user } = renderApp(<CalendarView />);
+    for (let k = 0; k < 120 && !screen.queryByText(/enero de 2030/i, { selector: "p" }); k++) await user.click(screen.getByRole("button", { name: "Mes siguiente" }));
+    await user.click(screen.getByRole("button", { name: /15 de enero de 2030/ }));
+    expect(screen.getByText(/Fecha límite: 15 .*ene.* 2030/)).toBeInTheDocument();
+    expect(screen.queryByText("Pendiente", { selector: "span" })).not.toBeInTheDocument();
+    // La factura del otro hogar no aparece
+    expect(screen.getAllByText(/Fecha límite/)).toHaveLength(1);
   });
 });
 
