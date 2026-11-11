@@ -2,7 +2,7 @@
 // Encabezado superior: menú móvil, búsqueda, selector de hogar, idioma,
 // centro de notificaciones y menú de usuario (cerrar sesión desde cualquier pantalla).
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useId, useMemo, useRef, useState } from "react";
 import { Bell, LogOut, Menu, Search, UserRound } from "lucide-react";
 import { useI18n } from "@/i18n/I18nProvider";
@@ -86,10 +86,14 @@ function GlobalSearch() {
   );
 }
 
+/** Formularios que ya piden el hogar en sus propios campos: no se repite el selector. */
+const OWN_HOUSEHOLD_FIELD = /\/servicios\/(nuevo|[^/]+\/editar)\/?$/;
+
 function HouseholdSelector() {
   const { dict } = useI18n();
+  const pathname = usePathname() ?? "";
   const { households, selectedId, setSelectedId } = useSelectedHousehold();
-  if (households.length < 2) return null;
+  if (households.length < 2 || OWN_HOUSEHOLD_FIELD.test(pathname)) return null;
   return (
     <label className="hidden items-center gap-2 lg:flex">
       <span className="sr-only">{dict.header.household}</span>

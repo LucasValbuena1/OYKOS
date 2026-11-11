@@ -16,7 +16,7 @@ import type { Service } from "@/types";
 function Form({ initial, editing }: { initial: ServiceInput; editing?: Service }) {
   const { dict, href, t } = useI18n();
   const services = useServices();
-  const { households } = useSelectedHousehold();
+  const { households, setSelectedId } = useSelectedHousehold();
   const router = useRouter();
   const { notify } = useToast();
   const providersId = useId();
@@ -35,6 +35,8 @@ function Form({ initial, editing }: { initial: ServiceInput; editing?: Service }
         router.push(href(`/servicios/${editing.id}`));
       } else {
         services.add({ ...clean, createdAt: new Date().toISOString() });
+        // Único selector de hogar en esta pantalla: el listado abre el hogar elegido
+        setSelectedId(clean.householdId);
         notify(t(dict.services.created, { name }));
         router.push(href("/servicios"));
       }
