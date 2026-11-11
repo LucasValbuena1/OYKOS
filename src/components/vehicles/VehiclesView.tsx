@@ -255,29 +255,29 @@ export function VehicleDetail({ id }: { id: string }) {
           </Card>
         </div>
 
-        <aside aria-labelledby="total-cost" className="relative flex h-fit flex-col gap-8 overflow-hidden rounded-3xl bg-primary p-8 text-white">
+        <aside aria-labelledby="total-cost" className="@container relative flex h-fit min-w-0 flex-col gap-8 overflow-hidden rounded-3xl bg-primary p-6 text-white sm:p-8">
           <span aria-hidden="true" className="absolute -top-20 -right-20 size-64 rounded-full bg-[#38665f]" />
           <div className="relative">
             <h2 id="total-cost" className="text-sm font-bold tracking-wider text-primary-fixed uppercase">
               {dict.vehicles.totalCost}
             </h2>
-            <p className="mt-2 text-4xl font-extrabold md:text-5xl" data-testid="vehicle-total">
+            <p className="mt-2 text-[clamp(1.75rem,11cqi,3rem)] leading-tight font-extrabold break-words tabular-nums" data-testid="vehicle-total">
               {money(cost.total)}
             </p>
             <p className="text-primary-fixed-dim">
               {date(from)} – {date(to)}
             </p>
           </div>
-          <dl className="relative grid grid-cols-2 gap-3">
+          <dl className="relative grid grid-cols-1 gap-3 @xs:grid-cols-2">
             <div className="rounded-xl bg-primary-container p-3">
               <dt className="text-xs text-primary-fixed">{dict.vehicles.taxesPart}</dt>
-              <dd className="text-lg font-bold" data-testid="vehicle-taxes-total">
+              <dd className="text-lg font-bold break-words tabular-nums" data-testid="vehicle-taxes-total">
                 {money(cost.taxes)}
               </dd>
             </div>
             <div className="rounded-xl bg-primary-container p-3">
               <dt className="text-xs text-primary-fixed">{dict.vehicles.expensesPart}</dt>
-              <dd className="text-lg font-bold" data-testid="vehicle-expenses-total">
+              <dd className="text-lg font-bold break-words tabular-nums" data-testid="vehicle-expenses-total">
                 {money(cost.expenses)}
               </dd>
             </div>

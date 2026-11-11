@@ -139,12 +139,12 @@ export function TaxesView() {
       />
 
       <section aria-label={dict.taxes.summary} className="grid grid-cols-1 gap-6 md:grid-cols-2">
-        <div className="relative overflow-hidden rounded-3xl bg-primary p-8 text-white">
+        <div className="@container relative min-w-0 overflow-hidden rounded-3xl bg-primary p-6 text-white sm:p-8">
           <span aria-hidden="true" className="absolute -top-8 -right-8 size-32 rounded-full bg-primary-container" />
           <p className="relative flex items-center justify-between text-sm font-bold tracking-wider text-primary-fixed uppercase">
             {t(dict.taxes.totalYear, { year })} <Info aria-hidden="true" className="size-4" />
           </p>
-          <p className="relative mt-6 text-4xl font-extrabold md:text-5xl">{money(yearTotal)}</p>
+          <p className="relative mt-6 text-[clamp(1.75rem,11cqi,3rem)] leading-tight font-extrabold break-words tabular-nums">{money(yearTotal)}</p>
           {prevTotal > 0 && (
             <p className="relative mt-2 text-primary-fixed-dim">
               {t(dict.taxes.vsPrevious, { value: percent(((yearTotal - prevTotal) / prevTotal) * 100) })}
