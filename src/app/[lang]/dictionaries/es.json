@@ -274,7 +274,9 @@
     "payUrgent": "Pagar urgente",
     "paymentEvent": "Pago registrado",
     "dueOn": "Vencía el {date}",
-    "paidOn": "Pagada el {date}"
+    "paidOn": "Pagada el {date}",
+    "dueBy": "Fecha límite: {date}",
+    "overdueSince": "Venció el {date}"
   },
   "households": {
     "title": "Gestión de hogares",

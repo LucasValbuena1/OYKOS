@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useMemo, useState } from "react";
 import { ChevronLeft, ChevronRight, CalendarDays } from "lucide-react";
 import { useI18n } from "@/i18n/I18nProvider";
-import { useInvoices, useServices, useTaxes } from "@/hooks/useDomain";
+import { useInvoices, useSelectedHousehold, useServices, useTaxes, useVehicles } from "@/hooks/useDomain";
 import { useAssetName } from "@/hooks/useTaxDetail";
 import { PageHeader } from "@/components/ui/Surface";
 import { IconButton } from "@/components/ui/Button";
@@ -22,17 +22,27 @@ export function CalendarView() {
   const services = useServices();
   const taxes = useTaxes();
   const assetName = useAssetName();
+  const vehicles = useVehicles();
+  const { selectedId: homeId } = useSelectedHousehold();
   const today = new Date();
   const [cursor, setCursor] = useState(new Date(today.getFullYear(), today.getMonth(), 1));
   const [selected, setSelected] = useState(toISODate(today));
 
   const events = useMemo(
     () =>
-      buildCalendarEvents(invoices.items, taxes.items, (id) => {
+      buildCalendarEvents(
+        // Solo lo del hogar activo (selector de hogar del encabezado)
+        homeId ? invoices.items.filter((i) => i.householdId === homeId) : invoices.items,
+        homeId
+          ? taxes.items.filter((tx) =>
+              tx.assetType === "hogar" ? tx.assetId === homeId : vehicles.getById(tx.assetId)?.householdId === homeId,
+            )
+          : taxes.items,
+        (id) => {
         const s = services.getById(id);
         return s ? `${s.provider} · ${dict.serviceTypes[s.type]}` : "—";
       }, (t) => `${dict.taxTypes[t.type]} · ${assetName(t.assetType, t.assetId)}`),
-    [invoices.items, taxes.items, services, dict, assetName],
+    [invoices.items, taxes.items, vehicles, homeId, services, dict, assetName],
   );
   const weeks = monthMatrix(cursor);
   const byDay = new Map<string, CalendarEvent[]>();
@@ -145,7 +155,13 @@ export function CalendarView() {
                   <div className="flex items-start justify-between gap-3">
                     <p className="min-w-0 font-bold break-words">{e.title}</p>
                     <Badge tone={e.state === "overdue" ? "danger" : e.state === "paid" ? "success" : "warning"}>
-                      {e.kind === "payment" ? dict.calendar.paymentEvent : dict.calendar.legend[e.state]}
+                      {e.kind === "payment"
+                        ? dict.calendar.paymentEvent
+                        : e.state === "paid"
+                          ? dict.calendar.legend.paid
+                          : t(e.state === "overdue" ? dict.calendar.overdueSince : dict.calendar.dueBy, {
+                              date: date(e.date, { day: "numeric", month: "short", year: "numeric" }),
+                            })}
                     </Badge>
                   </div>
                   {e.kind === "payment" && e.dueDate ? (

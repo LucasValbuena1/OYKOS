@@ -274,7 +274,9 @@
     "payUrgent": "Pay urgently",
     "paymentEvent": "Payment recorded",
     "dueOn": "Was due on {date}",
-    "paidOn": "Paid on {date}"
+    "paidOn": "Paid on {date}",
+    "dueBy": "Due by {date}",
+    "overdueSince": "Overdue since {date}"
   },
   "households": {
     "title": "Home management",
