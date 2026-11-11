@@ -18,6 +18,8 @@ export type ValidationKey =
   | "stratum"
   | "cutoffDay"
   | "duplicateService"
+  | "duplicateProvider"
+  | "duplicateInvoice"
   | "percent"
   | "minLength"
   | "code";

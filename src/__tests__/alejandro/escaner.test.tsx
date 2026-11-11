@@ -23,7 +23,8 @@ const claudeExtraction = {
   amount: { value: 134700, confidence: 0.92 },
   cutoffDate: { value: inDays(-6), confidence: 0.85 },
   dueDate: { value: inDays(9), confidence: 0.88 },
-  period: { value: inDays(-6).slice(0, 7), confidence: 0.6 },
+  // Periodo sin factura previa del servicio (regla: una factura por servicio y periodo)
+  period: { value: "2030-01", confidence: 0.6 },
   consumption: { value: null, confidence: 0 },
   serviceType: { value: "energia", confidence: 0.9 },
 };

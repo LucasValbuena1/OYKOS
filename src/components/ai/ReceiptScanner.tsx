@@ -6,7 +6,7 @@ import { useCallback, useId, useMemo, useState } from "react";
 import { AlertTriangle, CheckCircle2, FileText, Loader2, ScanLine, Sparkles, Upload, Circle } from "lucide-react";
 import { useI18n } from "@/i18n/I18nProvider";
 import { useReceiptScanner, type ScanPhase } from "@/hooks/useReceiptScanner";
-import { useServices } from "@/hooks/useDomain";
+import { useInvoices, useSelectedHousehold, useServices } from "@/hooks/useDomain";
 import { useForm } from "@/hooks/useForm";
 import { useToast } from "@/components/ui/Toast";
 import { PageHeader, Card } from "@/components/ui/Surface";
@@ -96,17 +96,21 @@ interface ReviewValues {
 function ReviewForm({ extraction, onConfirm, onDiscard }: { extraction: ReceiptExtraction; onConfirm: (v: ReviewValues) => void; onDiscard: () => void }) {
   const { dict, t } = useI18n();
   const services = useServices().items;
+  const invoices = useInvoices().items;
+  const { households } = useSelectedHousehold();
+  const homeName = (id: string) => households.find((h) => h.id === id)?.name;
   const matched = matchService(extraction.provider.value, extraction.serviceType.value, services);
   const review = fieldsToReview(extraction);
   const labels = dict.scanner.fields as Record<ExtractionKey, string>;
 
   const validate = useCallback(
     (v: ReviewValues): FormErrors<ReviewValues> => {
-      // HU13: mismas validaciones del registro manual
-      const e = validateInvoice({ ...v, attachment: undefined }) as FormErrors<ReviewValues>;
+      // HU13: mismas validaciones del registro manual, incluida la regla de
+      // no duplicar facturas (el mismo recibo escaneado dos veces)
+      const e = validateInvoice({ ...v, attachment: undefined }, invoices) as FormErrors<ReviewValues>;
       return e;
     },
-    [],
+    [invoices],
   );
 
   const form = useForm<ReviewValues>({
@@ -167,6 +171,7 @@ function ReviewForm({ extraction, onConfirm, onDiscard }: { extraction: ReceiptE
           {services.map((s) => (
             <option key={s.id} value={s.id}>
               {dict.serviceTypes[s.type]} · {s.provider}
+              {homeName(s.householdId) ? ` · ${homeName(s.householdId)}` : ""}
             </option>
           ))}
         </SelectField>

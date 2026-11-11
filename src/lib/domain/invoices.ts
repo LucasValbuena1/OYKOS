@@ -66,13 +66,23 @@ export const emptyInvoice = (serviceId = "", householdId = ""): InvoiceInput => 
   source: "manual",
 });
 
-export function validateInvoice(input: InvoiceInput): FormErrors<InvoiceInput> {
+/** Ya existe una factura del mismo servicio para el mismo periodo (p. ej. el mismo recibo escaneado dos veces). */
+export function isDuplicateInvoice(
+  input: Pick<InvoiceInput, "serviceId" | "period">,
+  invoices: Invoice[],
+  editingId?: string,
+): boolean {
+  return invoices.some((i) => i.id !== editingId && i.serviceId === input.serviceId && i.period === input.period);
+}
+
+export function validateInvoice(input: InvoiceInput, invoices: Invoice[] = [], editingId?: string): FormErrors<InvoiceInput> {
   const errors: FormErrors<InvoiceInput> = {};
   if (isBlank(input.serviceId)) errors.serviceId = "required";
   if (isBlank(input.period) || !/^\d{4}-\d{2}$/.test(input.period)) errors.period = "required";
   if (!isPositiveNumber(input.consumption)) errors.consumption = "positive";
   if (!isPositiveNumber(input.amount)) errors.amount = "positive";
   if (isBlank(input.dueDate)) errors.dueDate = "required";
+  if (!errors.serviceId && !errors.period && isDuplicateInvoice(input, invoices, editingId)) errors.period = "duplicateInvoice";
   return errors;
 }
 

@@ -67,13 +67,13 @@ describe("HU02 · Registrar factura", () => {
     setSearch("servicio=s1");
     const { user } = renderApp(<InvoiceForm />);
     expect(screen.getByLabelText(/Servicio/)).toHaveValue("s1");
-    await user.type(screen.getByLabelText(/Periodo facturado/), "2026-10");
+    await user.type(screen.getByLabelText(/Periodo facturado/), "2030-01");
     await user.type(screen.getByLabelText(/Fecha límite de pago/), "2026-11-10");
     await user.type(screen.getByLabelText(/Consumo/), "19");
     await user.type(screen.getByLabelText(/^Valor/), "84000");
     await user.click(screen.getByRole("button", { name: "Guardar factura" }));
     const created = invoicesStore.get().at(-1);
-    expect(created).toMatchObject({ period: "2026-10", serviceId: "s1", status: "pendiente", amount: 84000, householdId: "h1" });
+    expect(created).toMatchObject({ period: "2030-01", serviceId: "s1", status: "pendiente", amount: 84000, householdId: "h1" });
     expect(mockRouter().push).toHaveBeenCalledWith("/es/facturas");
   });
 
@@ -81,7 +81,7 @@ describe("HU02 · Registrar factura", () => {
     const { user } = renderApp(<InvoiceForm />);
     await user.click(screen.getByRole("radio", { name: "Foto o PDF" }));
     await user.selectOptions(screen.getByLabelText(/Servicio/), "s2");
-    await user.type(screen.getByLabelText(/Periodo facturado/), "2026-10");
+    await user.type(screen.getByLabelText(/Periodo facturado/), "2030-01");
     await user.type(screen.getByLabelText(/Fecha límite de pago/), "2026-11-10");
     await user.type(screen.getByLabelText(/Consumo/), "19");
     await user.type(screen.getByLabelText(/^Valor/), "84000");

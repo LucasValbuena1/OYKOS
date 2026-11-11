@@ -42,6 +42,16 @@ export function isDuplicateService(input: ServiceInput, services: Service[], edi
   );
 }
 
+const normalize = (v: string) => v.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/\s+/g, " ").trim().toLowerCase();
+
+/** Mismo hogar, mismo tipo y misma empresa prestadora: sería el mismo servicio registrado dos veces. */
+export function isDuplicateProvider(input: ServiceInput, services: Service[], editingId?: string): boolean {
+  const provider = normalize(input.provider);
+  return services.some(
+    (s) => s.id !== editingId && s.householdId === input.householdId && s.type === input.type && normalize(s.provider) === provider,
+  );
+}
+
 export function validateService(
   input: ServiceInput,
   services: Service[],
@@ -55,6 +65,9 @@ export function validateService(
   if (!Number.isInteger(input.cutoffDay) || input.cutoffDay < 1 || input.cutoffDay > 31) errors.cutoffDay = "cutoffDay";
   if (!errors.accountNumber && !errors.type && isDuplicateService(input, services, editingId)) {
     errors.accountNumber = "duplicateService";
+  }
+  if (!errors.provider && !errors.type && isDuplicateProvider(input, services, editingId)) {
+    errors.provider = "duplicateProvider";
   }
   return errors;
 }

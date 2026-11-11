@@ -1,7 +1,7 @@
 "use client";
 // Gabriela · F1 — HU02 Registrar factura (manual o foto/PDF) · HU03 Editar factura.
 import { useRouter, useSearchParams } from "next/navigation";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { useI18n } from "@/i18n/I18nProvider";
 import { useInvoices, useServices, useSelectedHousehold } from "@/hooks/useDomain";
 import { useForm } from "@/hooks/useForm";
@@ -26,9 +26,11 @@ function Form({ initial, editing }: { initial: InvoiceInput; editing?: Invoice }
   const [mode, setMode] = useState<"manual" | "foto">(initial.source === "manual" ? "manual" : "foto");
   const [attachmentError, setAttachmentError] = useState(false);
 
+  // Regla de negocio: una sola factura por servicio y periodo
+  const validate = useCallback((v: InvoiceInput) => validateInvoice(v, invoices.items, editing?.id), [invoices.items, editing?.id]);
   const form = useForm<InvoiceInput>({
     initialValues: initial,
-    validate: validateInvoice,
+    validate,
     onSubmit: (values) => {
       if (mode === "foto" && !values.attachment) {
         setAttachmentError(true);
