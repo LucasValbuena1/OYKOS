@@ -96,7 +96,12 @@ export function useInvoices() {
     (id: string, paidAt: string) => invoices.update(id, { status: "pagada", paidAt }),
     [invoices],
   );
-  return { ...invoices, markPaid };
+  /** Deshace un pago marcado por error: vuelve a pendiente y borra la fecha y el soporte del pago. */
+  const unmarkPaid = useCallback(
+    (id: string) => invoices.update(id, { status: "pendiente", paidAt: undefined, paymentProof: undefined }),
+    [invoices],
+  );
+  return { ...invoices, markPaid, unmarkPaid };
 }
 
 // ---------- Impuestos ----------

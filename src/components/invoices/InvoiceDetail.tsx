@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { ArrowLeft, CheckCircle2, Paperclip, Pencil, Trash2 } from "lucide-react";
+import { ArrowLeft, CheckCircle2, Paperclip, Pencil, RotateCcw, Trash2 } from "lucide-react";
 import { useI18n } from "@/i18n/I18nProvider";
 import { useInvoices, useServices, useSelectedHousehold } from "@/hooks/useDomain";
 import { useToast } from "@/components/ui/Toast";
@@ -58,7 +58,14 @@ export function InvoiceDetail({ id }: { id: string }) {
             </IconButton>
           </div>
         </div>
-        <InvoiceStatusBadge status={status} daysLeft={status === "por_vencer" ? daysUntil(invoice.dueDate) : undefined} />
+        <div className="flex flex-wrap items-center gap-3">
+          <InvoiceStatusBadge status={status} daysLeft={status === "por_vencer" ? daysUntil(invoice.dueDate) : undefined} />
+          {invoice.status === "pagada" && invoice.paidAt && (
+            <span className="text-sm font-semibold text-on-surface-variant" data-testid="invoice-paid-on">
+              {t(dict.invoices.paidOn, { date: date(invoice.paidAt) })}
+            </span>
+          )}
+        </div>
         <dl className="grid grid-cols-1 gap-4 sm:grid-cols-3">
           <div className="rounded-2xl bg-surface-low p-4">
             <dt className="text-sm text-on-surface-variant">{dict.invoices.fields.amount}</dt>
@@ -87,7 +94,8 @@ export function InvoiceDetail({ id }: { id: string }) {
             <p className="text-on-surface-variant">{dict.invoices.noSupport}</p>
           )}
         </section>
-        {invoice.status === "pendiente" && (
+        {/* Un solo marcador de pago: si hay link de pago, el panel de pago lo ofrece */}
+        {invoice.status === "pendiente" && !invoice.paymentLink && (
           <Button
             className="w-fit"
             icon={<CheckCircle2 aria-hidden="true" className="size-4" />}
@@ -97,6 +105,19 @@ export function InvoiceDetail({ id }: { id: string }) {
             }}
           >
             {dict.invoices.markPaid}
+          </Button>
+        )}
+        {invoice.status === "pagada" && (
+          <Button
+            variant="tonal"
+            className="w-fit"
+            icon={<RotateCcw aria-hidden="true" className="size-4" />}
+            onClick={() => {
+              invoices.unmarkPaid(id);
+              notify(dict.invoices.unmarkedPaid);
+            }}
+          >
+            {dict.invoices.unmarkPaid}
           </Button>
         )}
       </Card>
